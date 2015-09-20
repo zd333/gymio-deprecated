@@ -31,7 +31,32 @@ CREATE TABLE `clubs` (
   `club_email` varchar(45) DEFAULT NULL,
   `club_homepage` varchar(100) DEFAULT NULL,
   `club_key` varchar(200) DEFAULT NULL,
+  `club_schedule` varchar(100) NOT NULL,
   PRIMARY KEY (`club_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `expenses`
+--
+
+DROP TABLE IF EXISTS `expenses`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `expenses` (
+  `expense_id` int(11) NOT NULL AUTO_INCREMENT,
+  `expense_club_id` int(11) NOT NULL,
+  `expense_description` varchar(200) NOT NULL,
+  `expense_receipt_photo` varchar(100) DEFAULT NULL,
+  `expense_date` date NOT NULL,
+  `expense_amount` decimal(15,2) NOT NULL,
+  `expense_inputed_by_user_id` int(11) NOT NULL,
+  `expense_input_time` datetime NOT NULL,
+  PRIMARY KEY (`expense_id`),
+  KEY `fk_expenses_club_id` (`expense_club_id`),
+  KEY `fk_expenses_inputed_by_user_id` (`expense_inputed_by_user_id`),
+  CONSTRAINT `fk_expenses_club_id` FOREIGN KEY (`expense_club_id`) REFERENCES `clubs` (`club_id`) ON UPDATE CASCADE,
+  CONSTRAINT `fk_expenses_inputed_by_user_id` FOREIGN KEY (`expense_inputed_by_user_id`) REFERENCES `users` (`user_id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -370,4 +395,4 @@ CREATE TABLE `workout_visits` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-09-20 23:11:06
+-- Dump completed on 2015-09-21  0:15:16
