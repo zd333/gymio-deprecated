@@ -51,6 +51,6 @@ end
   #Jenkins port forwarding from vagrant box 8090 to localhost:8085
   config.vm.network "forwarded_port", guest: 8080, host:8085
  
-  config.vm.provision "shell", path: "provision.sh"
+  config.vm.provision "shell", path: "vagrant-environment/provision.sh"
 
 end
