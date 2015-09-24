@@ -17,3 +17,7 @@ sudo cp -r $CONF_DIR/jenkins/* /var/lib/jenkins/jobs/
 sudo chown -R vagrant:vagrant /var/lib/jenkins/jobs/
 sudo chmod -R 777  /var/lib/jenkins/jobs/
 sudo service jenkins restart || exit 1
+
+echo "Open Mysql to listen on 0.0.0.0"
+sudo sed -i "s/127.0.0.1/0.0.0.0/g" /etc/mysql/my.cnf
+sudo service mysql restart
