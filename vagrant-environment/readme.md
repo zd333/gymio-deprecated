@@ -1,4 +1,4 @@
-### HOW TO USE Vagrant Environment
+### How to use Vagrant environment
 
 ##### Install following apps:
  * Vitrualbox >=v5.0.4
