@@ -12,6 +12,24 @@ sudo apt-get update --yes $QUIET_APT
 # Java 1.7.0_51 is what Amazon has...
 sudo apt-get install --reinstall  -y --force-yes -o Dpkg::options::=--force-confold $QUIET_APT openjdk-7-jre-headless=7u51-2.4.6-1ubuntu4 openjdk-7-jre=7u51-2.4.6-1ubuntu4 openjdk-7-jdk=7u51-2.4.6-1ubuntu4 jenkins mysql-server mc dos2unix nginx
 
+echo "Install python package tool and virtualenv"
+sudo apt-get install --reinstall -y python-pip $QUIET_APT
+sudo pip install virtualenv
+sudo rm -rf -f /virtualenvs
+sudo mkdir /virtualenvs
+cd /virtualenvs
+sudo virtualenv gymio_django_env
+echo "Activate dev env"
+source /virtualenvs/gymio_django_env/bin/activate
+echo "Install frameworks to virtual env"
+/virtualenvs/gymio_django_env/bin/pip install django
+/virtualenvs/gymio_django_env/bin/pip install djangorestframework
+echo "Setup django backend REST API project"
+sudo rm -rf -f /gymio_backend
+sudo mkdir /gymio_backend
+cd /gymio_backend
+django-admin.py startproject gymio_rest_api
+
 echo "Grant permittion to MySQL root"
 echo "grant all privileges on *.* to 'root'@'%' with grant option;" | mysql -u root -pgymio
 echo "flush privileges;" | mysql -u root -pgymio
