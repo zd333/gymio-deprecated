@@ -10,7 +10,17 @@ sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again p
 # Set things up
 sudo apt-get update --yes $QUIET_APT
 # Java 1.7.0_51 is what Amazon has...
-sudo apt-get install --reinstall  -y --force-yes -o Dpkg::options::=--force-confold $QUIET_APT openjdk-7-jre-headless=7u51-2.4.6-1ubuntu4 openjdk-7-jre=7u51-2.4.6-1ubuntu4 openjdk-7-jdk=7u51-2.4.6-1ubuntu4 jenkins mysql-server mc dos2unix nginx
+udo apt-get install --reinstall  -y --force-yes -o Dpkg::options::=--force-confold $QUIET_APT openjdk-7-jre-headless=7u51-2.4.6-1ubuntu4 openjdk-7-jre=7u51-2.4.6-1ubuntu4 openjdk-7-jdk=7u51-2.4.6-1ubuntu4 jenkins mysql-server mc dos2unix nginx
+
+#Run Jenkins from vagrant user
+service jenkins stop
+sed -i 's/JENKINS_USER=\$NAME/JENKINS_USER=vagrant/g' /etc/default/jenkins
+sed -i 's/JENKINS_GROUP=\$NAME/JENKINS_GROUP=vagrant/g' /etc/default/jenkins
+sudo chown -R vagrant:vagrant /var/log/jenkins/
+sudo chown -R vagrant:vagrant /var/lib/jenkins/
+sudo chown -R vagrant:vagrant /var/cache/jenkins/
+sudo service jenkins start
+
 
 echo "Install python package tool and virtualenv"
 sudo apt-get install --reinstall -y python-pip $QUIET_APT
