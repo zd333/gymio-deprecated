@@ -24,8 +24,7 @@
 cd /vagrant/backend
 source /usr/local/bin/virtualenvwrapper.sh
 mkvirtualenv gymio_django_env
-pip install -Ur requirements.txt
-django-admin start-project gymio_rest_api</command>
+pip install -Ur requirements.txt</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers/>
