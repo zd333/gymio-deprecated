@@ -10,7 +10,7 @@ sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again p
 # Set things up
 sudo apt-get update --yes $QUIET_APT
 # Java 1.7.0_51 is what Amazon has...
-sudo apt-get install --reinstall  -y --force-yes -o Dpkg::options::=--force-confold $QUIET_APT openjdk-7-jre-headless=7u51-2.4.6-1ubuntu4 openjdk-7-jre=7u51-2.4.6-1ubuntu4 openjdk-7-jdk=7u51-2.4.6-1ubuntu4 jenkins mysql-server mc dos2unix nginx
+sudo apt-get install --reinstall  -y --force-yes -o Dpkg::options::=--force-confold $QUIET_APT openjdk-7-jre-headless=7u51-2.4.6-1ubuntu4 openjdk-7-jre=7u51-2.4.6-1ubuntu4 openjdk-7-jdk=7u51-2.4.6-1ubuntu4 jenkins mysql-server python3-dev libmysqlclient-dev mc dos2unix nginx
 
 #Run Jenkins from vagrant user
 service jenkins stop
@@ -26,7 +26,6 @@ sudo apt-get install --reinstall -y python-pip $QUIET_APT
 sudo pip install virtualenv
 sudo pip install virtualenvwrapper
 export WORKON_HOME=$HOME/.virtualenvs
-source /usr/local/bin/virtualenvwrapper.sh
 
 echo "Grant permittion to MySQL root"
 echo "grant all privileges on *.* to 'root'@'%' with grant option;" | mysql -u root -pgymio

@@ -20,11 +20,32 @@
   <builders>
     <hudson.tasks.Shell>
       <command>#!/bin/bash -x
+DBNAME=&quot;go_db&quot;
+USER=root
+PASSWD=gymio
 
-cd /vagrant/backend
+echo "Creating virtual python environment"
 source /usr/local/bin/virtualenvwrapper.sh
-mkvirtualenv gymio_django_env
-pip install -Ur requirements.txt</command>
+#need Python 3.4.3 installed:
+mkvirtualenv --python=/usr/bin/python3.4 gymio_django_env
+
+echo "Installing python packajes to virtual environment"
+cd /vagrant/backend/gymio_rest_api
+pip install -Ur requirements.txt
+
+RESULT=`mysqlshow -v --user=$USER --password=$PASSWD | grep -v Wildcard | grep -o $DBNAME` 
+
+echo &quot;+++ DBNAME:$DBNAME&quot;
+echo &quot;+++ RESULT:$RESULT&quot;
+
+if [ $DBNAME == &quot;$RESULT&quot; ]; then
+    echo &quot;+++ Dropping $DBNAME DB ...&quot;
+    mysqladmin --force -u$USER -p$PASSWD drop $DBNAME 
+fi
+echo &quot;+++ Creating $DBNAME DB ...&quot;
+echo &apos;CREATE DATABASE &apos;$DBNAME&apos; CHARACTER SET utf8;&apos; | mysql -v -u $USER -p$PASSWD
+
+python manage.py migrate</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers/>
