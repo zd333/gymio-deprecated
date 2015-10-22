@@ -45,7 +45,8 @@ fi
 echo &quot;+++ Creating $DBNAME DB ...&quot;
 echo &apos;CREATE DATABASE &apos;$DBNAME&apos; CHARACTER SET utf8;&apos; | mysql -v -u $USER -p$PASSWD
 
-python manage.py migrate</command>
+python manage.py migrate
+python manage.py runserver 0.0.0.0:8008</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers/>

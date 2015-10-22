@@ -14,9 +14,5 @@
  * passwd:  gymio
  * host:    localhost
  * port:    3307
-
-
-
-
- 
-
+##### Django dev web server:
+ * http://localhost:8008
