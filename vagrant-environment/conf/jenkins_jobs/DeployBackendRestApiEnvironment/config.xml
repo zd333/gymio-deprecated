@@ -24,12 +24,12 @@ DBNAME=&quot;go_db&quot;
 USER=root
 PASSWD=gymio
 
-echo "Creating virtual python environment"
+echo &quot;Creating virtual python environment&quot;
 source /usr/local/bin/virtualenvwrapper.sh
 #need Python 3.4.3 installed:
 mkvirtualenv --python=/usr/bin/python3.4 gymio_django_env
 
-echo "Installing python packajes to virtual environment"
+echo &quot;Installing python packajes to virtual environment&quot;
 cd /vagrant/backend/gymio_rest_api
 pip install -Ur requirements.txt
 
@@ -45,10 +45,36 @@ fi
 echo &quot;+++ Creating $DBNAME DB ...&quot;
 echo &apos;CREATE DATABASE &apos;$DBNAME&apos; CHARACTER SET utf8;&apos; | mysql -v -u $USER -p$PASSWD
 
+python manage.py makemigrations restful
 python manage.py migrate
-python manage.py runserver 0.0.0.0:8008</command>
+</command>
     </hudson.tasks.Shell>
+    <jenkins.plugins.shiningpanda.builders.CustomPythonBuilder plugin="shiningpanda@0.22">
+      <home>/home/vagrant/.virtualenvs/gymio_django_env/bin/python</home>
+      <nature>python</nature>
+      <command>import os
+import sys
+os.environ.setdefault(&quot;DJANGO_SETTINGS_MODULE&quot;, &quot;gymio_rest_api.settings&quot;)
+sys.path.append(&quot;/vagrant/backend/gymio_rest_api&quot;)
+from django.contrib.auth.models import User
+user = User.objects.create_user(&apos;admin&apos;, &apos;gymio@googlegroups.com&apos;, &apos;gymio&apos;)
+user.is_superuser = True
+user.is_staff = True
+user.save()
+</command>
+      <ignoreExitCode>false</ignoreExitCode>
+    </jenkins.plugins.shiningpanda.builders.CustomPythonBuilder>
   </builders>
-  <publishers/>
+  <publishers>
+    <hudson.tasks.BuildTrigger>
+      <childProjects>RunBackendDevPythonWebServer</childProjects>
+      <threshold>
+        <name>SUCCESS</name>
+        <ordinal>0</ordinal>
+        <color>BLUE</color>
+        <completeBuild>true</completeBuild>
+      </threshold>
+    </hudson.tasks.BuildTrigger>
+  </publishers>
   <buildWrappers/>
 </project>

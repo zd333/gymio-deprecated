@@ -16,3 +16,7 @@
  * port:    3307
 ##### Django dev web server:
  * http://localhost:8008
+ ##### Backend project admin panel:
+ * http://localhost:8008/admin
+ *superuser:admin
+ *password: gymio

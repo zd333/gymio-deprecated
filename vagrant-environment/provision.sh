@@ -31,10 +31,15 @@ echo "Grant permittion to MySQL root"
 echo "grant all privileges on *.* to 'root'@'%' with grant option;" | mysql -u root -pgymio
 echo "flush privileges;" | mysql -u root -pgymio
 
-echo "Copying Jenkins job config files ..."
-sudo cp -r $CONF_DIR/jenkins/* /var/lib/jenkins/jobs/
+echo "Copying Jenkins plugins and job config files ..."
+sudo cp $CONF_DIR/jenkins_plugins/* /var/lib/jenkins/plugins/
+sudo chown -R vagrant:vagrant /var/lib/jenkins/plugins/
+sudo chmod -R 777  /var/lib/jenkins/plugins/
+
+sudo cp -r $CONF_DIR/jenkins_jobs/* /var/lib/jenkins/jobs/
 sudo chown -R vagrant:vagrant /var/lib/jenkins/jobs/
 sudo chmod -R 777  /var/lib/jenkins/jobs/
+
 sudo service jenkins restart || exit 1
 
 echo "Open Mysql to listen on 0.0.0.0"
