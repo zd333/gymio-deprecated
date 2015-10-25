@@ -5,11 +5,11 @@ from django.contrib.auth.models import User
 class Club(models.Model):
     club_name = models.CharField(max_length=20)
     club_address = models.CharField(max_length=45)
-    club_gps_str = models.CharField(max_length=100)
-    club_phones = models.CharField(max_length=45)
-    club_email = models.CharField(max_length=45)
-    club_homepage = models.CharField(max_length=100)
-    club_key = models.CharField(max_length=200)
+    club_gps_str = models.CharField(max_length=100, blank=True)
+    club_phones = models.CharField(max_length=45, blank=True)
+    club_email = models.EmailField(max_length=45)
+    club_homepage = models.URLField()
+    club_key = models.CharField(max_length=200, blank=True)
 
 
 class WorkoutType(models.Model):
@@ -42,10 +42,10 @@ class ClubUser(models.Model):
     user_phones = models.CharField(max_length=100)
     user_gender = models.BooleanField()
     user_birthday = models.DateField()
-    user_description = models.CharField(max_length=200)
-    user_notes = models.CharField(max_length=200)
-    user_position = models.ForeignKey(PositionType)
-    user_photo = models.CharField(max_length=200)
+    user_description = models.CharField(max_length=200, blank=True)
+    user_notes = models.CharField(max_length=200, blank=True)
+    user_position = models.ForeignKey(PositionType, null=True, blank=True)
+    user_photo = models.ImageField()
 
 
 class UserRight(models.Model):
@@ -75,7 +75,7 @@ class StaffPayment(models.Model):
 class Expense(models.Model):
     expense_club = models.ForeignKey(Club)  # duplicate?
     expense_description = models.CharField(max_length=200)
-    expense_receipt_photo = models.CharField(max_length=100)
+    expense_receipt_photo = models.ImageField()
     expense_time = models.DateTimeField
     expense_amount = models.DecimalField(max_digits=6, decimal_places=2)
     expense_input_by = models.ForeignKey(ClubUser)
