@@ -1,3 +1,8 @@
-from django.shortcuts import render
+from rest_framework import viewsets
+from .models import ClubUser
+from .serializers import ClubUserSerializer
 
-# Create your views here.
+
+class ClubUserViewSet(viewsets.ModelViewSet):
+    queryset = ClubUser.objects.all()
+    serializer_class = ClubUserSerializer
