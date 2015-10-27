@@ -1,5 +1,21 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.models import PermissionsMixin
+
+from django.utils import timezone
+from django.contrib.auth.models import BaseUserManager
+from gettext import gettext as _
+
+
+RIGHT_CHOICES = (
+        ('CO', _('Club owner')),
+        ('FK', _('Finance keeper')),
+        ('EI', _('Expenses compositor')),
+        ('HR', _('Human resources')),
+        ('SK', _('Sales keeper')),
+        ('RA', _('Reception admin')),
+        ('HT', _('Head trainer')),
+    )
 
 
 class Club(models.Model):
@@ -33,53 +49,102 @@ class PositionType(models.Model):
 class PositionRight(models.Model):
     position_right_club = models.ForeignKey(Club)
     position_right_position = models.ForeignKey(PositionType)
-    position_right_text = models.CharField(max_length=45)
+    position_right_text = models.CharField(max_length=2, choices=RIGHT_CHOICES)
 
 
-class ClubUser(models.Model):
-    user = models.OneToOneField(User)
-    user_club = models.ForeignKey(Club)  # duplicate?
-    user_phones = models.CharField(max_length=100)
-    user_gender = models.BooleanField()
+class ClubUserManager(BaseUserManager):
+    def create_user(self, username, password=None, **kwargs):
+        if not username:
+            raise ValueError(_('Users must have a valid login name.'))
+
+        if not kwargs.get('user_birthday'):
+            raise ValueError(_('Users must have a valid birthday date.'))
+
+        if not kwargs.get('user_full_name'):
+            raise ValueError(_('Users must have a valid full name.'))
+
+        club_user = self.model(
+            username=username, user_birthday=kwargs.get('user_birthday'), user_full_name=kwargs.get('user_full_name')
+        )
+
+        club_user.set_password(password)
+        club_user.save()
+
+        return club_user
+
+    def create_superuser(self, username, password, **kwargs):
+        club_user = self.create_user(username, password, **kwargs)
+
+        club_user.is_superuser = True
+        club_user.is_staff = True
+        club_user.is_active = True
+        club_user.save()
+
+        return club_user
+
+
+class ClubUser(AbstractBaseUser, PermissionsMixin):
+    username = models.CharField(max_length=45, unique=True)
+    email = models.EmailField(unique=True, null=True, blank=True)
+    is_staff = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=False)
+    date_joined = models.DateTimeField(auto_now_add=True)
+
+    user_club = models.ForeignKey(Club, null=True, blank=True)
+    user_full_name = models.CharField(max_length=100)
+    user_phones = models.CharField(max_length=100, blank=True)
+    user_gender = models.BooleanField(default=False)  # False=female, True=mail :)
     user_birthday = models.DateField()
-    user_description = models.CharField(max_length=200, blank=True)
-    user_notes = models.CharField(max_length=200, blank=True)
+    user_description = models.CharField(max_length=200, blank=True)  # external info, available for all users
+    user_notes = models.CharField(max_length=200, blank=True)  # internal, for club staff
     user_position = models.ForeignKey(PositionType, null=True, blank=True)
-    user_photo = models.ImageField()
+    user_photo = models.ImageField(blank=True)
+    user_photo_not_validated = models.ImageField(null=True, blank=True)
+
+    objects = ClubUserManager()
+
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ['user_birthday', 'user_full_name']
+
+    def get_full_name(self):
+        return self.user_full_name
+
+    def get_short_name(self):
+        return self.username
 
 
 class UserRight(models.Model):
     user_right_club = models.ForeignKey(Club)  # duplicate?
     user_right_user = models.ForeignKey(ClubUser)
-    user_right_text = models.CharField(max_length=45)
+    user_right_text = models.CharField(max_length=2, choices=RIGHT_CHOICES)
 
 
 class StaffComing(models.Model):
     staff_coming_club = models.ForeignKey(Club)  # duplicate?
     staff_coming_user = models.ForeignKey(ClubUser, related_name='employee_who_came_to_work')
-    staff_coming_date = models.DateField()
+    staff_coming_date = models.DateField(default=timezone.now)
     staff_coming_worked_hours = models.SmallIntegerField()
     staff_coming_input_by = models.ForeignKey(ClubUser, related_name='employee_who_input_coming_to_work')
-    staff_coming_update_time = models.DateTimeField
+    staff_coming_update_time = models.DateTimeField(default=timezone.now)
 
 
 class StaffPayment(models.Model):
     staff_payment_club = models.ForeignKey(Club)  # duplicate?
     staff_payment_receiver_id = models.ForeignKey(ClubUser, related_name='employee_who_received_payment')
-    staff_payment_date = models.DateField
+    staff_payment_date = models.DateField(default=timezone.now)
     staff_payment_amount = models.DecimalField(max_digits=6, decimal_places=2)
     staff_payment_input_by = models.ForeignKey(ClubUser, related_name='employee_who_input_payment')
-    staff_payment_input_time = models.DateTimeField
+    staff_payment_input_time = models.DateTimeField(default=timezone.now)
 
 
 class Expense(models.Model):
     expense_club = models.ForeignKey(Club)  # duplicate?
     expense_description = models.CharField(max_length=200)
     expense_receipt_photo = models.ImageField()
-    expense_time = models.DateTimeField
+    expense_time = models.DateTimeField(default=timezone.now)
     expense_amount = models.DecimalField(max_digits=6, decimal_places=2)
     expense_input_by = models.ForeignKey(ClubUser)
-    expense_input_time = models.DateTimeField
+    expense_input_time = models.DateTimeField(default=timezone.now)
 
 
 class TicketType(models.Model):
@@ -100,14 +165,14 @@ class TicketSale(models.Model):
     ticket_sale_type = models.ForeignKey(TicketType)
     ticket_sale_buyer = models.ForeignKey(ClubUser, related_name='user_who_bought_ticket')
     ticket_sale_price = models.DecimalField(max_digits=6, decimal_places=2)
-    ticket_sale_time = models.DateTimeField()
+    ticket_sale_time = models.DateTimeField(default=timezone.now)
     ticket_sale_seller = models.ForeignKey(ClubUser, related_name='employee_who_sold_ticket')
 
 
 class TicketFreez(models.Model):
     ticket_freez_club = models.ForeignKey(Club)  # duplicate?
     ticket_freez_sold_ticket = models.ForeignKey(TicketSale)
-    ticket_freez_start_date = models.DateField()
+    ticket_freez_start_date = models.DateField(default=timezone.now)
     ticket_freez_days = models.SmallIntegerField()
     ticket_freez_input_by = models.ForeignKey(ClubUser)
 
@@ -118,7 +183,7 @@ class WorkoutSchedule(models.Model):
     scheduled_workout_type = models.ForeignKey(WorkoutType)
     scheduled_workout_trainer = models.ForeignKey(ClubUser, related_name='employee_trainer_of_workout')
     scheduled_workout_input_by = models.ForeignKey(ClubUser, related_name='employee_who_scheduled_workout')
-    scheduled_workout_cancel_time = models.DateTimeField(null=True)
+    scheduled_workout_cancel_time = models.DateTimeField(null=True, default=None)
     scheduled_workout_canceled_by = models.ForeignKey(ClubUser, null=True, related_name='employee_'
                                                                                         'who_canceled_scheduling')
 
@@ -127,7 +192,7 @@ class WorkoutSigning(models.Model):
     signing_club = models.ForeignKey(Club)  # duplicate?
     signing_scheduled_workout = models.ForeignKey(WorkoutSchedule)
     signing_visitor = models.ForeignKey(ClubUser, related_name='user_who_signed_to_come')
-    signing_input_time = models.DateTimeField()
+    signing_input_time = models.DateTimeField(default=timezone.now)
     signing_input_by = models.ForeignKey(ClubUser, related_name='user_who_input_signing')
     signing_cancelled_by = models.ForeignKey(ClubUser, null=True, related_name='employee_who_cancelled_signing')
 
@@ -136,5 +201,5 @@ class WorkoutVisit(models.Model):
     visit_club = models.ForeignKey(Club)  # duplicate?
     visit_scheduled_workout = models.ForeignKey(WorkoutSchedule)
     visit_visitor = models.ForeignKey(ClubUser, related_name='user_who_came_to_workout')
-    visit_input_time = models.DateTimeField()
+    visit_input_time = models.DateTimeField(default=timezone.now)
     visit_input_by = models.ForeignKey(ClubUser, related_name='employee_who_input_coming_to_workout')

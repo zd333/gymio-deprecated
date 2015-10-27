@@ -24,6 +24,9 @@ DBNAME=&quot;go_db&quot;
 USER=root
 PASSWD=gymio
 
+echo &quot;Wiping migrations&quot;
+sudo rm -r /vagrant/backend/gymio_rest_api/restful/migrations/
+
 echo &quot;Creating virtual python environment&quot;
 source /usr/local/bin/virtualenvwrapper.sh
 #need Python 3.4.3 installed:
@@ -54,14 +57,13 @@ python manage.py migrate
       <nature>python</nature>
       <command>import os
 import sys
+
 os.environ.setdefault(&quot;DJANGO_SETTINGS_MODULE&quot;, &quot;gymio_rest_api.settings&quot;)
 sys.path.append(&quot;/vagrant/backend/gymio_rest_api&quot;)
-from django.contrib.auth.models import User
-user = User.objects.create_user(&apos;admin&apos;, &apos;gymio@googlegroups.com&apos;, &apos;gymio&apos;)
-user.is_superuser = True
-user.is_staff = True
-user.save()
-</command>
+
+from restful.models import ClubUser
+
+ClubUser.objects.create_superuser(username=&apos;admin&apos;, password=&apos;gymio&apos;, user_birthday=&apos;1900-01-01&apos;, user_full_name=&apos;Ivanov Ivan Ivanovich&apos;)</command>
       <ignoreExitCode>false</ignoreExitCode>
     </jenkins.plugins.shiningpanda.builders.CustomPythonBuilder>
   </builders>

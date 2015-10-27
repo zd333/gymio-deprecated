@@ -7,11 +7,14 @@
 ##### How to run:
 * From project root directory execute "vagrant up" and "vagrant provision" commands
 
+##### SSH box's credentials:
+ * phrase:
+ * password:vagrant
 ##### Jenkins host:
   * http://localhost:8085
 ##### Mysql credentials:
  * user:    root
- * passwd:  gymio
+ * password:gymio
  * host:    localhost
  * port:    3307
 ##### Django dev web server:
