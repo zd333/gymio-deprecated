@@ -21,11 +21,14 @@ RIGHT_CHOICES = (
 class Club(models.Model):
     club_name = models.CharField(max_length=20)
     club_address = models.CharField(max_length=45)
-    club_gps_str = models.CharField(max_length=100, blank=True)
-    club_phones = models.CharField(max_length=45, blank=True)
+    club_gps_str = models.CharField(max_length=100, null=True, blank=True)
+    club_phones = models.CharField(max_length=45)
     club_email = models.EmailField(max_length=45)
-    club_homepage = models.URLField()
-    club_key = models.CharField(max_length=200, blank=True)
+    club_homepage = models.URLField(null=True, blank=True)
+    club_key = models.CharField(max_length=200, null=True, blank=True)
+
+    def __str__(self):
+        return self.club_name
 
 
 class WorkoutType(models.Model):
@@ -47,9 +50,12 @@ class PositionType(models.Model):
 
 
 class PositionRight(models.Model):
-    position_right_club = models.ForeignKey(Club)
+    #position_right_club = models.ForeignKey(Club)  # duplicate?
     position_right_position = models.ForeignKey(PositionType)
     position_right_text = models.CharField(max_length=2, choices=RIGHT_CHOICES)
+
+    def __str__(self):
+        return str(self.position_right_position) + '-' + str(self.position_right_text)
 
 
 class ClubUserManager(BaseUserManager):
@@ -114,13 +120,16 @@ class ClubUser(AbstractBaseUser, PermissionsMixin):
 
 
 class UserRight(models.Model):
-    user_right_club = models.ForeignKey(Club)  # duplicate?
+    #user_right_club = models.ForeignKey(Club)  # duplicate?
     user_right_user = models.ForeignKey(ClubUser)
     user_right_text = models.CharField(max_length=2, choices=RIGHT_CHOICES)
 
+    def __str__(self):
+        return str(self.user_right_user) + '-' + str(self.user_right_text)
+
 
 class StaffComing(models.Model):
-    staff_coming_club = models.ForeignKey(Club)  # duplicate?
+    #staff_coming_club = models.ForeignKey(Club)  # duplicate?
     staff_coming_user = models.ForeignKey(ClubUser, related_name='employee_who_came_to_work')
     staff_coming_date = models.DateField(default=timezone.now)
     staff_coming_worked_hours = models.SmallIntegerField()
@@ -129,7 +138,7 @@ class StaffComing(models.Model):
 
 
 class StaffPayment(models.Model):
-    staff_payment_club = models.ForeignKey(Club)  # duplicate?
+    #staff_payment_club = models.ForeignKey(Club)  # duplicate?
     staff_payment_receiver_id = models.ForeignKey(ClubUser, related_name='employee_who_received_payment')
     staff_payment_date = models.DateField(default=timezone.now)
     staff_payment_amount = models.DecimalField(max_digits=6, decimal_places=2)
@@ -161,7 +170,7 @@ class TicketType(models.Model):
 
 
 class TicketSale(models.Model):
-    ticket_sale_club = models.ForeignKey(Club)  # duplicate?
+    #ticket_sale_club = models.ForeignKey(Club)  # duplicate?
     ticket_sale_type = models.ForeignKey(TicketType)
     ticket_sale_buyer = models.ForeignKey(ClubUser, related_name='user_who_bought_ticket')
     ticket_sale_price = models.DecimalField(max_digits=6, decimal_places=2)
@@ -170,7 +179,7 @@ class TicketSale(models.Model):
 
 
 class TicketFreez(models.Model):
-    ticket_freez_club = models.ForeignKey(Club)  # duplicate?
+    #ticket_freez_club = models.ForeignKey(Club)  # duplicate?
     ticket_freez_sold_ticket = models.ForeignKey(TicketSale)
     ticket_freez_start_date = models.DateField(default=timezone.now)
     ticket_freez_days = models.SmallIntegerField()
@@ -178,7 +187,7 @@ class TicketFreez(models.Model):
 
 
 class WorkoutSchedule(models.Model):
-    scheduled_workout = models.ForeignKey(Club)  # duplicate?
+    scheduled_workout_club = models.ForeignKey(Club)  # duplicate?
     scheduled_workout_time = models.DateTimeField
     scheduled_workout_type = models.ForeignKey(WorkoutType)
     scheduled_workout_trainer = models.ForeignKey(ClubUser, related_name='employee_trainer_of_workout')
@@ -189,7 +198,7 @@ class WorkoutSchedule(models.Model):
 
 
 class WorkoutSigning(models.Model):
-    signing_club = models.ForeignKey(Club)  # duplicate?
+    #signing_club = models.ForeignKey(Club)  # duplicate?
     signing_scheduled_workout = models.ForeignKey(WorkoutSchedule)
     signing_visitor = models.ForeignKey(ClubUser, related_name='user_who_signed_to_come')
     signing_input_time = models.DateTimeField(default=timezone.now)
@@ -198,7 +207,7 @@ class WorkoutSigning(models.Model):
 
 
 class WorkoutVisit(models.Model):
-    visit_club = models.ForeignKey(Club)  # duplicate?
+    #visit_club = models.ForeignKey(Club)  # duplicate?
     visit_scheduled_workout = models.ForeignKey(WorkoutSchedule)
     visit_visitor = models.ForeignKey(ClubUser, related_name='user_who_came_to_workout')
     visit_input_time = models.DateTimeField(default=timezone.now)
