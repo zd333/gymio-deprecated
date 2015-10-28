@@ -22,7 +22,7 @@ router = routers.DefaultRouter()
 router.register(r'users', views.ClubUserViewSet)
 
 urlpatterns = [
-    url(r'^admin/', include(admin.site.urls)),
-    url(r'^', include(router.urls)),
-    url(r'^docs/', include('rest_framework_swagger.urls')),
+    url(r'^sc/admin/', include(admin.site.urls)),
+    url(r'^sc/restful_test/', include(router.urls)),
+    url(r'^sc/restful_docs/', include('rest_framework_swagger.urls')),
 ]

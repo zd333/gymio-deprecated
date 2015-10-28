@@ -25,10 +25,10 @@
  * host:     localhost
  * port:     3307
 ### Django admin panel:
- * http://localhost:8008/admin/
+ * http://localhost:8008/sc/admin/
  * superuser:admin
  * password: gymio
-### Test RESTful API in HTML format:
- * http://localhost:8008/docs/
 ### RESTful API documentation:
- * http://localhost:8008/docs/
+ * http://localhost:8008/restful_docs/
+### Test RESTful API in HTML format:
+ * http://localhost:8008/sc/restful_test/
