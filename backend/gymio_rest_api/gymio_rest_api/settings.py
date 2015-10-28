@@ -39,6 +39,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'rest_framework',
     'restful',
+	'rest_framework_swagger',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -110,5 +111,6 @@ STATIC_URL = '/static/'
 AUTH_USER_MODEL = 'restful.ClubUser'
 
 REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAdminUser',),
     'PAGE_SIZE': 30
 }

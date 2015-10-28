@@ -4,6 +4,7 @@ from django.contrib.auth.models import PermissionsMixin
 
 from django.utils import timezone
 from django.contrib.auth.models import BaseUserManager
+#from django.utils.translation import ugettext as _  # TBD: find out how to perform internationalization
 from gettext import gettext as _
 
 

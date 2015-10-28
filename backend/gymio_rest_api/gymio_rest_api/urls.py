@@ -24,4 +24,5 @@ router.register(r'users', views.ClubUserViewSet)
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^', include(router.urls)),
+    url(r'^docs/', include('rest_framework_swagger.urls')),
 ]
