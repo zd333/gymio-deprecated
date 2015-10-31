@@ -38,7 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'restful',
+    'sc1',
 	'rest_framework_swagger',
 )
 
@@ -53,7 +53,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.security.SecurityMiddleware',
 )
 
-ROOT_URLCONF = 'gymio_rest_api.urls'
+ROOT_URLCONF = 'rest_api.urls'
 
 TEMPLATES = [
     {
@@ -71,7 +71,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'gymio_rest_api.wsgi.application'
+WSGI_APPLICATION = 'rest_api.wsgi.application'
 
 
 # Database
@@ -108,7 +108,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-AUTH_USER_MODEL = 'restful.ClubUser'
+AUTH_USER_MODEL = 'sc1.ClubUser'
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAdminUser',),

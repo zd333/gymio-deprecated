@@ -16,7 +16,7 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 from rest_framework import routers
-from restful import views
+from sc1 import views
 
 router = routers.SimpleRouter()
 router.register(r'clubs', views.ClubViewSet)

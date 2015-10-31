@@ -25,7 +25,7 @@ USER=root
 PASSWD=gymio
 
 echo &quot;Wiping migrations&quot;
-sudo rm -r /vagrant/backend/gymio_rest_api/restful/migrations/
+sudo rm -r /vagrant/backend/rest_api/sc1/migrations/
 
 echo &quot;Creating virtual python environment&quot;
 source /usr/local/bin/virtualenvwrapper.sh
@@ -33,7 +33,7 @@ source /usr/local/bin/virtualenvwrapper.sh
 mkvirtualenv --python=/usr/bin/python3.4 gymio_django_env
 
 echo &quot;Installing python packajes to virtual environment&quot;
-cd /vagrant/backend/gymio_rest_api
+cd /vagrant/backend/rest_api
 pip install -Ur requirements.txt
 
 RESULT=`mysqlshow -v --user=$USER --password=$PASSWD | grep -v Wildcard | grep -o $DBNAME` 
@@ -48,7 +48,7 @@ fi
 echo &quot;+++ Creating $DBNAME DB ...&quot;
 echo &apos;CREATE DATABASE &apos;$DBNAME&apos; CHARACTER SET utf8;&apos; | mysql -v -u $USER -p$PASSWD
 
-python manage.py makemigrations restful
+python manage.py makemigrations sc1
 python manage.py migrate
 python manage.py loaddata test_data.json
 </command>
@@ -59,10 +59,10 @@ python manage.py loaddata test_data.json
       <command>import os
 import sys
 
-os.environ.setdefault(&quot;DJANGO_SETTINGS_MODULE&quot;, &quot;gymio_rest_api.settings&quot;)
-sys.path.append(&quot;/vagrant/backend/gymio_rest_api&quot;)
+os.environ.setdefault(&quot;DJANGO_SETTINGS_MODULE&quot;, &quot;rest_api.settings&quot;)
+sys.path.append(&quot;/vagrant/backend/rest_api&quot;)
 
-from restful.models import ClubUser
+from sc1.models import ClubUser
 
 ClubUser.objects.create_superuser(username=&apos;admin&apos;, password=&apos;gymio&apos;, user_birthday=&apos;1900-01-01&apos;, user_full_name=&apos;Ivanov Ivan Ivanovich&apos;)</command>
       <ignoreExitCode>false</ignoreExitCode>
