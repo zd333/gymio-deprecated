@@ -18,11 +18,15 @@ from django.contrib import admin
 from rest_framework import routers
 from restful import views
 
-router = routers.DefaultRouter()
-router.register(r'users', views.ClubUserViewSet)
+router = routers.SimpleRouter()
+router.register(r'clubs', views.ClubViewSet)
 
 urlpatterns = [
-    url(r'^sc/admin/', include(admin.site.urls)),
-    url(r'^sc/restful_test/', include(router.urls)),
-    url(r'^sc/restful_docs/', include('rest_framework_swagger.urls')),
+    url(r'^sc1/', include(router.urls)),
+
+    url(r'^sc1/users/(?P<club>[0-9]+)/$', views.ClubUserViewSet.as_view({'post': 'create'})),
+    url(r'^sc1/users/(?P<club>[0-9]+)/(?P<pk>[0-9]+)/$', views.ClubUserViewSet.as_view({'get': 'retrieve'})),
+
+    url(r'^sc1/admin/', include(admin.site.urls)),
+    url(r'^sc1/restful_docs/', include('rest_framework_swagger.urls')),  # TBD: remove in production?
 ]

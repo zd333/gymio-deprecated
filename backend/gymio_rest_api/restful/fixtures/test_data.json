@@ -1,0 +1,26 @@
+[
+  {
+    "model": "restful.Club",
+    "pk": 1,
+    "fields": {
+      "club_name": "Клуб качков 1",
+      "club_address": "г.Донецк, ул.Артема, д.1",
+      "club_gps_str": "",
+      "club_phones": "111-11-11",
+      "club_email": "email1@ua.fm",
+      "club_homepage": "www.sc1.com"
+   }
+  },
+  {
+    "model": "restful.Club",
+    "pk": 2,
+    "fields": {
+      "club_name": "Клуб фитоняш 2",
+      "club_address": "г.Луганск, ул.Центральная, д.2",
+      "club_gps_str": "",
+      "club_phones": "2222222",
+      "club_email": "email2@ua.fm",
+      "club_homepage": "www.sc2.com"
+   }
+  }
+]

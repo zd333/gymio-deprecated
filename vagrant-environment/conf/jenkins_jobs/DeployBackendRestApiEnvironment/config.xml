@@ -20,7 +20,7 @@
   <builders>
     <hudson.tasks.Shell>
       <command>#!/bin/bash -x
-DBNAME=&quot;go_db&quot;
+DBNAME=&quot;rest_db&quot;
 USER=root
 PASSWD=gymio
 
@@ -50,6 +50,7 @@ echo &apos;CREATE DATABASE &apos;$DBNAME&apos; CHARACTER SET utf8;&apos; | mysql
 
 python manage.py makemigrations restful
 python manage.py migrate
+python manage.py loaddata test_data.json
 </command>
     </hudson.tasks.Shell>
     <jenkins.plugins.shiningpanda.builders.CustomPythonBuilder plugin="shiningpanda@0.22">

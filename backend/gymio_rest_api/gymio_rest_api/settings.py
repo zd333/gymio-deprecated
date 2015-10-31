@@ -80,7 +80,7 @@ WSGI_APPLICATION = 'gymio_rest_api.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', 
-        'NAME': 'go_db',
+        'NAME': 'rest_db',
         'USER': 'root',
         'PASSWORD': 'gymio',
         'HOST': 'localhost',

@@ -4,6 +4,7 @@ from django.contrib.auth.models import PermissionsMixin
 
 from django.utils import timezone
 from django.contrib.auth.models import BaseUserManager
+
 #from django.utils.translation import ugettext as _  # TBD: find out how to perform internationalization
 from gettext import gettext as _
 
@@ -106,7 +107,7 @@ class ClubUser(AbstractBaseUser, PermissionsMixin):
     user_notes = models.CharField(max_length=200, blank=True)  # internal, for club staff
     user_position = models.ForeignKey(PositionType, null=True, blank=True)
     user_photo = models.ImageField(blank=True)
-    user_photo_not_validated = models.ImageField(null=True, blank=True)
+    user_photo_not_approved = models.ImageField(null=True, blank=True)
 
     objects = ClubUserManager()
 
