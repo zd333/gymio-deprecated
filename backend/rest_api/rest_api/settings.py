@@ -111,6 +111,6 @@ STATIC_URL = '/static/'
 AUTH_USER_MODEL = 'sc1.ClubUser'
 
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAdminUser',),
+    'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAuthenticated', ),
     'PAGE_SIZE': 30
 }
