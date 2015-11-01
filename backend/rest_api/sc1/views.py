@@ -1,5 +1,5 @@
-from rest_framework import viewsets, mixins
-from rest_framework.exceptions import NotFound
+from rest_framework import viewsets, mixins, permissions
+from rest_framework.exceptions import NotFound, ValidationError
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from .models import Club, ClubUser
@@ -27,10 +27,15 @@ class ClubUserViewSet(mixins.CreateModelMixin,
         except Club.DoesNotExist:
             raise NotFound(_('Club not found'))
 
+        # TBD: perform check of password here, now simply check if it's nor empty
+        password = serializer.validated_data.get('password', None)
+        if not password:
+            raise ValidationError(_('Password have not passed complexity check.'))
+
         serializer.save(user_club=club)
 
     # don't use mixin to perform filtering by club
     def retrieve(self, request, pk=None, club=None):
         user = get_object_or_404(self.queryset, pk=pk, user_club=club)
-        serializer = ClubUserSerializer(user)
+        serializer = self.serializer_class(user)
         return Response(serializer.data)

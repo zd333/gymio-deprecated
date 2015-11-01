@@ -1,6 +1,6 @@
 [
   {
-    "model": "restful.Club",
+    "model": "sc1.Club",
     "pk": 1,
     "fields": {
       "club_name": "Клуб качков 1",
@@ -12,7 +12,7 @@
    }
   },
   {
-    "model": "restful.Club",
+    "model": "sc1.Club",
     "pk": 2,
     "fields": {
       "club_name": "Клуб фитоняш 2",
