@@ -30,3 +30,5 @@
  * password: gymio
 ### RESTful API documentation:
  * http://localhost:8008/sc1/restful_docs/
+### Frontend (Nginx) root
+ * http://localhost:8001/

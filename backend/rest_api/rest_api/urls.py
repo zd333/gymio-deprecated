@@ -13,20 +13,27 @@ Including another URLconf
     1. Add an import:  from blog import urls as blog_urls
     2. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
-from django.conf.urls import include, url
+from django.conf.urls import include, url, patterns
+from django.conf import settings
 from django.contrib import admin
 from rest_framework import routers
 from sc1 import views
 
+prefix = ''
+
 router = routers.SimpleRouter()
 router.register(r'clubs', views.ClubViewSet)
 
-urlpatterns = [
-    url(r'^sc1/', include(router.urls)),
+urlpatterns = patterns(prefix,
+                       url(r'^sc1/', include(router.urls)),
 
-    url(r'^sc1/users/(?P<club>[0-9]+)/$', views.ClubUserViewSet.as_view({'post': 'create'})),
-    url(r'^sc1/users/(?P<club>[0-9]+)/(?P<pk>[0-9]+)/$', views.ClubUserViewSet.as_view({'get': 'retrieve'})),
+                       url(r'^sc1/users/(?P<club>[0-9]+)/$', views.ClubUserViewSet.as_view({'post': 'create'})),
+                       url(r'^sc1/users/(?P<club>[0-9]+)/(?P<pk>[0-9]+)/$',
+                           views.ClubUserViewSet.as_view({'get': 'retrieve'})),
+                       url(r'^sc1/admin/', include(admin.site.urls)),
+                       )
 
-    url(r'^sc1/admin/', include(admin.site.urls)),
-    url(r'^sc1/restful_docs/', include('rest_framework_swagger.urls')),  # TBD: remove in production?
-]
+if settings.DEBUG:
+    urlpatterns += patterns(prefix,
+                            url(r'^sc1/restful_docs/', include('rest_framework_swagger.urls')),
+                            )

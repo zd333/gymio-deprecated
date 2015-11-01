@@ -42,6 +42,13 @@ sudo chmod -R 777  /var/lib/jenkins/jobs/
 
 sudo service jenkins restart || exit 1
 
+echo "Copying Nginx configs ..."
+sudo cp $CONF_DIR/nginx_site_configs/* /etc/nginx/sites-available/
+sudo chown -R vagrant:vagrant /etc/nginx/sites-available/
+sudo chmod -R 777  /etc/nginx/sites-available/
+
+sudo service nginx restart
+
 echo "Open Mysql to listen on 0.0.0.0"
 sudo sed -i "s/127.0.0.1/0.0.0.0/g" /etc/mysql/my.cnf
 sudo service mysql restart

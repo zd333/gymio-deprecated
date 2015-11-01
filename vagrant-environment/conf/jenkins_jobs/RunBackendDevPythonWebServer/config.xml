@@ -21,7 +21,7 @@
     <hudson.tasks.Shell>
       <command>#!/bin/bash -x
 source /usr/local/bin/virtualenvwrapper.sh
-cd /vagrant/backend/gymio_rest_api
+cd /vagrant/backend/rest_api
 workon gymio_django_env
 python manage.py runserver 0.0.0.0:8008
 </command>

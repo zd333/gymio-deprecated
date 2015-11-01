@@ -52,6 +52,8 @@ end
   config.vm.network "forwarded_port", guest: 8080, host:8085
   #Django dev web server port forwarding from vagrant box 8008 to localhost:8008
   config.vm.network "forwarded_port", guest: 8008, host:8008
+  #Nginx web server port forwarding from vagrant box 8001 to localhost:8001
+  config.vm.network "forwarded_port", guest: 8001, host:8001
  
   config.vm.provision "shell", path: "vagrant-environment/provision.sh"
 
