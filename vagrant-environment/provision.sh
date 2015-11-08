@@ -44,8 +44,7 @@ sudo service jenkins restart || exit 1
 
 echo "Copying Nginx configs ..."
 sudo cp $CONF_DIR/nginx_site_configs/* /etc/nginx/sites-available/
-sudo chown -R vagrant:vagrant /etc/nginx/sites-available/
-sudo chmod -R 777  /etc/nginx/sites-available/
+sudo cp $CONF_DIR/nginx_config/* /etc/nginx/
 
 sudo service nginx restart
 

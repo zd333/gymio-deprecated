@@ -1,13 +1,30 @@
 <!DOCTYPE html>
-<html ng-app="store">
-    <head>
-        <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
-    </head>
-    <body>
-        <script type="text/javascript" src="js/angular.min.js"></script>
-        <script type="text/javascript" src="js/app.js"></script>
-        <p>
-            {{"hello " + "world " + 4 * 3}}
-        </p>
-    </body>
+<html ng-app="gymio" ng-cloak>
+<head>
+    <meta charset="UTF-8">
+    <base href="/">
+    <title>Gymio</title>
+
+    <!--TODO: replace with local libraries-->
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.js"></script>
+    <script type="text/javascript"
+            src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-route.js"></script>
+    <script type="text/javascript"
+            src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-cookies.js"></script>
+
+    <script type="text/javascript" src="_common/js/gymio.js"></script>
+    <script type="text/javascript" src="_common/js/gymio.config.js"></script>
+    <script type="text/javascript" src="_common/js/gymio.routes.js"></script>
+    <script type="text/javascript" src="_common/js/global.service.js"></script>
+
+    <script type="text/javascript" src="authentication/authentication.module.js"></script>
+    <script type="text/javascript" src="authentication/register.controller.js"></script>
+    <script type="text/javascript" src="authentication/authentication.service.js"></script>
+
+    <script type="text/javascript" src="dashboard/dashboard.module.js"></script>
+    <script type="text/javascript" src="dashboard/dashboard.controller.js"></script>
+</head>
+<body>
+<ng-view></ng-view>
+</body>
 </html>

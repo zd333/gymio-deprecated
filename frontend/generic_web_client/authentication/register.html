@@ -1,0 +1,26 @@
+<!--TODO: add translation ASAP-->
+<div>
+    <h1>Register</h1>
+    <div>
+        <form role="form" ng-submit="rc.register()">
+            <div>
+                <label for="register__username">Login name</label>
+                <input type="text" id="register__username" ng-model="rc.username"/>
+            </div>
+            <div>
+                <label for="register__password">Password</label>
+                <input type="password" id="register__password" ng-model="rc.password"/>
+            </div>
+            <div>
+                <label for="register__userfullname">Full name</label>
+                <input type="text" id="register__userfullname" ng-model="rc.userFullName"/>
+            </div>
+            <div>
+                <button type="submit">Submit</button>
+            </div>
+            <div>
+                {{rc.registerErrorText}}
+            </div>
+        </form>
+    </div>
+</div>

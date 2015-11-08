@@ -5,7 +5,7 @@ from django.contrib.auth.models import PermissionsMixin
 from django.utils import timezone
 from django.contrib.auth.models import BaseUserManager
 
-#from django.utils.translation import ugettext as _  # TBD: find out how to perform internationalization
+#from django.utils.translation import ugettext as _  # TODO: find out how to perform internationalization
 from gettext import gettext as _
 
 
@@ -100,9 +100,9 @@ class ClubUser(AbstractBaseUser, PermissionsMixin):
 
     user_club = models.ForeignKey(Club, null=True, blank=True)
     user_full_name = models.CharField(max_length=100)
-    user_phones = models.CharField(max_length=100, blank=True)
+    user_phone = models.CharField(max_length=100, blank=True)
     user_gender = models.BooleanField(default=False)  # False=female, True=mail :)
-    user_birthday = models.DateField()
+    user_birthday = models.DateField(null=True, blank=True)
     user_description = models.CharField(max_length=200, blank=True)  # external info, available for all users
     user_notes = models.CharField(max_length=200, blank=True)  # internal, for club staff
     user_position = models.ForeignKey(PositionType, null=True, blank=True)

@@ -34,10 +34,10 @@ class ClubUserViewSet(mixins.CreateModelMixin,
         except Club.DoesNotExist:
             raise NotFound(_('Club not found'))
 
-        # TBD: perform check of password here, now simply check if it's nor empty
+        # TODO: perform check of password here, now simply check if it's nor empty
         password = serializer.validated_data.get('password', None)
-        if not password:
-            raise ValidationError(_('Password have not passed complexity check.'))
+        if len(password) < 3:
+            raise ValidationError(_({'password': ['This field must be at least 3 symbols long.']}))
 
         serializer.save(user_club=club)
 

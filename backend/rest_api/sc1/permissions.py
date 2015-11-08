@@ -7,20 +7,20 @@ class UnAuthenticatedOrAuthorizedStaffCanPostUser(permissions.BasePermission):
     Typically used for user registration
     """
     def has_permission(self, request, view):
-        # TBD: now only unassigned can add user, need to add authorized staff functionality
+        # TODO: now only unassigned can add user, need to add authorized staff functionality
         return request.method != 'POST' or not request.user or not request.user.is_authenticated()
 
 
 class OwnerOrStaffCanViewUser(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
-        # TBD: now all authenticated can view all, fix this
+        # TODO: now all authenticated can view all, fix this
         return (not (request.method in permissions.SAFE_METHODS) or
                 (request.user and request.user.is_authenticated()))
 
 
 class StaffCanViewUserList(permissions.BasePermission):
     def has_permission(self, request, view):
-        # TBD: now this is loop back, need to fix it
+        # TODO: now this is loop back, need to fix it
         # check view.action == 'list' or
         # request.method == 'GET' and not 'pk' in view.kwarg
         # to determine if this is list (not retrieve) action
@@ -29,12 +29,12 @@ class StaffCanViewUserList(permissions.BasePermission):
 
 class AuthenticatedCanViewStaffUser(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
-        # TBD: now it's only loop back, need to fix this
+        # TODO: now it's only loop back, need to fix this
         # return True if this is not staff account
         return True
 
 
 class OwnerOrAuthorizedStaffCanEditUser(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
-        # TBD: now it's only loop back, need to fix this
+        # TODO: now it's only loop back, need to fix this
         return True

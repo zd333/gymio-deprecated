@@ -34,7 +34,7 @@ class ClubUserSerializer(serializers.HyperlinkedModelSerializer):
             'email',
             'date_joined',
             'user_full_name',
-            'user_phones',
+            'user_phone',
             'user_gender',
             'user_birthday',
             'user_description',
@@ -56,7 +56,7 @@ class ClubUserSerializer(serializers.HyperlinkedModelSerializer):
     def update(self, instance, validated_data):
         instance.email = validated_data.get('email', instance.username)
         instance.user_full_name = validated_data.get('user_full_name', instance.username)
-        instance.user_phones = validated_data.get('user_phones', instance.username)
+        instance.user_phone = validated_data.get('user_phone', instance.username)
         instance.user_gender = validated_data.get('user_gender', instance.username)
         instance.user_birthday = validated_data.get('user_birthday', instance.username)
         instance.user_description = validated_data.get('user_description', instance.username)
