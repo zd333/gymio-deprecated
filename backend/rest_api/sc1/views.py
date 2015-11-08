@@ -1,10 +1,13 @@
-from rest_framework import viewsets, mixins, permissions
-from rest_framework.exceptions import NotFound, ValidationError
-from rest_framework.response import Response
+import json
 from django.shortcuts import get_object_or_404
+from django.contrib.auth import authenticate, login, logout
+from rest_framework import viewsets, mixins, permissions, status, views
+from rest_framework.exceptions import NotFound, ValidationError, PermissionDenied
+from rest_framework.response import Response
 from .models import Club, ClubUser
 from .serializers import ClubSerializer, ClubUserSerializer
 from . import permissions as my_permissions
+
 from gettext import gettext as _
 
 
@@ -45,5 +48,51 @@ class ClubUserViewSet(mixins.CreateModelMixin,
     def retrieve(self, request, pk=None, club=None):
         user = get_object_or_404(self.queryset, pk=pk, user_club=club)
         self.check_object_permissions(request, user)
-        serializer = self.serializer_class(user)
+        serializer = self.serializer_class(user, context={'request': request})
         return Response(serializer.data)
+
+
+# Use generic APIView because this view is not CRUD, just need to perform some actions
+# and can use serializer of user model
+class LoginView(views.APIView):
+    permission_classes = (permissions.AllowAny,)
+
+    def post(self, request, club=None):
+        data = json.loads(request.body.decode('utf-8'))  # added decode because of type error on python 3, check this?
+
+        username = data.get('username', None)
+        password = data.get('password', None)
+
+        # check if user club is correct, if not - don't allow to enter
+        if not ClubUser.objects.filter(username=username, user_club=club).exists():
+            raise PermissionDenied
+
+        user = authenticate(username=username, password=password)
+
+        if user is not None:
+            if user.is_active:
+                login(request, user)
+
+                serialized = ClubUserSerializer(user)
+
+                return Response(serialized.data)
+            else:
+                return Response({
+                    'status': _('Unauthorized'),
+                    'message': _('This account has been disabled.')
+                }, status=status.HTTP_401_UNAUTHORIZED)
+        else:
+            return Response({
+                'status': _('Unauthorized'),
+                'message': _('Username/password combination invalid.')
+            }, status=status.HTTP_401_UNAUTHORIZED)
+
+
+# Use generic APIView because this view is not CRUD, just need to perform some actions
+class LogoutView(views.APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def post(self, request, club=None):
+        # don't check club, because it is safe operation
+        logout(request)
+        return Response({}, status=status.HTTP_204_NO_CONTENT)

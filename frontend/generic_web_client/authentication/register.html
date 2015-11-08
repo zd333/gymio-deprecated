@@ -1,6 +1,7 @@
 <!--TODO: add translation ASAP-->
 <div>
     <h1>Register</h1>
+
     <div>
         <form role="form" ng-submit="rc.register()">
             <div>
@@ -14,6 +15,21 @@
             <div>
                 <label for="register__userfullname">Full name</label>
                 <input type="text" id="register__userfullname" ng-model="rc.userFullName"/>
+            </div>
+            <div>
+                <label for="register__userphone">Phone</label>
+                <input type="text" id="register__userphone" ng-model="rc.userPhone"/>
+            </div>
+            <div>
+                <label for="register__usergenderfemale">Female</label>
+                <input type="radio" id="register__usergenderfemale" name="gender" ng-model="rc.userGender" ng-value="false"/>
+
+                <label for="register__usergendermale">Male</label>
+                <input type="radio" id="register__usergendermale" name="gender" ng-model="rc.userGender" ng-value="true"/>
+            </div>
+            <div>
+                <label for="register__userbirthday">Birthday date</label>
+                <input type="date" id="register__userbirthday" ng-model="rc.userBirthday"/>
             </div>
             <div>
                 <button type="submit">Submit</button>

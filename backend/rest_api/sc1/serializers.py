@@ -2,8 +2,16 @@ from rest_framework import serializers
 from django.contrib.auth import update_session_auth_hash
 from .models import Club, ClubUser
 
+# TODO: all serializers are set to ModelSerializer
+# better solution would be to use HyperlinkedModelSerializer
+# because it returns direct URLs instead of IDs
+# but because of customized URL structure with club parameter almost for every model/action
+# HyperlinkedModelSerializer does not work (it uses one lookup field to specify reverse URL)
+# see this possible workaround: http://stackoverflow.com/a/26670818
 
-class ClubSerializer(serializers.HyperlinkedModelSerializer):
+
+
+class ClubSerializer(serializers.ModelSerializer):
     class Meta:
         model = Club
         fields = (
@@ -24,26 +32,30 @@ class ClubSerializer(serializers.HyperlinkedModelSerializer):
         )
 
 
-class ClubUserSerializer(serializers.HyperlinkedModelSerializer):
+class ClubUserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=False)
 
     class Meta:
         model = ClubUser
         fields = (
+            'id',
             'username',
             'email',
+            'is_staff',  # TODO: create checking of field level permission, only authorized can change this
+            'is_active',  # TODO: create checking of field level permission, only authorized can change this
             'date_joined',
-            'user_full_name',
+            'user_full_name',  # TODO: create checking of field level permission, only authorized can change this
             'user_phone',
-            'user_gender',
-            'user_birthday',
+            'user_gender',  # TODO: create checking of field level permission, only authorized can change this
+            'user_birthday',  # TODO: create checking of field level permission, only authorized can change this
             'user_description',
             'user_notes',
+            'user_position',  # TODO: create checking of field level permission, only authorized can change this
             'user_photo',
             'user_photo_not_approved',
             'password',
         )
-        read_only_fields = ('date_joined',)
+        read_only_fields = ('id', 'date_joined',)
 
     def create(self, validated_data):
         user = ClubUser.objects.create(**validated_data)
@@ -54,13 +66,21 @@ class ClubUserSerializer(serializers.HyperlinkedModelSerializer):
         return user
 
     def update(self, instance, validated_data):
+        #  TODO: this is crutch. Can't define username as read only, because need to write it
+        #  when creating. Backend will accept updated user name,
+        #  but will not update it. Probably, this not so bad :).
+        #  Investigate and fix it when everything else will be just perfect.
+        #  instance.email = validated_data.get('email', instance.username)
         instance.email = validated_data.get('email', instance.username)
+        instance.is_staff = validated_data.get('is_staff', instance.is_staff)
+        instance.is_active = validated_data.get('is_active', instance.is_active)
         instance.user_full_name = validated_data.get('user_full_name', instance.username)
         instance.user_phone = validated_data.get('user_phone', instance.username)
         instance.user_gender = validated_data.get('user_gender', instance.username)
         instance.user_birthday = validated_data.get('user_birthday', instance.username)
         instance.user_description = validated_data.get('user_description', instance.username)
         instance.user_notes = validated_data.get('user_notes', instance.username)
+        instance.user_position = validated_data.get('user_position', instance.user_position)
         instance.user_photo = validated_data.get('user_photo', instance.username)
         instance.user_photo_not_approved = validated_data.get('user_photo_not_approved', instance.username)
 

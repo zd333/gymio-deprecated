@@ -4,27 +4,31 @@
     <meta charset="UTF-8">
     <base href="/">
     <title>Gymio</title>
-
-    <!--TODO: replace with local libraries-->
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.js"></script>
-    <script type="text/javascript"
-            src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-route.js"></script>
-    <script type="text/javascript"
-            src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-cookies.js"></script>
+    <!--TODO:DEPLOY: replace libraries with minified ones-->
+    <script type="text/javascript" src="_common/js/vendor/angularjs/1.4.7/angular.js"></script>
+    <script type="text/javascript" src="_common/js/vendor/angularjs/1.4.7/angular-route.js"></script>
+    <script type="text/javascript" src="_common/js/vendor/angularjs/1.4.7/angular-cookies.js"></script>
 
     <script type="text/javascript" src="_common/js/gymio.js"></script>
     <script type="text/javascript" src="_common/js/gymio.config.js"></script>
     <script type="text/javascript" src="_common/js/gymio.routes.js"></script>
     <script type="text/javascript" src="_common/js/global.service.js"></script>
 
+    <script type="text/javascript" src="header/header.module.js"></script>
+    <script type="text/javascript" src="header/header.controller.js"></script>
+
     <script type="text/javascript" src="authentication/authentication.module.js"></script>
-    <script type="text/javascript" src="authentication/register.controller.js"></script>
     <script type="text/javascript" src="authentication/authentication.service.js"></script>
+    <script type="text/javascript" src="authentication/register.controller.js"></script>
+    <script type="text/javascript" src="authentication/login.controller.js"></script>
 
     <script type="text/javascript" src="dashboard/dashboard.module.js"></script>
     <script type="text/javascript" src="dashboard/dashboard.controller.js"></script>
 </head>
 <body>
+<!--Header is always present-->
+<div ng-include="'header/header.html'"></div>
+
 <ng-view></ng-view>
 </body>
 </html>

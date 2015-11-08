@@ -98,7 +98,8 @@ TIME_ZONE = 'Europe/Kiev'
 
 USE_I18N = True
 
-USE_L10N = True
+# Date and time formats are hardcoded
+USE_L10N = False
 
 USE_TZ = True
 
@@ -109,6 +110,12 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 AUTH_USER_MODEL = 'sc1.ClubUser'
+
+# Hardcode date and time formats, do this on client side too
+TIME_FORMAT = 'H:i'  #23:01
+DATE_FORMAT = 'Y-m-d'  #2015-01-30
+DATETIME_FORMAT = 'Y-m-d H:i'  #2015-01-30 23:01
+
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAuthenticated', ),

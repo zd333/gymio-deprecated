@@ -6,7 +6,7 @@
 
     cfg.config(['$locationProvider', function ($locationProvider) {
         $locationProvider.html5Mode(true);
-        //TODO: check what is this and enable if needed
-        //$locationProvider.hashPrefix('!');
+        //seems like this helps to work with old browsers which don't support html5 routing
+        $locationProvider.hashPrefix('!');
     }]);
 })();

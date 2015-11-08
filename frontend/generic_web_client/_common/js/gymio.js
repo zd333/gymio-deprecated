@@ -5,6 +5,7 @@
         'gymio.config',
         'gymio.routes',
         'gymio.services',
+        'gymio.header',
         'gymio.authentication',
         'gymio.dashboard'
     ]);

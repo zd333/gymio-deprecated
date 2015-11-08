@@ -5,15 +5,18 @@
 
     rts.config(['$routeProvider', function ($routeProvider) {
         $routeProvider
-            .when('/', { //TODO: fix stub (need dashboard or welcome page if unauthenticated)
+            .when('/', {
+                templateUrl: '/mainview/mainview.html'
+            })
+            .when('/register', {//TODO: redirect to update user profile here
                 controller: 'RegisterController',
                 controllerAs: 'rc',
                 templateUrl: '/authentication/register.html'
             })
-            .when('/register', {
-                controller: 'RegisterController',
-                controllerAs: 'rc',
-                templateUrl: '/authentication/register.html'
+            .when('/login', {
+                controller: 'LoginController',
+                controllerAs: 'lc',
+                templateUrl: '/authentication/login.html'
             })
             .when('/dashboard', {
                 controller: 'DashboardController',

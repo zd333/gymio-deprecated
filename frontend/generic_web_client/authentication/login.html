@@ -1,0 +1,21 @@
+<div>
+    <h1>Login</h1>
+    <div>
+        <form role="form" ng-submit="lc.login()">
+            <div>
+                <label for="login__username">Login name</label>
+                <input type="text" id="login__username" ng-model="lc.username"/>
+            </div>
+            <div>
+                <label for="login__password">Password</label>
+                <input type="password" id="login__password" ng-model="lc.password"/>
+            </div>
+            <div>
+                <button type="submit">Submit</button>
+            </div>
+            <div>
+                {{lc.loginErrorText}}
+            </div>
+        </form>
+    </div>
+</div>

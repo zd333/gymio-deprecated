@@ -1,9 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
-
-from django.utils import timezone
 from django.contrib.auth.models import BaseUserManager
+from django.utils import timezone
 
 #from django.utils.translation import ugettext as _  # TODO: find out how to perform internationalization
 from gettext import gettext as _
@@ -95,16 +94,16 @@ class ClubUser(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=45, unique=True)
     email = models.EmailField(unique=True, null=True, blank=True)
     is_staff = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=False)
-    date_joined = models.DateTimeField(auto_now_add=True)
+    is_active = models.BooleanField(default=True)
+    date_joined = models.DateTimeField(auto_now_add=True)  # check what format is returned
 
-    user_club = models.ForeignKey(Club, null=True, blank=True)
+    user_club = models.ForeignKey(Club, null=True, blank=True)  # Allow null for Gymio owners
     user_full_name = models.CharField(max_length=100)
-    user_phone = models.CharField(max_length=100, blank=True)
-    user_gender = models.BooleanField(default=False)  # False=female, True=mail :)
-    user_birthday = models.DateField(null=True, blank=True)
-    user_description = models.CharField(max_length=200, blank=True)  # external info, available for all users
-    user_notes = models.CharField(max_length=200, blank=True)  # internal, for club staff
+    user_phone = models.CharField(max_length=100)
+    user_gender = models.BooleanField(default=False)  # False=female, True=male :)
+    user_birthday = models.DateField()
+    user_description = models.CharField(max_length=800, blank=True)  # external info, available for all users
+    user_notes = models.CharField(max_length=800, blank=True)  # internal, for club staff
     user_position = models.ForeignKey(PositionType, null=True, blank=True)
     user_photo = models.ImageField(blank=True)
     user_photo_not_approved = models.ImageField(null=True, blank=True)
