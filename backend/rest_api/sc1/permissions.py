@@ -27,7 +27,7 @@ class StaffCanViewUserList(permissions.BasePermission):
         return True
 
 
-class AuthenticatedCanViewStaffUser(permissions.BasePermission):
+class AnyCanViewStaffUser(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         # TODO: now it's only loop back, need to fix this
         # return True if this is not staff account

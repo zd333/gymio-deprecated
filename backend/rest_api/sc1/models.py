@@ -27,6 +27,22 @@ class Club(models.Model):
     club_email = models.EmailField(max_length=45)
     club_homepage = models.URLField(null=True, blank=True)
     club_key = models.CharField(max_length=200, null=True, blank=True)
+    club_short_name = models.CharField(max_length=8)
+
+    # frontend settings
+    club_show_finance_module = models.BooleanField(default=True)
+    club_show_hr_module = models.BooleanField(default=True)
+    club_show_reports_module = models.BooleanField(default=True)
+    club_show_gym_room_module = models.BooleanField(default=True)
+    club_show_measurements_module = models.BooleanField(default=True)
+    club_show_meal_module = models.BooleanField(default=True)
+    club_show_menses_module = models.BooleanField(default=True)
+
+    # internal backend settings
+    club_allow_push_notifications = models.BooleanField(default=False)
+    club_allow_email_notification = models.BooleanField(default=False)
+    club_allow_sms_notification = models.BooleanField(default=False)
+    club_internal_notes = models.CharField(max_length=800)
 
     def __str__(self):
         return self.club_name

@@ -51,6 +51,11 @@ echo &apos;CREATE DATABASE &apos;$DBNAME&apos; CHARACTER SET utf8;&apos; | mysql
 python manage.py makemigrations sc1
 python manage.py migrate
 python manage.py loaddata test_data.json
+
+echo "Installing bower and dependencies"
+sudo npm install -g bower
+cd /vagrant/frontend/generic_web_client/_bower/
+bower install
 </command>
     </hudson.tasks.Shell>
     <jenkins.plugins.shiningpanda.builders.CustomPythonBuilder plugin="shiningpanda@0.22">

@@ -21,6 +21,14 @@ class ClubSerializer(serializers.ModelSerializer):
             'club_phones',
             'club_email',
             'club_homepage',
+            'club_short_name',
+            'club_show_finance_module',
+            'club_show_hr_module',
+            'club_show_reports_module',
+            'club_show_gym_room_module',
+            'club_show_measurements_module',
+            'club_show_meal_module',
+            'club_show_menses_module',
         )
         read_only_fields = (
             'club_name',
@@ -29,6 +37,14 @@ class ClubSerializer(serializers.ModelSerializer):
             'club_phones',
             'club_email',
             'club_homepage',
+            'club_short_name',
+            'club_show_finance_module',
+            'club_show_hr_module',
+            'club_show_reports_module',
+            'club_show_gym_room_module',
+            'club_show_measurements_module',
+            'club_show_meal_module',
+            'club_show_menses_module',
         )
 
 

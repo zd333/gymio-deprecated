@@ -24,7 +24,7 @@ class ClubUserViewSet(mixins.CreateModelMixin,
     permission_classes = (my_permissions.UnAuthenticatedOrAuthorizedStaffCanPostUser,
                           my_permissions.OwnerOrStaffCanViewUser,
                           my_permissions.StaffCanViewUserList,
-                          my_permissions.AuthenticatedCanViewStaffUser,
+                          my_permissions.AnyCanViewStaffUser,
                           my_permissions.OwnerOrAuthorizedStaffCanEditUser)
 
     def perform_create(self, serializer):
