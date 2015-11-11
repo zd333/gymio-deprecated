@@ -23,6 +23,11 @@
                 controllerAs: 'dc',
                 templateUrl: '/dashboard/dashboard.html'
             })
+            //.when('/staffboard', {//TODO: fix this stub
+            //    controller: 'StaffboardController',
+            //    controllerAs: 'sc',
+            //    templateUrl: '/staffboard/staffboard.html'
+            //})
             .otherwise({
                 redirectTo: '/'
             });

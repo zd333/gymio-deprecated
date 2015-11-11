@@ -1,7 +1,40 @@
-<!--TODO: Finish this stub-->
-<div ng-controller="HeaderController as hc">
-    This is header stub!
-    <a href="/register">Register</a>
-    <a href="/login">Login</a>
-    <a href="/" ng-click="hc.logout()">Logout</a>
-</div>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container" ng-controller="HeaderController as hc">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">{{hc.shortName}}</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <!--TODO: language swither is stub now. Fix it with tiny flags-->
+                <li class="dropdown  active"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Язык <span
+                        class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Українська</a></li>
+                        <li><a href="#">Русский</a></li>
+                        <li><a href="#">English</a></li>
+                    </ul>
+                </li>
+                <li><a href="/">Контакты</a></li>
+                <li><a href="/dashboard">Кабинет</a></li>
+                <li><a href="/staffboard">Кабинет сотрудника</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <div class="btn-nav">
+                        <a class="btn btn-primary btn-small navbar-btn" href="/register">Register</a>
+                        <a class="btn btn-primary btn-small navbar-btn" href="/login">Login</a>
+                        <a class="btn btn-primary btn-small navbar-btn" href="/" ng-click="hc.logout()">Logout</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <!--/.nav-collapse -->
+    </div>
+</nav>

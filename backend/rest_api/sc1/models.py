@@ -37,6 +37,7 @@ class Club(models.Model):
     club_show_measurements_module = models.BooleanField(default=True)
     club_show_meal_module = models.BooleanField(default=True)
     club_show_menses_module = models.BooleanField(default=True)
+    club_show_ads = models.BooleanField(default=False)
 
     # internal backend settings
     club_allow_push_notifications = models.BooleanField(default=False)

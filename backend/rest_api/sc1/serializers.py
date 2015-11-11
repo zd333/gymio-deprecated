@@ -29,6 +29,7 @@ class ClubSerializer(serializers.ModelSerializer):
             'club_show_measurements_module',
             'club_show_meal_module',
             'club_show_menses_module',
+            'club_show_ads',
         )
         read_only_fields = (
             'club_name',
@@ -45,6 +46,7 @@ class ClubSerializer(serializers.ModelSerializer):
             'club_show_measurements_module',
             'club_show_meal_module',
             'club_show_menses_module',
+            'club_show_ads',
         )
 
 

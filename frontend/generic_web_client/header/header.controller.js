@@ -5,11 +5,12 @@
         .module('gymio.header.controllers')
         .controller('HeaderController', HeaderController);
 
-    HeaderController.$inject = ['$location', '$scope', 'Authentication'];
+    HeaderController.$inject = ['$location', '$scope', 'Authentication', '$global'];
 
-    function HeaderController($location, $scope, Authentication) {
+    function HeaderController($location, $scope, Authentication, $global) {
         var hc = this;
 
+        hc.shortName = $global.settings().shortName;
         hc.logout = logout;
 
         function logout(){

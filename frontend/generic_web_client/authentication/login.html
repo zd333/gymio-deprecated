@@ -1,21 +1,28 @@
-<div>
-    <h1>Login</h1>
-    <div>
-        <form role="form" ng-submit="lc.login()">
-            <div>
-                <label for="login__username">Login name</label>
-                <input type="text" id="login__username" ng-model="lc.username"/>
-            </div>
-            <div>
-                <label for="login__password">Password</label>
-                <input type="password" id="login__password" ng-model="lc.password"/>
-            </div>
-            <div>
-                <button type="submit">Submit</button>
-            </div>
-            <div>
-                {{lc.loginErrorText}}
-            </div>
-        </form>
-    </div>
+<div class="col-lg-4 col-lg-offset-4">
+    <form role="form" ng-submit="lc.login()">
+        <h2>Please sign in</h2>
+
+        <label for="inputUsername" class="sr-only">Login</label>
+        <input type="text" id="inputUsername" class="form-control" placeholder="Login name" required autofocus
+               ng-model="lc.username">
+        <label for="inputPassword" class="sr-only">Password</label>
+
+        <input type="password" id="inputPassword" class="form-control" placeholder="Password" required
+               ng-model="lc.password">
+
+        <!--TODO: add remember me feature-->
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" value="remember-me"> Remember me
+            </label>
+        </div>
+
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+
+        <!--TODO: add data validation and fix this stub-->
+        <div>
+            {{lc.loginErrorText}}
+        </div>
+        Я валидация данных и меня тут нет в помине.
+    </form>
 </div>

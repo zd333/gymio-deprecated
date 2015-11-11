@@ -1,42 +1,49 @@
 <!--TODO: add translation ASAP-->
-<div>
-    <h1>Register</h1>
+<div class="col-lg-4 col-lg-offset-4">
+    <form role="form" ng-submit="rc.register()">
+        <h2>Register</h2>
 
-    <div>
-        <form role="form" ng-submit="rc.register()">
-            <div>
-                <label for="register__username">Login name</label>
-                <input type="text" id="register__username" ng-model="rc.username"/>
-            </div>
-            <div>
-                <label for="register__password">Password</label>
-                <input type="password" id="register__password" ng-model="rc.password"/>
-            </div>
-            <div>
-                <label for="register__userfullname">Full name</label>
-                <input type="text" id="register__userfullname" ng-model="rc.userFullName"/>
-            </div>
-            <div>
-                <label for="register__userphone">Phone</label>
-                <input type="text" id="register__userphone" ng-model="rc.userPhone"/>
-            </div>
-            <div>
-                <label for="register__usergenderfemale">Female</label>
-                <input type="radio" id="register__usergenderfemale" name="gender" ng-model="rc.userGender" ng-value="false"/>
+        <label for="registerUsername" class="sr-only">Login name</label>
+        <input type="text" id="registerUsername" class="form-control" placeholder="Login name"
+               ng-model="rc.username">
 
-                <label for="register__usergendermale">Male</label>
-                <input type="radio" id="register__usergendermale" name="gender" ng-model="rc.userGender" ng-value="true"/>
-            </div>
-            <div>
-                <label for="register__userbirthday">Birthday date</label>
-                <input type="date" id="register__userbirthday" ng-model="rc.userBirthday"/>
-            </div>
-            <div>
-                <button type="submit">Submit</button>
-            </div>
-            <div>
-                {{rc.registerErrorText}}
-            </div>
-        </form>
-    </div>
+        <label for="registerPassword" class="sr-only">Password</label>
+        <input type="password" id="registerPassword" class="form-control" placeholder="Password"
+               ng-model="rc.password">
+
+        <label for="registerUserFullName" class="sr-only">Full name</label>
+        <input type="text" id="registerUserFullName" class="form-control" placeholder="Full name"
+               ng-model="rc.userFullName">
+
+        <label for="registerUserPhone" class="sr-only">Phone</label>
+        <input type="text" id="registerUserPhone" class="form-control" placeholder="Phone" ng-model="rc.userPhone">
+
+        <div class="radio-inline">
+            <label>
+                <input type="radio" name="gender" ng-model="rc.userGender" ng-value="false">
+                Female
+            </label>
+        </div>
+        <div class="radio-inline">
+            <label>
+                <input type="radio" name="gender" ng-model="rc.userGender" ng-value="true">
+                Male
+            </label>
+        </div>
+
+        <div class="form-group">
+            <label for="registerUserBirthday">Birthday date</label>
+            <input type="date" id="registerUserBirthday" class="form-control" ng-model="rc.userBirthday">
+        </div>
+
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
+        <!--TODO: data validation-->
+
+        <div>
+            {{rc.registerErrorText}}
+        </div>
+        Я валидация данных и меня тут нет в помине.
+    </form>
 </div>
+
+
