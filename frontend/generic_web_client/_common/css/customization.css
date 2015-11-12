@@ -1,5 +1,6 @@
 
 
+
 /*For sticky footer*/
 html {
     position: relative;
@@ -15,7 +16,7 @@ body {
     width: 100%;
     /* Set the fixed height of the footer here */
     height: 60px;
-    background-color: #dddddd;
+    background-color: #eeeeee;
 }
 
 /*For fixed header*/
