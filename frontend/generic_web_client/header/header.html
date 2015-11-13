@@ -13,24 +13,25 @@
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <!--TODO: language swither is stub now. Fix it with tiny flags-->
-                <li class="dropdown  active"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Язык <span
+                <li class="dropdown  active"><a class="dropdown-toggle" data-toggle="dropdown" href="#">UA <span
                         class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="#">Українська</a></li>
-                        <li><a href="#">Русский</a></li>
-                        <li><a href="#">English</a></li>
+                        <li><a href="#">UA</a></li>
+                        <li><a href="#">RU</a></li>
+                        <li><a href="#">EN</a></li>
                     </ul>
                 </li>
                 <li><a href="/">Контакты</a></li>
                 <li><a href="/dashboard">Кабинет</a></li>
-                <li><a href="/staffboard">Кабинет сотрудника</a></li>
+                <li><a href="/staffboard">Сотрудникам</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li>
                     <div class="btn-nav">
-                        <a class="btn btn-primary btn-small navbar-btn" href="/register">Register</a>
-                        <a class="btn btn-primary btn-small navbar-btn" href="/login">Login</a>
-                        <a class="btn btn-primary btn-small navbar-btn" href="/" ng-click="hc.logout()">Logout</a>
+                        <a class="btn btn-primary btn-small navbar-btn" href="/register"><span class="glyphicon glyphicon-play-circle"></span>
+                            Регистрация</a>
+                        <a class="btn btn-primary btn-small navbar-btn" href="/login"><span class="glyphicon glyphicon-log-in"></span> Вход</a>
+                        <a class="btn btn-primary btn-small navbar-btn" href="/" ng-click="hc.logout()"><span class="glyphicon glyphicon-off"></span> Выход</a>
                     </div>
                 </li>
             </ul>

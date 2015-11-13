@@ -11,7 +11,7 @@
             };
             var globalSettings = {
                 //TODO: this must come from backend
-                shortName: 'Спортивный клуб Unity'
+                shortName: 'Unity'
             };
 
             //returns app settings

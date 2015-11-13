@@ -4,19 +4,19 @@
         <h2>Register</h2>
 
         <label for="registerUsername" class="sr-only">Login name</label>
-        <input type="text" id="registerUsername" class="form-control" placeholder="Login name"
+        <input type="text" id="registerUsername" class="form-control" placeholder="Login name" required autofocus
                ng-model="rc.username">
 
         <label for="registerPassword" class="sr-only">Password</label>
-        <input type="password" id="registerPassword" class="form-control" placeholder="Password"
+        <input type="password" id="registerPassword" class="form-control" placeholder="Password" required
                ng-model="rc.password">
 
         <label for="registerUserFullName" class="sr-only">Full name</label>
-        <input type="text" id="registerUserFullName" class="form-control" placeholder="Full name"
+        <input type="text" id="registerUserFullName" class="form-control" placeholder="Full name" required
                ng-model="rc.userFullName">
 
         <label for="registerUserPhone" class="sr-only">Phone</label>
-        <input type="text" id="registerUserPhone" class="form-control" placeholder="Phone" ng-model="rc.userPhone">
+        <input type="text" id="registerUserPhone" class="form-control" placeholder="Phone" required ng-model="rc.userPhone">
 
         <div class="radio-inline">
             <label>
@@ -33,16 +33,15 @@
 
         <div class="form-group">
             <label for="registerUserBirthday">Birthday date</label>
-            <input type="date" id="registerUserBirthday" class="form-control" ng-model="rc.userBirthday">
+            <input type="date" id="registerUserBirthday" class="form-control" required ng-model="rc.userBirthday">
         </div>
 
         <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
         <!--TODO: data validation-->
 
         <div>
-            {{rc.registerErrorText}}
+            <p class="text-danger">{{rc.registerErrorText}} Я валидация данных и меня тут нет в помине.</p>
         </div>
-        Я валидация данных и меня тут нет в помине.
     </form>
 </div>
 
