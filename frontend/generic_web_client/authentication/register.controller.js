@@ -5,9 +5,9 @@
         .module('gymio.authentication.controllers')
         .controller('RegisterController', RegisterController);
 
-    RegisterController.$inject = ['$location', '$scope', 'Authentication'];
+    RegisterController.$inject = ['$location', '$scope', 'Authentication', '$translate'];
 
-    function RegisterController($location, $scope, Authentication) {
+    function RegisterController($location, $scope, Authentication, $translate) {
         var rc = this;
 
         rc.register = register;
@@ -37,7 +37,7 @@
                 .error(function (data, status, headers, config) {
                     //do not check what error was returned by backend
                     //TODO: perform input data validation here
-                    rc.registerErrorText = 'Please check input data';
+                    rc.registerErrorText = $translate.instant('Input data can not be accepted');
                 });
         }
     }

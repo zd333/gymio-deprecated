@@ -11,7 +11,9 @@
             };
             var globalSettings = {
                 //TODO: this must come from backend
-                shortName: 'Unity'
+                shortName: 'Generic',
+                //TODO:DEPLOY: first language in the list will be default for the app
+                languages: ['ua', 'ru', 'en']
             };
 
             //returns app settings

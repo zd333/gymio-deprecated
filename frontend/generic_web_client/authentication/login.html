@@ -1,23 +1,23 @@
 <div class="col-lg-4 col-lg-offset-4">
     <form role="form" ng-submit="lc.login()">
-        <h2>Please sign in</h2>
+        <h2 translate>Please sign in</h2>
 
-        <label for="inputUsername" class="sr-only">Login</label>
-        <input type="text" id="inputUsername" class="form-control" placeholder="Login name" required autofocus
+        <label for="inputUsername" class="sr-only" translate>Login</label>
+        <input type="text" id="inputUsername" class="form-control" placeholder="{{'Login' | translate}}" required autofocus
                ng-model="lc.username">
-        <label for="inputPassword" class="sr-only">Password</label>
+        <label for="inputPassword" class="sr-only" translate>Password</label>
 
-        <input type="password" id="inputPassword" class="form-control" placeholder="Password" required
+        <input type="password" id="inputPassword" class="form-control" placeholder="{{'Password' | translate}}" required
                ng-model="lc.password">
 
         <!--TODO: add remember me feature-->
         <div class="checkbox">
             <label>
-                <input type="checkbox" value="remember-me"> Remember me
+                <input type="checkbox" value="remember-me"> {{'Remember me' | translate}}
             </label>
         </div>
 
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+        <button class="btn btn-lg btn-primary btn-block" type="submit" translate>Sign in</button>
 
         <!--TODO: add data validation and fix this stub-->
         <div>

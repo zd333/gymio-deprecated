@@ -17,6 +17,10 @@
     "angular": "angularjs#~1.4.7",
     "angular-cookies": "~1.4.7",
     "angular-route": "~1.4.7",
+    "angular-sanitize": "~1.4.7",
+    "angular-translate": "~2.8.1",
+	"angular-translate-loader-static-files": "~2.8.1",
+    "angular-translate-storage-cookie": "~2.8.1",
     "bootstrap": "~3.3.5"
   }
 }

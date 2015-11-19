@@ -1,42 +1,42 @@
 <!--TODO: add translation ASAP-->
 <div class="col-lg-4 col-lg-offset-4">
     <form role="form" ng-submit="rc.register()">
-        <h2>Register</h2>
+        <h2 translate>Register</h2>
 
-        <label for="registerUsername" class="sr-only">Login name</label>
-        <input type="text" id="registerUsername" class="form-control" placeholder="Login name" required autofocus
+        <label for="registerUsername" class="sr-only" translate>Login</label>
+        <input type="text" id="registerUsername" class="form-control" placeholder="{{'Login' | translate}}" required autofocus
                ng-model="rc.username">
 
-        <label for="registerPassword" class="sr-only">Password</label>
-        <input type="password" id="registerPassword" class="form-control" placeholder="Password" required
+        <label for="registerPassword" class="sr-only" translate>Password</label>
+        <input type="password" id="registerPassword" class="form-control" placeholder="{{'Password' | translate}}" required
                ng-model="rc.password">
 
-        <label for="registerUserFullName" class="sr-only">Full name</label>
-        <input type="text" id="registerUserFullName" class="form-control" placeholder="Full name" required
+        <label for="registerUserFullName" class="sr-only" translate>Full name</label>
+        <input type="text" id="registerUserFullName" class="form-control" placeholder="{{'Full name' | translate}}" required
                ng-model="rc.userFullName">
 
-        <label for="registerUserPhone" class="sr-only">Phone</label>
-        <input type="text" id="registerUserPhone" class="form-control" placeholder="Phone" required ng-model="rc.userPhone">
+        <label for="registerUserPhone" class="sr-only" translate>Mobile phone</label>
+        <input type="text" id="registerUserPhone" class="form-control" placeholder="{{'Mobile phone' | translate}}" required ng-model="rc.userPhone">
 
         <div class="radio-inline">
             <label>
-                <input type="radio" name="gender" ng-model="rc.userGender" ng-value="false">
+                <input type="radio" name="gender" ng-model="rc.userGender" ng-value="false" translate>
                 Female
             </label>
         </div>
         <div class="radio-inline">
             <label>
-                <input type="radio" name="gender" ng-model="rc.userGender" ng-value="true">
+                <input type="radio" name="gender" ng-model="rc.userGender" ng-value="true" translate>
                 Male
             </label>
         </div>
 
         <div class="form-group">
-            <label for="registerUserBirthday">Birthday date</label>
+            <label for="registerUserBirthday" translate>Birthday date</label>
             <input type="date" id="registerUserBirthday" class="form-control" required ng-model="rc.userBirthday">
         </div>
 
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
+        <button class="btn btn-lg btn-primary btn-block" type="submit" translate>Register</button>
         <!--TODO: data validation-->
 
         <div>

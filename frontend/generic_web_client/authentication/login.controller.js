@@ -5,9 +5,9 @@
         .module('gymio.authentication.controllers')
         .controller('LoginController', LoginController);
 
-    LoginController.$inject = ['$location', '$scope', 'Authentication'];
+    LoginController.$inject = ['$location', '$scope', 'Authentication', '$translate'];
 
-    function LoginController($location, $scope, Authentication) {
+    function LoginController($location, $scope, Authentication, $translate) {
         var lc = this;
 
         lc.login = login;
@@ -26,7 +26,7 @@
                     $location.path('/dashboard');
                 })
                 .error(function (data, status, headers, config) {
-                    lc.loginErrorText = 'Credentials are incorrect';
+                    lc.loginErrorText = $translate.instant('Wrong credentials');
                 });
         }
     }
