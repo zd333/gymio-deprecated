@@ -4,7 +4,7 @@
     angular
         .module('gymio.services')
         .factory('$global', [function () {
-            //TODO:DEPLOY: always set particular values to this constants before prod deploy
+            //DEPLOY: always set particular values to this constants before prod deploy
             var DeploySettings = {
                 clubNumber: '/1/',
                 restPrefix: '/sc1/',
@@ -12,12 +12,12 @@
             var globalSettings = {
                 //TODO: this must come from backend
                 shortName: 'Generic',
-                //TODO:DEPLOY: first language in the list will be default for the app
+                //DEPLOY: first language in the list will be default for the app
                 languages: ['ua', 'ru', 'en']
             };
 
             //returns app settings
-            var settings = function(){
+            var settings = function () {
                 return globalSettings;
             };
 

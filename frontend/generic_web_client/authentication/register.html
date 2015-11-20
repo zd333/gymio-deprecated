@@ -1,22 +1,25 @@
-<!--TODO: add translation ASAP-->
 <div class="col-lg-4 col-lg-offset-4">
-    <form role="form" ng-submit="rc.register()">
+    <form role="form" name="register" ng-submit="rc.register()">
         <h2 translate>Register</h2>
 
         <label for="registerUsername" class="sr-only" translate>Login</label>
-        <input type="text" id="registerUsername" class="form-control" placeholder="{{'Login' | translate}}" required autofocus
+        <input type="text" id="registerUsername" class="form-control" placeholder="{{'Login' | translate}}" required
+               autofocus
                ng-model="rc.username">
 
         <label for="registerPassword" class="sr-only" translate>Password</label>
-        <input type="password" id="registerPassword" class="form-control" placeholder="{{'Password' | translate}}" required
+        <input type="password" id="registerPassword" class="form-control" placeholder="{{'Password' | translate}}"
+               required
                ng-model="rc.password">
 
         <label for="registerUserFullName" class="sr-only" translate>Full name</label>
-        <input type="text" id="registerUserFullName" class="form-control" placeholder="{{'Full name' | translate}}" required
+        <input type="text" id="registerUserFullName" class="form-control" placeholder="{{'Full name' | translate}}"
+               required
                ng-model="rc.userFullName">
 
         <label for="registerUserPhone" class="sr-only" translate>Mobile phone</label>
-        <input type="text" id="registerUserPhone" class="form-control" placeholder="{{'Mobile phone' | translate}}" required ng-model="rc.userPhone">
+        <input type="text" id="registerUserPhone" class="form-control" placeholder="{{'Mobile phone' | translate}}"
+               required ng-model="rc.userPhone">
 
         <div class="radio-inline">
             <label>
@@ -36,11 +39,13 @@
             <input type="date" id="registerUserBirthday" class="form-control" required ng-model="rc.userBirthday">
         </div>
 
-        <button class="btn btn-lg btn-primary btn-block" type="submit" translate>Register</button>
-        <!--TODO: data validation-->
+        <button class="btn btn-lg btn-primary btn-block"
+                ng-disabled="!rc.username || !rc.password || !rc.userFullName || !rc.userPhone"
+                type="submit" translate>Register
+        </button>
 
         <div>
-            <p class="text-danger">{{rc.registerErrorText}} Я валидация данных и меня тут нет в помине.</p>
+            <p class="text-danger">{{rc.registerErrorText}}</p>
         </div>
     </form>
 </div>

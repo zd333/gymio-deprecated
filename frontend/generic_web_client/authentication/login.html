@@ -1,9 +1,10 @@
 <div class="col-lg-4 col-lg-offset-4">
-    <form role="form" ng-submit="lc.login()">
+    <form role="login" ng-submit="lc.login()">
         <h2 translate>Please sign in</h2>
 
         <label for="inputUsername" class="sr-only" translate>Login</label>
-        <input type="text" id="inputUsername" class="form-control" placeholder="{{'Login' | translate}}" required autofocus
+        <input type="text" id="inputUsername" class="form-control" placeholder="{{'Login' | translate}}" required
+               autofocus
                ng-model="lc.username">
         <label for="inputPassword" class="sr-only" translate>Password</label>
 
@@ -17,11 +18,12 @@
             </label>
         </div>
 
-        <button class="btn btn-lg btn-primary btn-block" type="submit" translate>Sign in</button>
+        <button class="btn btn-lg btn-primary btn-block" ng-disabled="!lc.username || !lc.password" type="submit"
+                translate>Sign in
+        </button>
 
-        <!--TODO: add data validation and fix this stub-->
         <div>
-            <p class="text-danger">{{lc.loginErrorText}} Я валидация данных и меня тут нет в помине.</p>
+            <p class="text-danger">{{lc.loginErrorText}}</p>
         </div>
     </form>
 </div>

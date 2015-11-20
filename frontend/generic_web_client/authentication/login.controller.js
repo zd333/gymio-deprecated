@@ -20,12 +20,20 @@
 
         function login() {
             lc.loginErrorText = null;
+
+            //Authentication.login(lc.username, lc.password)
+            //    .success(function(data, status, headers, config){
+            //        Authentication.setAuthenticatedUser(data);
+            //        $location.path('/dashboard');
+            //    })
+            //    .error(function (data, status, headers, config) {
+            //        lc.loginErrorText = $translate.instant('Error') + ' ' + status + ' ' + data.Message;
+            //    });
             Authentication.login(lc.username, lc.password)
-                .success(function(data, status, headers, config){
-                    Authentication.setAuthenticatedUser(data);
+                .then(function (response) {
+                    Authentication.setAuthenticatedUser(response.data);
                     $location.path('/dashboard');
-                })
-                .error(function (data, status, headers, config) {
+                }, function (response) {
                     lc.loginErrorText = $translate.instant('Wrong credentials');
                 });
         }
