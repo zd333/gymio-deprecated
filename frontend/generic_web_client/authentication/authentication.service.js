@@ -20,7 +20,6 @@
 
         return Authentication;
 
-        //TODO: refactor this - replace 6 input parameters with 1 object?
         function register(username, password, userFullName, userPhone, userGender, userBirthday) {
             return $http.post($global.restUrl('users'), {
                 username: username,

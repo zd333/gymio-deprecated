@@ -4,6 +4,8 @@
     "pk": 1,
     "fields": {
       "club_name": "Клуб качков 1",
+      "club_short_name": "Тестклуб1",
+      "club_list_languages": "ru,ua,en",
       "club_address": "г.Донецк, ул.Артема, д.1",
       "club_gps_str": "",
       "club_phones": "111-11-11",
@@ -16,6 +18,8 @@
     "pk": 2,
     "fields": {
       "club_name": "Клуб фитоняш 2",
+      "club_short_name": "Тестклуб2",
+      "club_list_languages": "ru,ua,en",
       "club_address": "г.Луганск, ул.Центральная, д.2",
       "club_gps_str": "",
       "club_phones": "2222222",

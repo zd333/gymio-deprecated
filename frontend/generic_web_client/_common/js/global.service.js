@@ -3,27 +3,26 @@
 
     angular
         .module('gymio.services')
-        .factory('$global', [function () {
-            //DEPLOY: always set particular values to this constants before prod deploy
-            var DeploySettings = {
-                clubNumber: '/1/',
-                restPrefix: '/sc1/',
-            };
-            var globalSettings = {
-                //TODO: this must come from backend
-                shortName: 'Generic',
-                //DEPLOY: first language in the list will be default for the app
-                languages: ['ua', 'ru', 'en']
+        .factory('$global', ['$http', function ($http) {
+            //DEPLOY: set particular values to this constants before prod deploy
+            var deploySettings = {
+                clubNumber: 1,
+                restPrefix: 'sc1'
             };
 
-            //returns app settings
-            var settings = function () {
-                return globalSettings;
+            //returns promise of JSON with current club settings
+            var deferredGetClubSettings = function () {
+                return $http.get('/' + deploySettings.restPrefix + '/clubs/' + deploySettings.clubNumber + '/', {cache: true});
+            };
+
+            //returns promise of JSON with whole Gymio platform static settings
+            var deferredGetGymioPlatformSettings = function () {
+                return $http.get('/static_settings/' + deploySettings.restPrefix + '.json', {cache: true});
             };
 
             //builds URL to RESTful service
             var restUrl = function (entityName, entityKey) {
-                var URL = DeploySettings.restPrefix + entityName + DeploySettings.clubNumber;
+                var URL = '/' + deploySettings.restPrefix + '/' + entityName + '/' + deploySettings.clubNumber + '/';
                 if (entityKey !== undefined) URL += entityKey + '/';
                 return URL;
             };
@@ -39,7 +38,8 @@
             var globalServices = {
                 restUrl: restUrl,
                 stringifyDate: stringifyDate,
-                settings: settings
+                deferredGetClubSettings: deferredGetClubSettings,
+                deferredGetGymioPlatformSettings: deferredGetGymioPlatformSettings
             };
 
             return globalServices;

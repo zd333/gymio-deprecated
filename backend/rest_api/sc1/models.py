@@ -28,6 +28,7 @@ class Club(models.Model):
     club_homepage = models.URLField(null=True, blank=True)
     club_key = models.CharField(max_length=200, null=True, blank=True)
     club_short_name = models.CharField(max_length=8)
+    club_list_languages = models.CharField(max_length=20, blank=True)
 
     # frontend settings
     club_show_finance_module = models.BooleanField(default=True)
@@ -43,7 +44,7 @@ class Club(models.Model):
     club_allow_push_notifications = models.BooleanField(default=False)
     club_allow_email_notification = models.BooleanField(default=False)
     club_allow_sms_notification = models.BooleanField(default=False)
-    club_internal_notes = models.CharField(max_length=800)
+    club_internal_notes = models.CharField(max_length=800, blank=True)
 
     def __str__(self):
         return self.club_name

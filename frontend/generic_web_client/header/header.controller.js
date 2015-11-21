@@ -10,15 +10,17 @@
     function HeaderController($location, $scope, Authentication, $global, $translate) {
         var hc = this;
 
-        hc.shortName = $global.settings().shortName;
-        hc.languages = $global.settings().languages;
-        //TODO:DEPLOY default language will be the first in list
+        $global.deferredGetClubSettings().then(function (response) {
+            hc.shortName = response.data.club_short_name;
+            hc.languages = response.data.club_list_languages.split(',');
+        });
+
         if ($translate.use() === undefined) {
             //no language stored in cookie, so set default first language in the list
             hc.selectedLanguage = hc.languages[0];
             $translate.use(hc.languages[0]);
         }
-        else{
+        else {
             hc.selectedLanguage = $translate.use();
         }
 
@@ -32,18 +34,17 @@
 
         function logout() {
             Authentication.logout()
-                .success(function (data, status, headers, config) {
+                .success(function () {
                     //clear cookies and move to main view
                     Authentication.unAuthenticate();
                     $location.path('/');
                 })
-                .error(function (data, status, headers, config) {
+                .error(function () {
                     //not sure what is happening
                     //anyway, clear cookies and move to main view
                     Authentication.unAuthenticate();
                     $location.path('/');
-                })
-            ;
+                });
         }
     }
 })();
