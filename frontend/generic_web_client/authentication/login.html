@@ -11,10 +11,9 @@
         <input type="password" id="inputPassword" class="form-control" placeholder="{{'Password' | translate}}" required
                ng-model="lc.password">
 
-        <!--TODO: add remember me feature-->
         <div class="checkbox">
             <label>
-                <input type="checkbox" value="remember-me"> {{'Remember me' | translate}}
+                <input type="checkbox" value="remember-me" ng-model="lc.rememberMe"> {{'Remember me' | translate}}
             </label>
         </div>
 

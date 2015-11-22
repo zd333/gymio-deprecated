@@ -10,8 +10,9 @@
     function HeaderController($location, $rootScope, Authentication, $global, $translate) {
         var hc = this;
         hc.loggedIn = Authentication.isAuthenticated();
-        //TODO: fix this stub - set value corresponding to stored in cookies user details
-        hc.isStaff = false;
+        if (hc.loggedIn) hc.isStaff = !!Authentication.getAuthenticatedUser().is_staff;
+        else hc.isStaff = false;
+
         hc.shortName = '';
         hc.languages = ['en'];
 
@@ -37,8 +38,7 @@
         //authentication event
         $rootScope.$on('userWasAuthenticated', function () {
             hc.loggedIn = true;
-            //TODO: fix this stub - chrck user details in cookies and set to true if this is employee
-            hc.isStaff = true;
+            hc.isStaff = !!Authentication.getAuthenticatedUser().is_staff;
         });
 
         //unauthentication event
@@ -55,7 +55,7 @@
         function logout() {
             Authentication.logout()
                 .success(function () {
-                    //clear cookies and move to main view
+                    //clear user info and move to main view
                     Authentication.unAuthenticate();
                     $location.path('/');
                 })

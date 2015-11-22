@@ -38,21 +38,22 @@
             });
         }
 
-        function setAuthenticatedUser(user) {
+        function setAuthenticatedUser(user, remeber) {
+            $global.authenticatedUser = user;
+            if (remeber) $cookies.put('authenticatedUser', JSON.stringify(user));
             $rootScope.$broadcast('userWasAuthenticated');
-            $cookies.put('authenticatedUser', JSON.stringify(user));
         }
 
         function getAuthenticatedUser() {
-            var usr = $cookies.get('authenticatedUser');
-            if (!usr) {
-                return;
+            if (!$global.authenticatedUser) {
+                var cu = $cookies.get('authenticatedUser');
+                if (cu) $global.authenticatedUser = JSON.parse(cu);
             }
-            return JSON.parse(usr);
+            return $global.authenticatedUser;
         }
 
         function isAuthenticated() {
-            return !!$cookies.get('authenticatedUser');
+            return !!getAuthenticatedUser();
         }
 
         function logout() {
@@ -60,8 +61,10 @@
         }
 
         function unAuthenticate() {
-            $rootScope.$broadcast('userWasUnauthenticated');
+            $global.authenticatedUser = undefined;
             $cookies.remove('authenticatedUser');
+
+            $rootScope.$broadcast('userWasUnauthenticated');
         }
     }
 })();
