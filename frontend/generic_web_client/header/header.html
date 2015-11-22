@@ -15,30 +15,27 @@
                 <li class="dropdown  active"><a class="dropdown-toggle" data-toggle="dropdown" href="">{{hc.selectedLanguage}}<span
                         class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <!--<li><a href="">ua</a></li>-->
-                        <!--<li><a href="">ru</a></li>-->
-                        <!--<li><a href="">en</a></li>-->
                         <li ng-repeat="lng in hc.languages"><a href="" ng-click="hc.setLanguage(lng)">{{lng}}</a></li>
                     </ul>
                 </li>
                 <li><a href="/" translate>Contact us</a></li>
-                <li><a href="/dashboard" translate>Dashboard</a></li>
-                <li><a href="/staffboard" translate>For staff</a></li>
+                <li><a href="/dashboard" ng-show="hc.loggedIn" translate>Dashboard</a></li>
+                <li><a href="/staffboard" ng-show="hc.isStaff" translate>For staff</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li>
                     <div class="btn-nav">
-                        <a class="btn btn-primary btn-small navbar-btn" href="/register"><span
+                        <a class="btn btn-primary btn-small navbar-btn" ng-show="!hc.loggedIn" href="/register"><span
                                 class="glyphicon glyphicon-play-circle"></span>
                             {{'Register' | translate}}</a>
-                        <a class="btn btn-primary btn-small navbar-btn" href="/login"><span
+                        <a class="btn btn-primary btn-small navbar-btn" ng-show="!hc.loggedIn" href="/login"><span
                                 class="glyphicon glyphicon-log-in"></span> {{'Sign in' | translate}}</a>
-                        <a class="btn btn-primary btn-small navbar-btn" href="/" ng-click="hc.logout()"><span
+                        <a class="btn btn-primary btn-small navbar-btn" ng-show="hc.loggedIn" href="/"
+                           ng-click="hc.logout()"><span
                                 class="glyphicon glyphicon-off"></span> {{'Sign out' | translate}}</a>
                     </div>
                 </li>
             </ul>
         </div>
-        <!--/.nav-collapse -->
     </div>
 </nav>

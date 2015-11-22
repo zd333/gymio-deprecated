@@ -5,9 +5,9 @@
         .module('gymio.authentication.services')
         .factory('Authentication', Authentication);
 
-    Authentication.$inject = ['$cookies', '$http', '$global'];
+    Authentication.$inject = ['$cookies', '$http', '$global', '$rootScope'];
 
-    function Authentication($cookies, $http, $global) {
+    function Authentication($cookies, $http, $global, $rootScope) {
         var Authentication = {
             register: register,
             login: login,
@@ -39,18 +39,20 @@
         }
 
         function setAuthenticatedUser(user) {
-            $cookies.authenticatedUser = JSON.stringify(user);
+            $rootScope.$broadcast('userWasAuthenticated');
+            $cookies.put('authenticatedUser', JSON.stringify(user));
         }
 
         function getAuthenticatedUser() {
-            if (!$cookies.authenticatedUser) {
+            var usr = $cookies.get('authenticatedUser');
+            if (!usr) {
                 return;
             }
-            return JSON.parse($cookies.authenticatedUser);
+            return JSON.parse(usr);
         }
 
         function isAuthenticated() {
-            return !!$cookies.authenticatedUser;
+            return !!$cookies.get('authenticatedUser');
         }
 
         function logout() {
@@ -58,7 +60,8 @@
         }
 
         function unAuthenticate() {
-            delete $cookies.authenticatedUser;
+            $rootScope.$broadcast('userWasUnauthenticated');
+            $cookies.remove('authenticatedUser');
         }
     }
 })();
