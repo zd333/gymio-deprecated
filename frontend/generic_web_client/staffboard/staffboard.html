@@ -1,98 +1,13 @@
-<!--TODO: Finish this stub-->
 <div class="container-fluid">
-    <div class="row ">
+    <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
             <ul class="nav nav-sidebar">
-                <li class="active"><a href="">{{'Employee dashboard' | translate}}<span class="sr-only">(current)</span></a></li>
-                <li><a href="">{{'Customer tick' | translate}}</a></li>
-                <li><a href="">{{'Pre-registration' | translate}}</a></li>
-            </ul>
-            <ul class="nav nav-sidebar">
-                <li><a href="">{{'Register user' | translate}}</a></li>
-                <li><a href="">{{'Manage users' | translate}}</a></li>
-            </ul>
-            <ul class="nav nav-sidebar">
-                <li><a href="">{{'Ticket sale' | translate}}</a></li>
-                <li><a href="">{{'Ticket freez' | translate}}</a></li>
-                <li><a href="">{{'Tickets' | translate}}</a></li>
-            </ul>
-            <ul class="nav nav-sidebar">
-                <li><a href="">{{'Group workouts' | translate}}</a></li>
-                <li><a href="">{{'GYM' | translate}}</a></li>
-                <li><a href="">{{'Nutrition courses' | translate}}</a></li>
-            </ul>
-            <ul class="nav nav-sidebar">
-                <li><a href="">{{'Customer notification' | translate}}</a></li>
-            </ul>
-            <ul class="nav nav-sidebar">
-                <li><a href="">{{'Expenses' | translate}}</a></li>
-                <li><a href="">{{'Salary' | translate}}</a></li>
-            </ul>
-            <ul class="nav nav-sidebar">
-                <li><a href="">{{'Employee tick' | translate}}</a></li>
-                <li><a href="">{{'Employees' | translate}}</a></li>
-                <li><a href="">{{'Positions' | translate}}</a></li>
-                <li><a href="">{{'System rights' | translate}}</a></li>
-            </ul>
-            <ul class="nav nav-sidebar">
-                <li><a href="">{{'Reports' | translate}}</a></li>
+                <li ng-repeat="m in sc.modules" ng-class="{'active': m === sc.currentModule}">
+                    <a href="" ng-click="sc.currentModule = m">{{m | translate}}</a>
+                </li>
             </ul>
         </div>
-        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-            <h1 class="page-header">Dashboard</h1>
-
-            <h2 class="sub-header">Section title</h2>
-
-            <div class="table-responsive">
-                <table class="table table-striped">
-                    <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Header</th>
-                        <th>Header</th>
-                        <th>Header</th>
-                        <th>Header</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>1,001</td>
-                        <td>Lorem</td>
-                        <td>ipsum</td>
-                        <td>dolor</td>
-                        <td>sit</td>
-                    </tr>
-                    <tr>
-                        <td>1,002</td>
-                        <td>amet</td>
-                        <td>consectetur</td>
-                        <td>adipiscing</td>
-                        <td>elit</td>
-                    </tr>
-                    <tr>
-                        <td>1,003</td>
-                        <td>Integer</td>
-                        <td>nec</td>
-                        <td>odio</td>
-                        <td>Praesent</td>
-                    </tr>
-                    <tr>
-                        <td>1,003</td>
-                        <td>libero</td>
-                        <td>Sed</td>
-                        <td>cursus</td>
-                        <td>ante</td>
-                    </tr>
-                    <tr>
-                        <td>1,004</td>
-                        <td>dapibus</td>
-                        <td>diam</td>
-                        <td>Sed</td>
-                        <td>nisi</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main"
+             ng-include="'staffboard/' + sc.currentModule + '/' + sc.currentModule + '.html'"></div>
     </div>
 </div>

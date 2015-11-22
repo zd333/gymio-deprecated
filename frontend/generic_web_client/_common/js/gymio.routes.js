@@ -8,7 +8,7 @@
             .when('/', {
                 templateUrl: 'mainview/mainview.html'
             })
-            .when('/register', {//TODO: redirect to update user profile here
+            .when('/register', {
                 controller: 'RegisterController',
                 controllerAs: 'rc',
                 templateUrl: 'authentication/register.html'
@@ -23,9 +23,9 @@
                 controllerAs: 'dc',
                 templateUrl: 'dashboard/dashboard.html'
             })
-            .when('/staffboard', {//TODO: fix this stub
-                //controller: 'StaffboardController',
-                //controllerAs: 'sc',
+            .when('/staffboard', {
+                controller: 'StaffboardController',
+                controllerAs: 'sc',
                 templateUrl: 'staffboard/staffboard.html'
             })
             .otherwise({

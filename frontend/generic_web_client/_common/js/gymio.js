@@ -7,7 +7,8 @@
         'gymio.services',
         'gymio.header',
         'gymio.authentication',
-        'gymio.dashboard'
+        'gymio.dashboard',
+        'gymio.staffboard'
     ]);
 
     //common services

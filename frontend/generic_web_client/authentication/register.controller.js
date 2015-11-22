@@ -62,6 +62,7 @@
                     Authentication.login(rc.username, rc.password)
                         .then(function (response) {
                             Authentication.setAuthenticatedUser(response.data);
+                            //TODO: redirect to update user profile here
                             $location.path('/dashboard');
                         }, function (response) {
                             $location.path('/');
