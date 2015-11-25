@@ -10,13 +10,20 @@
                 restPrefix: 'sc1'
             };
 
-            //returns promise of JSON with current club settings
-            var deferredGetClubSettings = function () {
+
+            //next fields will be shared among all app controllers
+            //they will be added dynamically, defined them here only to comment
+            var clubSettings = {};
+            var gymioPlatformSettings = {};
+            var authenticatedUser = {};
+
+            //returns promise of JSON with current club settings, will be used only in initialization controller
+            var deferredRequestClubSettings = function () {
                 return $http.get('/' + deploySettings.restPrefix + '/clubs/' + deploySettings.clubNumber + '/', {cache: true});
             };
 
-            //returns promise of JSON with whole Gymio platform static settings
-            var deferredGetGymioPlatformSettings = function () {
+            //returns promise of JSON with whole Gymio platform static settings, will be used only in initialization controller
+            var deferredRequestGymioPlatformSettings = function () {
                 return $http.get('/static_settings/' + deploySettings.restPrefix + '.json', {cache: true});
             };
 
@@ -38,8 +45,8 @@
             var globalServices = {
                 restUrl: restUrl,
                 stringifyDate: stringifyDate,
-                deferredGetClubSettings: deferredGetClubSettings,
-                deferredGetGymioPlatformSettings: deferredGetGymioPlatformSettings
+                deferredRequestClubSettings: deferredRequestClubSettings,
+                deferredRequestGymioPlatformSettings: deferredRequestGymioPlatformSettings
             };
 
             return globalServices;

@@ -42,6 +42,7 @@
         // which are disubled for this particular club
 
         //current selected staffboard module
+        //TODO: add redirection mechanism here
         sc.currentModule = sc.modules[0];
     }
 })();

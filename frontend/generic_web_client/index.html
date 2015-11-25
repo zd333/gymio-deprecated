@@ -31,6 +31,7 @@
 <script type="text/javascript" src="_common/js/gymio.config.js"></script>
 <script type="text/javascript" src="_common/js/gymio.routes.js"></script>
 <script type="text/javascript" src="_common/js/global.service.js"></script>
+<script type="text/javascript" src="_common/js/gymio.initialization.js"></script>
 
 <script type="text/javascript" src="header/header.module.js"></script>
 <script type="text/javascript" src="header/header.controller.js"></script>
@@ -82,18 +83,20 @@
 
 <title>Gymio</title>
 </head>
-<body role="document">
+<body role="document" ng-controller="InitializationController as ic">
+<!--TODO: add initialization placeholder-->
 
+<!--initialization wrapper-->
+<div ng-if="ic.initialized">
+    <!--Header is sticky-->
+    <div ng-include="'header/header.html'"></div>
 
-<!--Header is sticky-->
-<div ng-include="'header/header.html'"></div>
+    <!--Main page section-->
+    <div class="container" role="main" ng-view></div>
 
-<!--Main page section-->
-<div class="container" role="main" ng-view></div>
-
-<!--Footer is sticky-->
-<div ng-include="'footer/footer.html'"></div>
-
+    <!--Footer is sticky-->
+    <div ng-include="'footer/footer.html'"></div>
+</div>
 
 <!-- Bootstrap core JavaScript
 ================================================== -->

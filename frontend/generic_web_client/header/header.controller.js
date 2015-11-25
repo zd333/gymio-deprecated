@@ -13,14 +13,8 @@
         if (hc.loggedIn) hc.isStaff = !!Authentication.getAuthenticatedUser().is_staff;
         else hc.isStaff = false;
 
-        hc.shortName = '';
-        hc.languages = ['en'];
-
-        //retrieve short name and languages from backend thought global service
-        $global.deferredGetClubSettings().then(function (response) {
-            hc.shortName = response.data.club_short_name;
-            hc.languages = response.data.club_list_languages.split(',');
-        });
+        hc.shortName = $global.clubSettings.club_short_name;
+        hc.languages = $global.clubSettings.club_list_languages.split(',');
 
         //set translation
         if ($translate.use() === undefined) {
