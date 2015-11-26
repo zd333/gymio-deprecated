@@ -41,7 +41,7 @@
             }
 
             var p = rc.userPhone;
-            p = p.replace('+', '').replace(' ', '').replace('-', '');
+            p = p.replace('+', '').replace(' ', '').replace('-', '').replace('(', '').replace(')', '');
 
             if ((!p.match(/^\d+$/)) || (p.length > 12) || (p.length < 10)) {
                 rc.registerErrorText = $translate.instant('Wrong phone');
@@ -62,8 +62,7 @@
                     Authentication.login(rc.username, rc.password)
                         .then(function (response) {
                             Authentication.setAuthenticatedUser(response.data);
-                            //TODO: redirect to update user profile here
-                            $location.path('/dashboard');
+                            $location.search({dashboardsection: 'my_profile'}).path('/dashboard');
                         }, function (response) {
                             $location.path('/');
                         }

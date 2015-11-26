@@ -77,7 +77,7 @@
 
 <!--Common-->
 <base href="/">
-<link rel="icon" href="/_common/img/favicon.png">
+<link rel="icon" href="_common/img/favicon.png">
 <!--CSS customization (overwrite)-->
 <link href="_common/css/customization.css" rel="stylesheet">
 
@@ -85,6 +85,11 @@
 </head>
 <body role="document" ng-controller="InitializationController as ic">
 <!--TODO: add initialization placeholder-->
+
+<div ng-if="!ic.initialized">
+    <div ng-include="'spinner/spinner.html'"></div>
+</div>
+
 
 <!--initialization wrapper-->
 <div ng-if="ic.initialized">

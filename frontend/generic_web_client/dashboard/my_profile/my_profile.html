@@ -1,14 +1,38 @@
 <!--TODO: fix this stub-->
 <h1 class="page-header" translate>my_profile</h1>
 <form class="form-horizontal" ng-controller="MyProfileController as mpc">
-    <div class="form-group"  ng-show="mpc.user.is_active">
+    <div class="form-group" ng-show="mpc.user.is_active">
         <div class="col-sm-12">
-           <strong><p class="form-control-static text-danger" translate>User inactive message</p></strong>
+            <strong><p class="form-control-static text-danger" translate>User inactive message</p></strong>
         </div>
     </div>
 
     <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <div class="img-rounded">
+                <img src="_common/img/cat_spinner.gif" width="200" alt="Profile photo">
+                <img src="_common/img/cat_spinner.gif" width="200" alt="Not approved profile photo">
+            </div>
+
+            <div>
+                <h4 translate>Photo is waiting for approvement</h4>
+
+                <p translate>PHOTO_IS_UNDER_UPPROOVEMENT_DETAILS</p>
+            </div>
+
+            <div class="input-group">
+                <span class="btn btn-default btn-file input-group-addon" id="choseFileButton"
+                      translate>Browse photo<input type="file"></span>
+                <input type="text" class="form-control" aria-describedby="choseFileButton">
+            </div>
+
+        </div>
+    </div>
+
+
+    <div class="form-group">
         <label class="col-sm-2 control-label" translate>Login</label>
+
         <div class="col-sm-10">
             <p class="form-control-static">{{mpc.user.username}}}</p>
         </div>
@@ -16,6 +40,7 @@
 
     <div class="form-group">
         <label class="col-sm-2 control-label" translate>Register date</label>
+
         <div class="col-sm-10">
             <p class="form-control-static">{{mpc.user.date_joined}}}</p>
         </div>
@@ -23,6 +48,7 @@
 
     <div class="form-group">
         <label for="inputFullName" class="col-sm-2 control-label" translate>Full name</label>
+
         <div class="col-sm-10">
             <input type="text" class="form-control" id="inputFullName" placeholder="full name placeholder | translate">
         </div>
@@ -30,6 +56,7 @@
 
     <div class="form-group">
         <label for="inputPhone" class="col-sm-2 control-label" translate>Mobile phone</label>
+
         <div class="col-sm-10">
             <input type="tel" class="form-control" id="inputPhone" placeholder="050 123 45 67">
         </div>
@@ -38,29 +65,50 @@
 
     <div class="form-group">
         <label for="inputEmail" class="col-sm-2 control-label">Email</label>
+
         <div class="col-sm-10">
             <input type="email" class="form-control" id="inputEmail" placeholder="email placeholder | translate">
         </div>
     </div>
 
     <div class="form-group">
-        <label for="inputPassword3" class="col-sm-2 control-label">Password</label>
+        <label for="inputBirthday" class="col-sm-2 control-label" translate>Birthday date</label>
+
         <div class="col-sm-10">
-            <input type="password" class="form-control" id="inputPassword3" placeholder="Password">
+            <input type="date" class="form-control" id="inputBirthday">
         </div>
     </div>
+
     <div class="form-group">
-        <div class="col-sm-offset-2 col-sm-10">
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox"> Remember me
-                </label>
-            </div>
+        <label for="inputDescription" class="col-sm-2 control-label" translate>About me</label>
+
+        <div class="col-sm-10">
+            <textarea class="form-control" id="inputDescription"
+                      placeholder="ATTENTION_ALL_USERS_SEE_THIS_INFO | translate"></textarea>
         </div>
     </div>
+
+    <div class="form-group">
+        <label for="inputPassword" class="col-sm-2 control-label" translate>Password</label>
+
+        <div class="col-sm-10">
+            <input type="password" class="form-control" id="inputPassword" placeholder="{{'Password' | translate}}"
+                   required>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="inputPassword2" class="col-sm-2 control-label" translate>Repeat password</label>
+
+        <div class="col-sm-10">
+            <input type="password" class="form-control" id="inputPassword2"
+                   placeholder="{{'Repeat password' | translate}}" required>
+        </div>
+    </div>
+
     <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
-            <button type="submit" class="btn btn-default">Sign in</button>
+            <button type="submit" class="btn btn-primary" translate>Save profile changes</button>
         </div>
     </div>
 </form>

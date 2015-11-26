@@ -10,7 +10,7 @@
     function StaffboardController($location, $scope, Authentication) {
         //redirect to main view if it is unauthenticated user
         //TODO: add redirect if it is not employee
-        if (!Authentication.isAuthenticated()) {
+        if (!Authentication.isAuthenticated() || !Authentication.getAuthenticatedUser().is_staff) {
             $location.path('/');
         }
 

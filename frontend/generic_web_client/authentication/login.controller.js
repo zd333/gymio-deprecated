@@ -24,8 +24,13 @@
             Authentication.login(lc.username, lc.password)
                 .then(function (response) {
                     Authentication.setAuthenticatedUser(response.data, lc.rememberMe);
-                    //TODO: redirect staff to staffboard here
-                    $location.path('/dashboard');
+                    if (!Authentication.getAuthenticatedUser().is_staff) {
+                        $location.path('/dashboard');
+                    }
+                    else
+                    {
+                        $location.path('/staffboard');
+                    }
                 }, function (response) {
                     lc.loginErrorText = $translate.instant('Wrong credentials');
                 });

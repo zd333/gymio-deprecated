@@ -29,7 +29,15 @@
         //TODO: add here service call which will delete from modules array all modules, which are disabled for this particular club
 
         //current selected dashboard module
-        //TODO: add redirection mechanism
         dc.currentModule = dc.modules[0];
+
+        //redirect to particular section by search parameter and clean url
+        var paramModule = $location.search().dashboardsection;
+        if (!!paramModule){
+            if (dc.modules.indexOf(paramModule) != -1) {
+                dc.currentModule = paramModule;
+            }
+            $location.search({dashboardsection: null});
+        }
     }
 })();

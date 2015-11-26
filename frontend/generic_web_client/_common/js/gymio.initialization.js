@@ -9,6 +9,7 @@ function InitializationController($global) {
 
     //asynchronous settings request chain
     //main app parts will start only after all settings are received
+    //TODO: add cycle with timeout
     $global.deferredRequestGymioPlatformSettings().then(function (response) {
         $global.gymioPlatformSettings = response.data;
 
