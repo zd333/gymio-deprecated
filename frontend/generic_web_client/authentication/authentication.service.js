@@ -5,9 +5,11 @@
         .module('gymio.authentication.services')
         .factory('Authentication', Authentication);
 
-    Authentication.$inject = ['$cookies', '$http', '$global', '$rootScope'];
+    Authentication.$inject = ['$cookies', '$http', 'global', '$rootScope', '$translate'];
 
-    function Authentication($cookies, $http, $global, $rootScope) {
+    function Authentication($cookies, $http, global, $rootScope, $translate) {
+        var authenticatedUser = undefined;//will store logged in user's profile
+
         var Authentication = {
             register: register,
             login: login,
@@ -15,41 +17,65 @@
             getAuthenticatedUser: getAuthenticatedUser,
             isAuthenticated: isAuthenticated,
             logout: logout,
-            unAuthenticate: unAuthenticate
+            unAuthenticate: unAuthenticate,
+            updateUser: updateUser
         };
 
         return Authentication;
 
         function register(username, password, userFullName, userPhone, userGender, userBirthday) {
-            return $http.post($global.restUrl('users'), {
+            return $http.post(global.restUrl('users'), {
                 username: username,
                 password: password,
                 user_full_name: userFullName,
                 user_phone: userPhone,
                 user_gender: userGender,
-                user_birthday: $global.stringifyDate(userBirthday)
+                user_birthday: global.stringifyDate(userBirthday)
             })
         }
 
+        function updateUser(user) {
+            $http.patch(global.restUrl('users', user.id), user)
+                .then(function (response) {
+                    Authentication.setAuthenticatedUser(response.data);
+                    //TODO: use something more elegant
+                    alert($translate.instant('Successfully saved'));
+                }, function (response) {
+                    //TODO: use something more elegant
+                    alert($translate.instant('Not saved'));
+                });
+        }
+
         function login(username, password) {
-            return $http.post($global.restUrl('login'), {
+            return $http.post(global.restUrl('login'), {
                 username: username,
                 password: password
             });
         }
 
         function setAuthenticatedUser(user, remeber) {
-            $global.authenticatedUser = user;
+            authenticatedUser = user;
             if (remeber) $cookies.put('authenticatedUser', JSON.stringify(user));
+
+            //date is coming and stored in cookies in string YYYY-MM-DD format
+            authenticatedUser.user_birthday = global.datifyString(authenticatedUser.user_birthday);
+            authenticatedUser.date_joined = global.datifyString(authenticatedUser.date_joined);
+
             $rootScope.$broadcast('userWasAuthenticated');
         }
 
         function getAuthenticatedUser() {
-            if (!$global.authenticatedUser) {
+            if (!authenticatedUser) {
                 var cu = $cookies.get('authenticatedUser');
-                if (cu) $global.authenticatedUser = JSON.parse(cu);
+                if (cu){
+                    authenticatedUser = JSON.parse(cu);
+                    //date is coming and stored in cookies in string YYYY-MM-DD format
+                    authenticatedUser.user_birthday = global.datifyString(authenticatedUser.user_birthday);
+                    authenticatedUser.date_joined = global.datifyString(authenticatedUser.date_joined);
+                }
             }
-            return $global.authenticatedUser;
+
+            return authenticatedUser;
         }
 
         function isAuthenticated() {
@@ -57,11 +83,11 @@
         }
 
         function logout() {
-            return $http.post($global.restUrl('logout'));
+            return $http.post(global.restUrl('logout'));
         }
 
         function unAuthenticate() {
-            $global.authenticatedUser = undefined;
+            authenticatedUser = undefined;
             $cookies.remove('authenticatedUser');
 
             $rootScope.$broadcast('userWasUnauthenticated');

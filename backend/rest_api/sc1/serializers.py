@@ -91,18 +91,18 @@ class ClubUserSerializer(serializers.ModelSerializer):
         #  but will not update it. Probably, this not so bad :).
         #  Investigate and fix it when everything else will be just perfect.
         #  instance.email = validated_data.get('email', instance.username)
-        instance.email = validated_data.get('email', instance.username)
+        instance.email = validated_data.get('email', instance.email)
         instance.is_staff = validated_data.get('is_staff', instance.is_staff)
         instance.is_active = validated_data.get('is_active', instance.is_active)
-        instance.user_full_name = validated_data.get('user_full_name', instance.username)
-        instance.user_phone = validated_data.get('user_phone', instance.username)
-        instance.user_gender = validated_data.get('user_gender', instance.username)
-        instance.user_birthday = validated_data.get('user_birthday', instance.username)
-        instance.user_description = validated_data.get('user_description', instance.username)
-        instance.user_notes = validated_data.get('user_notes', instance.username)
+        instance.user_full_name = validated_data.get('user_full_name', instance.user_full_name)
+        instance.user_phone = validated_data.get('user_phone', instance.user_phone)
+        instance.user_gender = validated_data.get('user_gender', instance.user_gender)
+        instance.user_birthday = validated_data.get('user_birthday', instance.user_birthday)
+        instance.user_description = validated_data.get('user_description', instance.user_description)
+        instance.user_notes = validated_data.get('user_notes', instance.user_notes)
         instance.user_position = validated_data.get('user_position', instance.user_position)
-        instance.user_photo = validated_data.get('user_photo', instance.username)
-        instance.user_photo_not_approved = validated_data.get('user_photo_not_approved', instance.username)
+        instance.user_photo = validated_data.get('user_photo', instance.user_photo)
+        instance.user_photo_not_approved = validated_data.get('user_photo_not_approved', instance.user_photo_not_approved)
 
         password = validated_data.get('password', None)
         if password:

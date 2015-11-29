@@ -1,3 +1,10 @@
+.myprofile-not-approved-img {
+    opacity: 0.5;
+    filter: alpha(opacity=50); /* For IE8 and earlier */
+}
+
+
+
 /*For file browsing button*/
 .btn-file {
     position: relative;
@@ -45,7 +52,8 @@
 @media (min-width: 768px) {
     .sidebar {
         position: fixed;
-        top: 51px;
+        /*DEPLOY: update top value when customizing size of jumbotron*/
+        top: 351px;
         /*TODO: fix side navigation bar size issue*/
         bottom: 100px;
         left: 0;
@@ -91,12 +99,21 @@
 
 
 /*Customize jumbotron***************************************************************/
-.container .jumbotron {
-    border-radius: 0;
-    margin-left: -104.5px;
-    margin-right: -104.5px;
-    background-color: #5F4586;
+.jumbotron {
+    min-height: 300px;
+
+    /*DEPLOY: customize jumbotron here*/
+    background-image: url("/_common/img/jumbo.jpg");
+    background-size: cover;
     color: #FFFFFF;
+
+
+    /*background-color: #1abdbf;*/
+    /*background-repeat: repeat-x;*/
+    /*background-image: -moz-linear-gradient(45deg, #104e73, #1abdbf);*/
+    /*background-image: -webkit-linear-gradient(45deg, #104e73, #1abdbf);*/
+    /*background-image: -o-linear-gradient(45deg, #104e73, #1abdbf);*/
+    /*background-image: linear-gradient(45deg, #104e73, #1abdbf);*/
 }
 
 

@@ -5,9 +5,9 @@
         .module('gymio.authentication.controllers')
         .controller('RegisterController', RegisterController);
 
-    RegisterController.$inject = ['$location', '$scope', 'Authentication', '$translate'];
+    RegisterController.$inject = ['$location', '$scope', 'Authentication', '$translate', 'datavalidation'];
 
-    function RegisterController($location, $scope, Authentication, $translate) {
+    function RegisterController($location, $scope, Authentication, $translate, datavalidation) {
         var rc = this;
 
         rc.register = register;
@@ -23,38 +23,42 @@
         function register() {
             rc.registerErrorText = null;
 
-            //register data validation
-            if (rc.username.length < 3) {
-                rc.registerErrorText = $translate.instant('Login too short');
+            var v;//validation buffer
+
+            v = datavalidation.loginValidation(rc.username);
+            if (!v.passed) {
+                rc.registerErrorText = v.errorMsg;
                 return;
             }
+            rc.username = v.processedField;
 
-            if (rc.password.length < 3) {
-                rc.registerErrorText = $translate.instant('Password too short');
+            v = datavalidation.passwordValidation(rc.password);
+            if (!v.passed) {
+                rc.registerErrorText = v.errorMsg;
                 return;
             }
+            rc.password = v.processedField;
 
-            var l = rc.userFullName.split(' ').length;
-            if ((l < 2) || (l > 3) || (rc.userFullName.match(/\d/))) {
-                rc.registerErrorText = $translate.instant('Wrong Full Name');
+            v = datavalidation.fullNameValidation(rc.userFullName);
+            if (!v.passed) {
+                rc.registerErrorText = v.errorMsg;
                 return;
             }
+            rc.userFullName = v.processedField;
 
-            var p = rc.userPhone;
-            p = p.replace('+', '').replace(' ', '').replace('-', '').replace('(', '').replace(')', '');
-
-            if ((!p.match(/^\d+$/)) || (p.length > 12) || (p.length < 10)) {
-                rc.registerErrorText = $translate.instant('Wrong phone');
+            v = datavalidation.phoneValidation(rc.userPhone);
+            if (!v.passed) {
+                rc.registerErrorText = v.errorMsg;
                 return;
             }
-            rc.userPhone = p.slice(p.length - 10);
+            rc.userPhone = v.processedField;
 
-            var y = rc.userBirthday.getFullYear();
-            var now = (new Date()).getFullYear();
-            if ((y < 1930) || ((now - y) < 3)) {
-                rc.registerErrorText = $translate.instant('Wrong age');
+            v = datavalidation.birthDateValidation(rc.userBirthday);
+            if (!v.passed) {
+                rc.registerErrorText = v.errorMsg;
                 return;
             }
+            rc.userBirthday = v.processedField;
 
             Authentication.register(rc.username, rc.password, rc.userFullName, rc.userPhone, rc.userGender, rc.userBirthday)
                 .then(function (response) {

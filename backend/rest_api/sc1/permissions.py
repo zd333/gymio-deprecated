@@ -1,7 +1,7 @@
 from rest_framework import permissions
 
 
-class UnAuthenticatedOrAuthorizedStaffCanPostUser(permissions.BasePermission):
+class UnAuthenticatedOrActiveAuthorizedStaffCanPostUser(permissions.BasePermission):
     """
     Only unauthenticated users can post (create new model instances)
     Typically used for user registration
@@ -11,14 +11,14 @@ class UnAuthenticatedOrAuthorizedStaffCanPostUser(permissions.BasePermission):
         return request.method != 'POST' or not request.user or not request.user.is_authenticated()
 
 
-class OwnerOrStaffCanViewUser(permissions.BasePermission):
+class OwnerOrActiveStaffCanViewUser(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         # TODO: now all authenticated can view all, fix this
         return (not (request.method in permissions.SAFE_METHODS) or
                 (request.user and request.user.is_authenticated()))
 
 
-class StaffCanViewUserList(permissions.BasePermission):
+class ActiveStaffCanViewUserList(permissions.BasePermission):
     def has_permission(self, request, view):
         # TODO: now this is loop back, need to fix it
         # check view.action == 'list' or
@@ -34,7 +34,7 @@ class AnyCanViewStaffUser(permissions.BasePermission):
         return True
 
 
-class OwnerOrAuthorizedStaffCanEditUser(permissions.BasePermission):
+class OwnerOrActiveAuthorizedStaffCanEditUser(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         # TODO: now it's only loop back, need to fix this
         return True

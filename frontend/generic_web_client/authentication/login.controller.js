@@ -5,9 +5,9 @@
         .module('gymio.authentication.controllers')
         .controller('LoginController', LoginController);
 
-    LoginController.$inject = ['$location', '$scope', 'Authentication', '$translate'];
+    LoginController.$inject = ['$location', 'Authentication', '$translate', '$sanitize'];
 
-    function LoginController($location, $scope, Authentication, $translate) {
+    function LoginController($location, Authentication, $translate, $sanitize) {
         var lc = this;
 
         lc.rememberMe = true;
@@ -21,14 +21,13 @@
 
         function login() {
             lc.loginErrorText = null;
-            Authentication.login(lc.username, lc.password)
+            Authentication.login($sanitize(lc.username), $sanitize(lc.password))
                 .then(function (response) {
                     Authentication.setAuthenticatedUser(response.data, lc.rememberMe);
-                    if (!Authentication.getAuthenticatedUser().is_staff) {
+                    if ((!Authentication.getAuthenticatedUser().is_staff) || (!Authentication.getAuthenticatedUser().is_active)) {
                         $location.path('/dashboard');
                     }
-                    else
-                    {
+                    else {
                         $location.path('/staffboard');
                     }
                 }, function (response) {

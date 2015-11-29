@@ -113,7 +113,7 @@ class ClubUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True, null=True, blank=True)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
-    date_joined = models.DateTimeField(auto_now_add=True)  # check what format is returned
+    date_joined = models.DateField(auto_now_add=True)  # check what format is returned
 
     user_club = models.ForeignKey(Club, null=True, blank=True)  # Allow null for Gymio owners
     user_full_name = models.CharField(max_length=100)

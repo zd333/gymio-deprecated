@@ -5,16 +5,16 @@
         .module('gymio.header.controllers')
         .controller('HeaderController', HeaderController);
 
-    HeaderController.$inject = ['$location', '$rootScope', 'Authentication', '$global', '$translate'];
+    HeaderController.$inject = ['$location', '$rootScope', 'Authentication', 'global', '$translate'];
 
-    function HeaderController($location, $rootScope, Authentication, $global, $translate) {
+    function HeaderController($location, $rootScope, Authentication, global, $translate) {
         var hc = this;
         hc.loggedIn = Authentication.isAuthenticated();
         if (hc.loggedIn) hc.isStaff = !!Authentication.getAuthenticatedUser().is_staff;
         else hc.isStaff = false;
 
-        hc.shortName = $global.clubSettings.club_short_name;
-        hc.languages = $global.clubSettings.club_list_languages.split(',');
+        hc.shortName = global.clubSettings.club_short_name;
+        hc.languages = global.clubSettings.club_list_languages.split(',');
 
         //set translation
         if ($translate.use() === undefined) {

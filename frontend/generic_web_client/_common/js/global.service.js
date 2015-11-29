@@ -3,7 +3,7 @@
 
     angular
         .module('gymio.services')
-        .factory('$global', ['$http', function ($http) {
+        .factory('global', ['$http', function ($http) {
             //DEPLOY: set particular values to this constants before prod deploy
             var deploySettings = {
                 clubNumber: 1,
@@ -11,11 +11,9 @@
             };
 
 
-            //next fields will be shared among all app controllers
-            //they will be added dynamically, defined them here only to comment
+            //global app properties
             var clubSettings = {};
             var gymioPlatformSettings = {};
-            var authenticatedUser = {};
 
             //returns promise of JSON with current club settings, will be used only in initialization controller
             var deferredRequestClubSettings = function () {
@@ -42,9 +40,17 @@
                     + ('0' + date.getDate()).slice(-2);
             };
 
+            var datifyString = function (string) {
+                //Date format is hardcoded on backend
+                //'Y-m-d'  #2015-01-30
+                var da = string.split('-');
+                return new Date(da[0], da[1] - 1, da[2]);
+            };
+
             var globalServices = {
                 restUrl: restUrl,
                 stringifyDate: stringifyDate,
+                datifyString: datifyString,
                 deferredRequestClubSettings: deferredRequestClubSettings,
                 deferredRequestGymioPlatformSettings: deferredRequestGymioPlatformSettings
             };

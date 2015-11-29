@@ -7,25 +7,24 @@ from rest_framework.response import Response
 from .models import Club, ClubUser
 from .serializers import ClubSerializer, ClubUserSerializer
 from . import permissions as my_permissions
-
 from gettext import gettext as _
 
 
 class ClubViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     queryset = Club.objects.all()
     serializer_class = ClubSerializer
-    permission_classes = (permissions.AllowAny, )
+    permission_classes = (permissions.AllowAny,)
 
 
-class ClubUserViewSet(mixins.CreateModelMixin,
+class ClubUserViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin,
                       viewsets.GenericViewSet):
     queryset = ClubUser.objects.all()
     serializer_class = ClubUserSerializer
-    permission_classes = (my_permissions.UnAuthenticatedOrAuthorizedStaffCanPostUser,
-                          my_permissions.OwnerOrStaffCanViewUser,
-                          my_permissions.StaffCanViewUserList,
+    permission_classes = (my_permissions.UnAuthenticatedOrActiveAuthorizedStaffCanPostUser,
+                          my_permissions.OwnerOrActiveStaffCanViewUser,
+                          my_permissions.ActiveStaffCanViewUserList,
                           my_permissions.AnyCanViewStaffUser,
-                          my_permissions.OwnerOrAuthorizedStaffCanEditUser)
+                          my_permissions.OwnerOrActiveAuthorizedStaffCanEditUser)
 
     def perform_create(self, serializer):
         # get club by id from URL named parameter
@@ -37,7 +36,6 @@ class ClubUserViewSet(mixins.CreateModelMixin,
         except Club.DoesNotExist:
             raise NotFound(_('Club not found'))
 
-        # TODO: perform check of password here, now simply check if it's nor empty
         password = serializer.validated_data.get('password', None)
         if len(password) < 3:
             raise ValidationError(_({'password': ['This field must be at least 3 symbols long.']}))
@@ -70,17 +68,11 @@ class LoginView(views.APIView):
         user = authenticate(username=username, password=password)
 
         if user is not None:
-            if user.is_active:
-                login(request, user)
+            login(request, user)
 
-                serialized = ClubUserSerializer(user)
+            serialized = ClubUserSerializer(user)
 
-                return Response(serialized.data)
-            else:
-                return Response({
-                    'status': _('Unauthorized'),
-                    'message': _('This account has been disabled.')
-                }, status=status.HTTP_401_UNAUTHORIZED)
+            return Response(serialized.data)
         else:
             return Response({
                 'status': _('Unauthorized'),
