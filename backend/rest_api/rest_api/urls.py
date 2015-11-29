@@ -32,7 +32,7 @@ urlpatterns = patterns(prefix,
 
                        url(r'^sc1/users/(?P<club>[0-9]+)/$', views.ClubUserViewSet.as_view({'post': 'create'})),
                        url(r'^sc1/users/(?P<club>[0-9]+)/(?P<pk>[0-9]+)/$',
-                           views.ClubUserViewSet.as_view({'get': 'retrieve', 'patch': 'partial_update'})),
+                           views.ClubUserViewSet.as_view({'get': 'retrieve', 'post': 'update'})),
                        url(r'^sc1/admin/', include(admin.site.urls)),
                        )
 

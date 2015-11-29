@@ -8,7 +8,10 @@ class UnAuthenticatedOrActiveAuthorizedStaffCanPostUser(permissions.BasePermissi
     """
     def has_permission(self, request, view):
         # TODO: now only unassigned can add user, need to add authorized staff functionality
-        return request.method != 'POST' or not request.user or not request.user.is_authenticated()
+        if request.method != 'POST': return True
+        if view.action != 'create': return True
+        #return not request.user or not request.user.is_authenticated()
+        return True
 
 
 class OwnerOrActiveStaffCanViewUser(permissions.BasePermission):

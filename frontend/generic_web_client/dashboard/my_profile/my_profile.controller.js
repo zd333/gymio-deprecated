@@ -5,9 +5,9 @@
         .module('gymio.dashboard.my_profile.controllers')
         .controller('MyProfileController', MyProfileController);
 
-    MyProfileController.$inject = ['Authentication', 'datavalidation', '$translate', '$sanitize'];
+    MyProfileController.$inject = ['Authentication', 'datavalidation', '$translate', '$sanitize', 'global', '$location'];
 
-    function MyProfileController(Authentication, datavalidation, $translate, $sanitize) {
+    function MyProfileController(Authentication, datavalidation, $translate, $sanitize, global, $location) {
         var mpc = this;
 
         mpc.save = save;
@@ -23,29 +23,40 @@
 
         function save() {
             //TODO: add photo support
+            //make one more user object to use in upload
+            //copy required by backend fields
+            var uploadUser = {};
+            uploadUser.id = Authentication.getAuthenticatedUser().id;
+            uploadUser.username = Authentication.getAuthenticatedUser().username;
+            uploadUser.user_full_name = Authentication.getAuthenticatedUser().user_full_name;
+            uploadUser.user_phone = Authentication.getAuthenticatedUser().user_phone;
+            uploadUser.user_birthday = global.stringifyDate(Authentication.getAuthenticatedUser().user_birthday);
+
             var v;//validation buffer
 
-            v = datavalidation.phoneValidation(mpc.user.user_phone);
-            if (!v.passed) {
-                mpc.errorText = v.errorMsg;
-                return;
-            }
-            mpc.user.user_phone = v.processedField;
+            //add property to upload object only if they were changed
 
-            //angularjs has native email validation support
-            if (!mpc.updateProfile.userEmail.$valid) {
-                mpc.errorText = $translate.instant('Wrong Email');
-                return;
+            if (mpc.updateProfile.userPhone.$dirty) {
+                v = datavalidation.phoneValidation(mpc.user.user_phone);
+                if (!v.passed) {
+                    mpc.errorText = v.errorMsg;
+                    return;
+                }
+                uploadUser.user_phone = v.processedField;
             }
 
-            v = datavalidation.birthDateValidation(mpc.user.user_birthday);
-            if (!v.passed) {
-                mpc.errorText = v.errorMsg;
-                return;
+            if (mpc.updateProfile.userEmail.$dirty) {
+                //angularjs has native email validation support, so do not use datavalidation module
+                if (!mpc.updateProfile.userEmail.$valid) {
+                    mpc.errorText = $translate.instant('Wrong Email');
+                    return;
+                }
+                uploadUser.email = mpc.user.email;
             }
-            mpc.user.user_birthday = v.processedField;
 
-            mpc.user.user_description = $sanitize(mpc.user.user_description);
+            if (mpc.updateProfile.userDescription.$dirty) {
+                uploadUser.user_description = $sanitize(mpc.user.user_description);
+            }
 
             if (mpc.newPassword.length > 0) {
                 v = datavalidation.passwordValidation(mpc.newPassword);
@@ -53,11 +64,18 @@
                     mpc.errorText = v.errorMsg;
                     return;
                 }
-                mpc.newPassword = v.processedField;
-                user.password = mpc.newPassword;
+                uploadUser.password = v.processedField;
             }
 
-            Authentication.updateUser(user);
+            Authentication.updateUser(uploadUser)
+                .then(function (response) {
+                    Authentication.setAuthenticatedUser(response.data);
+                    //TODO: use something more elegant
+                    alert($translate.instant('Successfully saved'));
+                }, function (response) {
+                    //TODO: use something more elegant
+                    alert($translate.instant('Not saved'));
+                });
         }
     }
 })();

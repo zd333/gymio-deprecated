@@ -23,6 +23,9 @@
         function register() {
             rc.registerErrorText = null;
 
+            //use buffer variables not to broke view after sanitizing
+            var username, password, userFullName, userPhone, userBirthday;
+
             var v;//validation buffer
 
             v = datavalidation.loginValidation(rc.username);
@@ -30,37 +33,37 @@
                 rc.registerErrorText = v.errorMsg;
                 return;
             }
-            rc.username = v.processedField;
+            username = v.processedField;
 
             v = datavalidation.passwordValidation(rc.password);
             if (!v.passed) {
                 rc.registerErrorText = v.errorMsg;
                 return;
             }
-            rc.password = v.processedField;
+            password = v.processedField;
 
             v = datavalidation.fullNameValidation(rc.userFullName);
             if (!v.passed) {
                 rc.registerErrorText = v.errorMsg;
                 return;
             }
-            rc.userFullName = v.processedField;
+            userFullName = v.processedField;
 
             v = datavalidation.phoneValidation(rc.userPhone);
             if (!v.passed) {
                 rc.registerErrorText = v.errorMsg;
                 return;
             }
-            rc.userPhone = v.processedField;
+            userPhone = v.processedField;
 
             v = datavalidation.birthDateValidation(rc.userBirthday);
             if (!v.passed) {
                 rc.registerErrorText = v.errorMsg;
                 return;
             }
-            rc.userBirthday = v.processedField;
+            userBirthday = v.processedField;
 
-            Authentication.register(rc.username, rc.password, rc.userFullName, rc.userPhone, rc.userGender, rc.userBirthday)
+            Authentication.register(username, password, userFullName, userPhone, rc.userGender, userBirthday)
                 .then(function (response) {
                     //auto login
                     Authentication.login(rc.username, rc.password)

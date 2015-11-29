@@ -35,15 +35,7 @@
         }
 
         function updateUser(user) {
-            $http.patch(global.restUrl('users', user.id), user)
-                .then(function (response) {
-                    Authentication.setAuthenticatedUser(response.data);
-                    //TODO: use something more elegant
-                    alert($translate.instant('Successfully saved'));
-                }, function (response) {
-                    //TODO: use something more elegant
-                    alert($translate.instant('Not saved'));
-                });
+            return $http.post(global.restUrl('users', user.id), user);
         }
 
         function login(username, password) {
@@ -55,7 +47,7 @@
 
         function setAuthenticatedUser(user, remeber) {
             authenticatedUser = user;
-            if (remeber) $cookies.put('authenticatedUser', JSON.stringify(user));
+            if (remeber || $cookies.get('authenticatedUser')) $cookies.put('authenticatedUser', JSON.stringify(user));
 
             //date is coming and stored in cookies in string YYYY-MM-DD format
             authenticatedUser.user_birthday = global.datifyString(authenticatedUser.user_birthday);
