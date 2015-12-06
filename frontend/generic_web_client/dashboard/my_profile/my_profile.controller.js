@@ -5,21 +5,23 @@
         .module('gymio.dashboard.my_profile.controllers')
         .controller('MyProfileController', MyProfileController);
 
-    MyProfileController.$inject = ['Authentication', 'datavalidation', '$translate', '$sanitize', 'global', '$location'];
+    MyProfileController.$inject = ['Authentication', 'datavalidation', '$translate', '$sanitize', 'global', '$scope'];
 
-    function MyProfileController(Authentication, datavalidation, $translate, $sanitize, global, $location) {
+    function MyProfileController(Authentication, datavalidation, $translate, $sanitize, global, $scope) {
         var mpc = this;
 
         mpc.save = save;
 
         mpc.newPassword = '';
-
         mpc.errorText = '';
 
         //do not assign user object directly to avoid changing by ref
         mpc.user = {};
         var usr = Authentication.getAuthenticatedUser();
         for (var k in usr) mpc.user[k] = usr[k];
+
+        //if no approved photo - replace it with placeholder on view
+        if (!mpc.user.user_photo) mpc.user.user_photo = '_common/img/profile_placeholder.png';
 
         function save() {
             //TODO: add photo support
@@ -32,7 +34,7 @@
             uploadUser.user_phone = Authentication.getAuthenticatedUser().user_phone;
             uploadUser.user_birthday = global.stringifyDate(Authentication.getAuthenticatedUser().user_birthday);
 
-            var v;//validation buffer
+            var v; //validation buffer
 
             //add property to upload object only if they were changed
 

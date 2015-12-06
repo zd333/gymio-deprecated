@@ -1,41 +1,41 @@
-<nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container" ng-controller="HeaderController as hc">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
-                    aria-expanded="false" aria-controls="navbar">
-                <span class="sr-only" translate>Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/">{{hc.shortName}}</a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <li class="dropdown  active"><a class="dropdown-toggle" data-toggle="dropdown" href="">{{hc.selectedLanguage}}<span
-                        class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li ng-repeat="lng in hc.languages"><a href="" ng-click="hc.setLanguage(lng)">{{lng}}</a></li>
-                    </ul>
-                </li>
-                <li><a href="/" translate>Information</a></li>
-                <li><a href="/dashboard" ng-show="hc.loggedIn" translate>Dashboard</a></li>
-                <li><a href="/staffboard" ng-show="hc.isStaff" translate>For staff</a></li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li>
-                    <div class="btn-nav">
-                        <a class="btn btn-primary btn-small navbar-btn" ng-show="!hc.loggedIn" href="/register"><span
-                                class="glyphicon glyphicon-play-circle"></span>
-                            {{'Register' | translate}}</a>
-                        <a class="btn btn-primary btn-small navbar-btn" ng-show="!hc.loggedIn" href="/login"><span
-                                class="glyphicon glyphicon-log-in"></span> {{'Sign in' | translate}}</a>
-                        <a class="btn btn-primary btn-small navbar-btn" ng-show="hc.loggedIn" href="/"
-                           ng-click="hc.logout()"><span
-                                class="glyphicon glyphicon-off"></span> {{'Sign out' | translate}}</a>
-                    </div>
-                </li>
-            </ul>
-        </div>
+<md-toolbar class="md-whiteframe-z2">
+    <div class="md-toolbar-tools">
+
+        <md-button ng-click="rc.toggleSidenav('mainMenu')" hide-gt-md class="md-icon-button"
+                   aria-label="{{'Main menu' | translate}}">
+            <ng-md-icon icon="menu" style="fill:white"></ng-md-icon>
+        </md-button>
+        <h2>
+            <span>{{rc.clubName}}</span>
+        </h2>
+
+        <span flex></span>
+
+        <md-button class="md-raised md-accent" ng-show="!rc.loggedIn" ng-href="/register">
+            {{'Register' | translate}}</md-button>
+        <md-button class="md-raised md-accent" ng-show="!rc.loggedIn" ng-href="/login">
+            {{'Sign in' | translate}}</md-button>
+        <!--TODO:add account photo and name to button-->
+        <md-button class="md-raised md-accent" ng-show="rc.loggedIn" ng-click="rc.logout()" ng-href="/">
+            {{'Sign out' | translate}}</md-button>
+
+        <md-menu>
+            <md-button aria-label="{{'Language' | translate}}" class="md-icon-button" ng-click="$mdOpenMenu($event)">
+                <ng-md-icon icon="language" style="fill:white"></ng-md-icon>
+            </md-button>
+            <md-menu-content width="1">
+                <md-menu-item  ng-repeat="lng in rc.languages">
+                    <md-button ng-click="rc.setLanguage(lng)">
+                        {{lng}}
+                    </md-button>
+                </md-menu-item>
+            </md-menu-content>
+        </md-menu>
+
+        <md-button ng-click="rc.showStaffboardMenu=!rc.showStaffboardMenu" ng-show="rc.isStaff"
+                   class="md-icon-button" aria-label="{{'For staff' | translate}}">
+            <ng-md-icon icon="cake" style="fill:white"></ng-md-icon>
+        </md-button>
+
     </div>
-</nav>
+</md-toolbar>

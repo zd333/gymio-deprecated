@@ -27,6 +27,7 @@ class Club(models.Model):
     club_email = models.EmailField(max_length=45)
     club_homepage = models.URLField(null=True, blank=True)
     club_key = models.CharField(max_length=200, null=True, blank=True)
+    # TODO: remove short name
     club_short_name = models.CharField(max_length=8)
     club_list_languages = models.CharField(max_length=20, blank=True)
 

@@ -1,0 +1,37 @@
+<!--<md-sidenav class="md-sidenav-left" md-component-id="dashboardMenu" md-is-open="true" md-is-locked-open="$mdMedia('gt-md')">-->
+<!--<md-content ng-controller="DashboardMenuController as dc">-->
+<!--<md-button>-->
+<!--Close Sidenav Left-->
+<!--</md-button>-->
+<!--<md-button>-->
+<!--Close Sidenav Left-->
+<!--</md-button>-->
+
+<!--</md-content>-->
+<!--</md-sidenav>-->
+<section layout="row" flex>
+    <md-sidenav md-component-id="mainMenu" class="md-sidenav-left md-whiteframe-z2"
+                md-is-locked-open="$mdMedia('gt-md')">
+        <md-toolbar class="md-whiteframe-z2">
+            <!--TODO: add beautiful gymio logo (and maybe md-toolbar-tools)-->
+            PUT GYMIO LOGO HERE
+        </md-toolbar>
+        <md-content>
+            <!--TODO: add static links (visible for unauthenticated) and dashboard links (visible for authenticated)-->
+        </md-content>
+
+    </md-sidenav>
+</section>
+<!--<div class="container-fluid">-->
+<!--<div class="row">-->
+<!--<div class="col-sm-3 col-md-2 sidebar">-->
+<!--<ul class="nav nav-sidebar">-->
+<!--<li ng-repeat="m in dc.modules" ng-class="{'active': m === dc.currentModule}">-->
+<!--<a href="" ng-click="dc.currentModule = m">{{m | translate}}</a>-->
+<!--</li>-->
+<!--</ul>-->
+<!--</div>-->
+<!--<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main"-->
+<!--ng-include="'dashboard/' + dc.currentModule + '/' + dc.currentModule + '.html'"></div>-->
+<!--</div>-->
+<!--</div>-->
