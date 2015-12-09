@@ -1,53 +1,46 @@
-<div class="col-lg-4 col-lg-offset-4">
-    <form role="form" name="register" ng-submit="rc.register()">
-        <h2 translate>Register</h2>
+<md-content layout="column" flex-offset="5" flex="90">
+    <form ng-submit="rc.register()">
+        <h2 class="md-headline" translate>Register</h2>
 
-        <label for="registerUsername" class="sr-only" translate>Login</label>
-        <input type="text" id="registerUsername" class="form-control" placeholder="{{'Login' | translate}}" required
-               autofocus
-               ng-model="rc.username">
+        <md-input-container class="md-block">
+            <label translate>Login</label>
+            <input type="text" required ng-model="rc.username">
+        </md-input-container>
 
-        <label for="registerPassword" class="sr-only" translate>Password</label>
-        <input type="password" id="registerPassword" class="form-control" placeholder="{{'Password' | translate}}"
-               required
-               ng-model="rc.password">
+        <md-input-container class="md-block">
+            <label translate>Password</label>
+            <input type="password" required ng-model="rc.password">
+        </md-input-container>
 
-        <label for="registerUserFullName" class="sr-only" translate>Full name</label>
-        <input type="text" id="registerUserFullName" class="form-control" placeholder="{{'Full name' | translate}}"
-               required
-               ng-model="rc.userFullName">
+        <md-input-container class="md-block">
+            <label translate>Full name</label>
+            <input type="text" required ng-model="rc.userFullName">
+        </md-input-container>
 
-        <label for="registerUserPhone" class="sr-only" translate>Mobile phone</label>
-        <input type="tel" id="registerUserPhone" class="form-control" placeholder="{{'Mobile phone' | translate}}"
-               required ng-model="rc.userPhone">
+        <md-input-container class="md-block">
+            <label translate>Mobile phone</label>
+            <input type="tel" required ng-model="rc.userPhone">
+        </md-input-container>
 
-        <div class="radio-inline">
-            <label>
-                <input type="radio" name="gender" ng-model="rc.userGender" ng-value="false" translate>
-                Female
-            </label>
+        <md-radio-group ng-model="rc.userGender" layout="row">
+            <md-radio-button ng-value="false">
+                {{'Female' | translate}}
+            </md-radio-button>
+            <md-radio-button ng-value="true">
+                {{'Male' | translate}}
+            </md-radio-button>
+        </md-radio-group>
+
+        <!--TODO: placeholder is not showed-->
+        <!--TODO: find another datepicker-->
+        <div layout="row">
+            <h4 class="md-subhead">{{'Birthday date' | translate}}</h4>
+            <md-datepicker ng-model="rc.userBirthday" ng-required="true"
+            placeholder="{{'Birthday date' | translate}}"></md-datepicker>
         </div>
-        <div class="radio-inline">
-            <label>
-                <input type="radio" name="gender" ng-model="rc.userGender" ng-value="true" translate>
-                Male
-            </label>
-        </div>
 
-        <div class="form-group">
-            <label for="registerUserBirthday" translate>Birthday date</label>
-            <input type="date" id="registerUserBirthday" class="form-control" required ng-model="rc.userBirthday">
-        </div>
-
-        <button class="btn btn-lg btn-primary btn-block"
-                ng-disabled="!rc.username || !rc.password || !rc.userFullName || !rc.userPhone"
-                type="submit" translate>Register
-        </button>
-
-        <div>
-            <p class="text-danger">{{rc.registerErrorText}}</p>
-        </div>
+        <md-button type="submit" ng-disabled="!rc.username || !rc.password || !rc.userFullName || !rc.userPhone"
+                   class="md-raised md-primary">{{'Register' | translate}}
+        </md-button>
     </form>
-</div>
-
-
+</md-content>

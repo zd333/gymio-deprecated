@@ -5,9 +5,9 @@
         .module('gymio.authentication.controllers')
         .controller('LoginController', LoginController);
 
-    LoginController.$inject = ['$location', 'Authentication', '$translate', '$sanitize'];
+    LoginController.$inject = ['$location', 'Authentication', '$translate', '$sanitize', '$mdToast'];
 
-    function LoginController($location, Authentication, $translate, $sanitize) {
+    function LoginController($location, Authentication, $translate, $sanitize, $mdToast) {
         var lc = this;
 
         lc.rememberMe = true;
@@ -20,18 +20,17 @@
         }
 
         function login() {
-            lc.loginErrorText = null;
             Authentication.login($sanitize(lc.username), $sanitize(lc.password))
                 .then(function (response) {
                     Authentication.setAuthenticatedUser(response.data, lc.rememberMe);
                     if ((!Authentication.getAuthenticatedUser().is_staff) || (!Authentication.getAuthenticatedUser().is_active)) {
-                        $location.path('/dashboard');
+                        $location.path('/dashboard/overview');
                     }
                     else {
-                        $location.path('/staffboard');
+                        $location.path('/staffboard/overview');
                     }
                 }, function (response) {
-                    lc.loginErrorText = $translate.instant('Wrong credentials');
+                    $mdToast.showSimple($translate.instant('Wrong credentials'));
                 });
         }
     }

@@ -79,16 +79,20 @@
 
             var birthDateValidation = function (field) {
                 var resultObj = {
-                    passed: true,//if filed passed validation
-                    errorMsg: '',
+                    passed: false,//if filed did not pass validation
+                    errorMsg: $translate.instant('Wrong age'),
                     processedField: field
                 };
+
+                if (!resultObj.processedField) return resultObj;
+                console.log(resultObj.processedField);
                 var y = resultObj.processedField.getFullYear();
+
                 var now = (new Date()).getFullYear();
-                if ((y < 1930) || ((now - y) < 3)) {
-                    resultObj.errorMsg = $translate.instant('Wrong age');
-                    resultObj.passed = false;
-                    return resultObj;
+
+                if (y && (y > 1930) && ((now - y) > 3)) {
+                    resultObj.passed = true;
+                    resultObj.errorMsg = '';
                 }
 
                 return resultObj;

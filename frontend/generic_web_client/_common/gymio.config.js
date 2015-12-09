@@ -20,10 +20,9 @@
         //DEPLOY: customize site colors here
         //material design theme customization
         $mdThemingProvider.theme('default')
-        //.dark()//TODO: check how it impacts on UI
-            .primaryPalette('blue')
-            .accentPalette('yellow')
-            .warnPalette('red')
-            .backgroundPalette('grey');
+            //.primaryPalette('blue')
+            //.accentPalette('amber')
+            //.warnPalette('red')
+            //.backgroundPalette('blue-grey');
     }]);
 })();
