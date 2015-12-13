@@ -4,6 +4,8 @@ from django.contrib.auth import authenticate, login, logout
 from rest_framework import viewsets, mixins, permissions, status, views
 from rest_framework.exceptions import NotFound, ValidationError, PermissionDenied
 from rest_framework.response import Response
+from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.decorators import detail_route, parser_classes
 from .models import Club, ClubUser
 from .serializers import ClubSerializer, ClubUserSerializer
 from . import permissions as my_permissions
@@ -50,6 +52,22 @@ class ClubUserViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin,
         self.check_object_permissions(request, user)
         serializer = self.serializer_class(user, context={'request': request})
         return Response(serializer.data)
+
+    @detail_route(methods=['POST'], permission_classes=[my_permissions.OwnerOrActiveAuthorizedStaffCanEditUser])
+    @parser_classes((FormParser, MultiPartParser,))
+    def userphoto(self, request, pk=None, club=None):
+        return Response(status=status.HTTP_402_PAYMENT_REQUIRED)
+        # if 'photo' in request.data:
+        #     user = get_object_or_404(self.queryset, pk=pk, user_club=club)
+        #     user.user_photo_not_approved.delete()
+        #
+        #     photo = request.data['photo']
+        #
+        #     user.user_photo_not_approved.save(photo.name, photo)
+        #
+        #     return Response(status=status.HTTP_201_CREATED, headers={'Location': user.user_photo_not_approved.url})
+        # else:
+        #     return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 # Use generic APIView because this view is not CRUD, just need to perform some actions

@@ -16,6 +16,7 @@ Including another URLconf
 from django.conf.urls import include, url, patterns
 from django.conf import settings
 from django.contrib import admin
+from django.conf.urls.static import static
 from rest_framework import routers
 from sc1 import views
 
@@ -33,10 +34,16 @@ urlpatterns = patterns(prefix,
                        url(r'^sc1/users/(?P<club>[0-9]+)/$', views.ClubUserViewSet.as_view({'post': 'create'})),
                        url(r'^sc1/users/(?P<club>[0-9]+)/(?P<pk>[0-9]+)/$',
                            views.ClubUserViewSet.as_view({'get': 'retrieve', 'post': 'update'})),
+                       url(r'^sc1/userphoto/(?P<club>[0-9]+)/(?P<pk>[0-9]+)/$',
+                           views.ClubUserViewSet.as_view({'post': 'userphoto'})),
                        url(r'^sc1/admin/', include(admin.site.urls)),
+
                        )
 
 if settings.DEBUG:
     urlpatterns += patterns(prefix,
                             url(r'^sc1/restful_docs/', include('rest_framework_swagger.urls')),
-                            )
+
+                            # to route uploaded files
+                            # DEPLOY: in prod web server must route uploaded files
+                            ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

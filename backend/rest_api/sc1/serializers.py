@@ -75,7 +75,7 @@ class ClubUserSerializer(serializers.ModelSerializer):
             'user_photo_not_approved',
             'password',
         )
-        read_only_fields = ('id', 'date_joined',)
+        read_only_fields = ('id', 'date_joined', 'user_photo', 'user_photo_not_approved',)
 
     def create(self, validated_data):
         user = ClubUser.objects.create(**validated_data)
@@ -101,8 +101,6 @@ class ClubUserSerializer(serializers.ModelSerializer):
         instance.user_description = validated_data.get('user_description', instance.user_description)
         instance.user_notes = validated_data.get('user_notes', instance.user_notes)
         instance.user_position = validated_data.get('user_position', instance.user_position)
-        instance.user_photo = validated_data.get('user_photo', instance.user_photo)
-        instance.user_photo_not_approved = validated_data.get('user_photo_not_approved', instance.user_photo_not_approved)
 
         password = validated_data.get('password', None)
         if password:

@@ -109,6 +109,11 @@ class ClubUserManager(BaseUserManager):
         return club_user
 
 
+# function to create path to store user photo
+def upload_not_approved_photo(instance, filename):
+    return 'sc1/naphotos/{}/{}/{}'.format(instance.user_club_id, instance.username, filename)
+
+
 class ClubUser(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=45, unique=True)
     email = models.EmailField(unique=True, null=True, blank=True)
@@ -124,8 +129,8 @@ class ClubUser(AbstractBaseUser, PermissionsMixin):
     user_description = models.CharField(max_length=800, blank=True)  # external info, available for all users
     user_notes = models.CharField(max_length=800, blank=True)  # internal, for club staff
     user_position = models.ForeignKey(PositionType, null=True, blank=True)
-    user_photo = models.ImageField(blank=True)
-    user_photo_not_approved = models.ImageField(null=True, blank=True)
+    user_photo = models.ImageField(null=True, blank=True)
+    user_photo_not_approved = models.ImageField(null=True, blank=True, upload_to=upload_not_approved_photo)
 
     objects = ClubUserManager()
 

@@ -29,8 +29,15 @@ server {
 		try_files $uri =404;		
 	}
 
+	#uploaded files (images)
+	location ~* ^/media/ {
+		root /vagrant/backend/rest_api/;		
+		try_files $uri =404;		
+	}
+
+	
 	#redirect to REST backend
-	location /sc1 {
+	location ~* ^/sc1/ {
 		proxy_pass  http://127.0.0.1:8008;
 	}
 	

@@ -3,24 +3,13 @@
 
     <p ng-show="!mpc.user.is_active" class="md-body-2" translate>User inactive message</p>
 
-
-    <!--<div class="input-group">-->
-        <!--<label class="btn btn-primary input-group-addon" for="my-file-selector">-->
-            <!--<input gymio-input-file="mpc.selectedFile" id="my-file-selector" type="file"-->
-                   <!--accept="image/*" style="display:none;">-->
-            <!--{{'Browse new photo' | translate}}-->
-        <!--</label>-->
-        <!--<input type="text" class="form-control"-->
-               <!--aria-describedby="my-file-selector" ng-model="mpc.selectedFile" readonly="true">-->
-    <!--</div>-->
-
     <form name="mpc.updateProfile" ng-submit="mpc.save()">
         <section layout="column">
             <p class="md-body-1" translate>Photo is not approved by administration yet</p>
             <div layout="row">
             <img width="80" ng-src="{{mpc.user.user_photo}}"
                  alt="{{'Actual profile photo' | translate}}"/>
-            <img width="80" ng-src="{{mpc.user.user_photo_not_approved}}"
+            <img height="80" ng-src="{{mpc.user.user_photo_not_approved}}"
                  alt="{{'New not approved profile photo' | translate}}"
                  ng-show="mpc.user.user_photo_not_approved"
                  class="myprofile-not-approved-img"/>
