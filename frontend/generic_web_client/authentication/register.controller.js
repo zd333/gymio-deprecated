@@ -67,7 +67,7 @@
                     Authentication.login(rc.username, rc.password)
                         .then(function (response) {
                             Authentication.setAuthenticatedUser(response.data);
-                            $location.path('/dashboard/myprofile');
+                            $location.path('/dashboard/my_profile');
                         }, function (response) {
                             $location.path('/');
                         }

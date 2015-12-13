@@ -1,15 +1,28 @@
-<section layout="row" flex>
+<!--TODO: whem we have many links in this menu and it becoms higher than screen - -->
+<!--then we get ugly second scroll. Fix it-->
+<section layout="row" flex ng-controller="MainMenuController as mmc">
     <md-sidenav md-component-id="mainMenu" class="md-sidenav-left md-whiteframe-z2"
                 md-is-locked-open="$mdMedia('gt-md')">
         <md-toolbar class="md-whiteframe-z2">
-            <!--TODO: add beautiful gymio logo (and maybe md-toolbar-tools)-->
-            PUT GYMIO LOGO HERE
+            <div class="md-toolbar-tools">
+                <!--TODO: add beautiful gymio logo (and maybe md-toolbar-tools)-->
+                PUT GYMIO LOGO HERE
+            </div>
         </md-toolbar>
-        <md-content>
-            <!--TODO: add static links (visible for unauthenticated) and dashboard links (visible for authenticated)-->
-            <!--TODO: add dashboard links from controller property mmc.dashboardModules-->
-            <!--TODO: links mast have beautiful big and cool image (icon)-->
-        </md-content>
+        <md-content layout="column" flex>
+            <!--TODO: this button must be marked somhow, it shoud be bright and different-->
+            <md-button class="md-cornered" style="text-align:left"
+                       ng-href="/mainview/mainview.html">
+                {{'Information' | translate}}
+                <span flex></span>
+            </md-button>
 
+            <md-button ng-repeat="m in mmc.modules" class="md-cornered" style="text-align:left"
+                       ng-href="{{'/dashboard/'+m}}">
+                {{m | translate}}
+                <span flex></span>
+            </md-button>
+            <!--TODO: refactor buttons, they mast have beautiful big and cool image (icon)-->
+        </md-content>
     </md-sidenav>
 </section>

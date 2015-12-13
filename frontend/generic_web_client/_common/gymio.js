@@ -11,6 +11,7 @@
         'gymio.initialization',
         'gymio.root',
         'gymio.authentication',
+        'gymio.mainMenu',
         'gymio.dashboard',
         'gymio.staffboard'
     ]);

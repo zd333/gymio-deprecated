@@ -9,8 +9,8 @@
             </div>
         </md-toolbar>
         <md-content layout="column" flex>
-            <!--TODO: add switch route (href?) to links-->
-            <md-button ng-repeat="m in smc.modules" class="md-cornered" style="text-align:left">
+            <md-button ng-repeat="m in smc.modules" class="md-cornered" style="text-align:left"
+                       ng-href="{{'/staffboard/'+m}}">
                 {{m | translate}}
                 <span flex></span>
             </md-button>

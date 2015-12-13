@@ -24,10 +24,10 @@
                 .then(function (response) {
                     Authentication.setAuthenticatedUser(response.data, lc.rememberMe);
                     if ((!Authentication.getAuthenticatedUser().is_staff) || (!Authentication.getAuthenticatedUser().is_active)) {
-                        $location.path('/dashboard/overview');
+                        $location.path('/dashboard/staffboard_overview');
                     }
                     else {
-                        $location.path('/staffboard/overview');
+                        $location.path('/staffboard/staffboard_overview');
                     }
                 }, function (response) {
                     $mdToast.showSimple($translate.instant('Wrong credentials'));

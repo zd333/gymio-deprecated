@@ -37,6 +37,8 @@ class ClubUserViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin,
             raise NotFound(_('Club not found'))
 
         password = serializer.validated_data.get('password', None)
+        if password is None:
+            raise ValidationError(_({'password': ['This field is required.']}))
         if len(password) < 3:
             raise ValidationError(_({'password': ['This field must be at least 3 symbols long.']}))
 

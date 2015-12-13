@@ -35,7 +35,27 @@
         }
 
         function updateUser(user) {
+            //TODO: fix this
             return $http.post(global.restUrl('users', user.id), user);
+            //return $http({
+            //    method: 'POST',
+            //    url: global.restUrl('users', user.id),
+            //    headers: {
+            //        'Content-Type': 'multipart/form-data'
+            //    },
+            //    data: user,
+            //    transformRequest: function (data, headersGetter) {
+            //        var formData = new FormData();
+            //        angular.forEach(data, function (value, key) {
+            //            formData.append(key, value);
+            //        });
+            //
+            //        var headers = headersGetter();
+            //        delete headers['Content-Type'];
+            //
+            //        return formData;
+            //    }
+            //});
         }
 
         function login(username, password) {

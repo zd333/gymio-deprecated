@@ -1,124 +1,70 @@
-<!--TODO: fix this stub-->
-<div ng-controller="MyProfileController as mpc">
-    <h1 class="page-header" translate>my_profile</h1>
+<md-content layout="column" flex-offset="5" flex="90" ng-controller="MyProfileController as mpc">
+    <h2 class="md-headline" translate>my_profile</h2>
 
-    <form name="mpc.updateProfile" class="form-horizontal" ng-submit="mpc.save()">
-        <div class="form-group" ng-show="!mpc.user.is_active">
-            <div class="col-sm-12">
-                <strong><p class="form-control-static text-danger" translate>User inactive message</p></strong>
+    <p ng-show="!mpc.user.is_active" class="md-body-2" translate>User inactive message</p>
+
+
+    <!--<div class="input-group">-->
+        <!--<label class="btn btn-primary input-group-addon" for="my-file-selector">-->
+            <!--<input gymio-input-file="mpc.selectedFile" id="my-file-selector" type="file"-->
+                   <!--accept="image/*" style="display:none;">-->
+            <!--{{'Browse new photo' | translate}}-->
+        <!--</label>-->
+        <!--<input type="text" class="form-control"-->
+               <!--aria-describedby="my-file-selector" ng-model="mpc.selectedFile" readonly="true">-->
+    <!--</div>-->
+
+    <form name="mpc.updateProfile" ng-submit="mpc.save()">
+        <section layout="column">
+            <p class="md-body-1" translate>Photo is not approved by administration yet</p>
+            <div layout="row">
+            <img width="80" ng-src="{{mpc.user.user_photo}}"
+                 alt="{{'Actual profile photo' | translate}}"/>
+            <img width="80" ng-src="{{mpc.user.user_photo_not_approved}}"
+                 alt="{{'New not approved profile photo' | translate}}"
+                 ng-show="mpc.user.user_photo_not_approved"
+                 class="myprofile-not-approved-img"/>
             </div>
-        </div>
+            <md-input-container>
+                <label translate>Browse new photo</label>
+                <input type="file" gymio-input-file="mpc.selectedFile" accept="image/*" placeholder="">
+            </md-input-container>
 
-        <div class="form-group">
-            <div class="col-sm-12">
-                <strong><p class="form-control-static text-danger" translate>{{mpc.errorText}}</p></strong>
-            </div>
-        </div>
+        </section>
 
-        <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-10">
-                <div class="img-rounded">
-                    <img ng-src="{{mpc.user.user_photo}}" width="200" alt="{{'Actual profile photo' | translate}}"/>
-                    <img ng-src="{{mpc.user.user_photo_not_approved}}" ng-show="mpc.user.user_photo_not_approved"
-                         class="myprofile-not-approved-img"
-                         width="200" alt="{{'New not approved profile photo' | translate}}"/>
-                </div>
-                <br>
+        <p class="md-body-1">{{'Login' | translate}}: {{mpc.user.username}}</p>
 
-                <div>
-                    <p ng-show="mpc.user.user_photo_not_approved"
-                       translate>Photo is not approved by administration yet</p>
-                </div>
+        <p class="md-body-1">{{'Full name' | translate}}: {{mpc.user.user_full_name}}</p>
 
-                <div class="input-group">
-                    <label class="btn btn-primary input-group-addon" for="my-file-selector">
-                        <input gymio-input-file="mpc.selectedFile" id="my-file-selector" type="file"
-                               accept="image/*" style="display:none;">
-                        {{'Browse new photo' | translate}}
-                    </label>
-                    <input type="text" class="form-control"
-                           aria-describedby="my-file-selector" ng-model="mpc.selectedFile" readonly="true">
-                </div>
+        <p class="md-body-1">{{'Birthday date' | translate}}: {{mpc.user.user_birthday | date:'shortDate'}}</p>
 
-            </div>
-        </div>
+        <p class="md-body-1">{{'Register date' | translate}}: {{mpc.user.date_joined | date:'shortDate'}}</p>
 
+        <md-input-container class="md-block">
+            <label translate>Mobile phone</label>
+            <input name="userPhone" type="tel" ng-model="mpc.user.user_phone">
+        </md-input-container>
 
-        <div class="form-group">
-            <label class="col-sm-2 control-label" translate>Login</label>
+        <md-input-container>
+            <label translate>Email</label>
+            <input name="userEmail" type="email" ng-model="mpc.user.email"
+                   placeholder="{{'email placeholder' | translate}}">
+        </md-input-container>
 
-            <div class="col-sm-10">
-                <p class="form-control-static">{{mpc.user.username}}</p>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label class="col-sm-2 control-label" translate>Full name</label>
-
-            <div class="col-sm-10">
-                <p class="form-control-static">{{mpc.user.user_full_name}}</p>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label class="col-sm-2 control-label" translate>Birthday date</label>
-
-            <div class="col-sm-10">
-                <p class="form-control-static">{{mpc.user.user_birthday | date:'shortDate'}}</p>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label class="col-sm-2 control-label" translate>Register date</label>
-
-            <div class="col-sm-10">
-                <p class="form-control-static">{{mpc.user.date_joined | date:'shortDate'}}</p>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label for="inputPhone" class="col-sm-2 control-label" translate>Mobile phone</label>
-
-            <div class="col-sm-10">
-                <input name="userPhone" type="tel" ng-model="mpc.user.user_phone" class="form-control" id="inputPhone">
-            </div>
-        </div>
-
-
-        <div class="form-group">
-            <label for="inputEmail" class="col-sm-2 control-label">Email</label>
-
-            <div class="col-sm-10">
-                <input name="userEmail" type="email" class="form-control" id="inputEmail" ng-model="mpc.user.email"
-                       placeholder="{{'email placeholder' | translate}}" autofocus>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label for="inputDescription" class="col-sm-2 control-label" translate>About me</label>
-
-            <div class="col-sm-10">
-            <textarea name="userDescription" class="form-control" id="inputDescription"
-                      ng-model="mpc.user.user_description"
+        <md-input-container>
+            <label translate>About me</label>
+            <textarea name="userDescription" ng-model="mpc.user.user_description"
                       placeholder="{{'ATTENTION_ALL_USERS_SEE_THIS_INFO' | translate}}"></textarea>
-            </div>
-        </div>
+        </md-input-container>
 
-        <div class="form-group">
-            <label for="inputPassword" class="col-sm-2 control-label" translate>Password</label>
+        <md-input-container>
+            <label translate>Password</label>
+            <input type="password" ng-model="mpc.newPassword"
+                   placeholder="{{'New password' | translate}}">
+        </md-input-container>
 
-            <div class="col-sm-10">
-                <input type="password" class="form-control" id="inputPassword" ng-model="mpc.newPassword"
-                       placeholder="{{'New password' | translate}}">
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" ng-disabled="mpc.updateProfile.$pristine" class="btn btn-primary"
-                        translate>Save profile changes
-                </button>
-            </div>
-        </div>
+        <md-button type="submit" ng-disabled="mpc.updateProfile.$pristine && !mpc.selectedFile"
+                   class="md-raised md-primary">{{'Save profile changes' | translate}}
+        </md-button>
     </form>
-</div>
+</md-content>

@@ -5,27 +5,29 @@
         .module('gymio.dashboard.my_profile.controllers')
         .controller('MyProfileController', MyProfileController);
 
-    MyProfileController.$inject = ['Authentication', 'datavalidation', '$translate', '$sanitize', 'global', '$scope'];
+    MyProfileController.$inject = ['Authentication', 'datavalidation', '$translate', '$sanitize', 'global', '$mdToast', '$location'];
 
-    function MyProfileController(Authentication, datavalidation, $translate, $sanitize, global, $scope) {
+    function MyProfileController(Authentication, datavalidation, $translate, $sanitize, global, $mdToast, $location) {
         var mpc = this;
 
         mpc.save = save;
 
         mpc.newPassword = '';
-        mpc.errorText = '';
 
         //do not assign user object directly to avoid changing by ref
         mpc.user = {};
         var usr = Authentication.getAuthenticatedUser();
         for (var k in usr) mpc.user[k] = usr[k];
 
+        if (!mpc.user.is_active) {
+            $mdToast.showSimple($translate.instant('User inactive message'));
+        }
+
         //if no approved photo - replace it with placeholder on view
         if (!mpc.user.user_photo) mpc.user.user_photo = '_common/img/profile_placeholder.png';
 
         function save() {
-            //TODO: add photo support
-            //make one more user object to use in upload
+            //create one more user object to use in upload
             //copy required by backend fields
             var uploadUser = {};
             uploadUser.id = Authentication.getAuthenticatedUser().id;
@@ -41,7 +43,7 @@
             if (mpc.updateProfile.userPhone.$dirty) {
                 v = datavalidation.phoneValidation(mpc.user.user_phone);
                 if (!v.passed) {
-                    mpc.errorText = v.errorMsg;
+                    $mdToast.showSimple(v.errorMsg);
                     return;
                 }
                 uploadUser.user_phone = v.processedField;
@@ -50,33 +52,39 @@
             if (mpc.updateProfile.userEmail.$dirty) {
                 //angularjs has native email validation support, so do not use datavalidation module
                 if (!mpc.updateProfile.userEmail.$valid) {
-                    mpc.errorText = $translate.instant('Wrong Email');
+                    $mdToast.showSimple($translate.instant('Wrong Email'));
                     return;
                 }
                 uploadUser.email = mpc.user.email;
             }
 
             if (mpc.updateProfile.userDescription.$dirty) {
-                uploadUser.user_description = $sanitize(mpc.user.user_description);
+                //TODO: разобраться с sanitize - если его применить здесь - то он кириллицу превратит в escape коды
+                //uploadUser.user_description = $sanitize(mpc.user.user_description);
+                uploadUser.user_description = mpc.user.user_description;
             }
 
             if (mpc.newPassword.length > 0) {
                 v = datavalidation.passwordValidation(mpc.newPassword);
                 if (!v.passed) {
-                    mpc.errorText = v.errorMsg;
+                    $mdToast.showSimple(v.errorMsg);
                     return;
                 }
                 uploadUser.password = v.processedField;
+            }
+            //TODO: add photo support
+            console.log(mpc.selectedFile);
+            if (mpc.selectedFile) {
+                uploadUser.user_photo_not_approved = mpc.selectedFile;
             }
 
             Authentication.updateUser(uploadUser)
                 .then(function (response) {
                     Authentication.setAuthenticatedUser(response.data);
-                    //TODO: use something more elegant
-                    alert($translate.instant('Successfully saved'));
+                    $location.path('/dashboard/dashboard_overview');
+                    $mdToast.showSimple($translate.instant('Successfully saved'));
                 }, function (response) {
-                    //TODO: use something more elegant
-                    alert($translate.instant('Not saved'));
+                    $mdToast.showSimple($translate.instant('Not saved'));
                 });
         }
     }

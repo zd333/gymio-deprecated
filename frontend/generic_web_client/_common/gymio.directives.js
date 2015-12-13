@@ -16,7 +16,7 @@
                 link: function (scope, el) {
                     el.bind('change', function (event) {
                         var file = event.target.files[0];
-                        scope.gymioInputFile = file ? file.name : undefined;
+                        scope.gymioInputFile = file ? file : undefined;
                         scope.$apply();
                     });
                 }

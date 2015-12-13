@@ -5,17 +5,18 @@
         .module('gymio.mainMenu.controllers')
         .controller('MainMenuController', MainMenuController);
 
-    MainMenuController.$inject = ['$location', 'Authentication'];
+    MainMenuController.$inject = ['Authentication'];
 
-    function MainMenuController($location, Authentication) {
+    function MainMenuController(Authentication) {
         //if it is unauthenticated user - just don't show him dashboard buttons
         if (!Authentication.isAuthenticated()) {
             return;
         }
+        //TODO: add login and logout event handlers here (to show hide modules/menu links)
 
         var mmc = this;
         //modules must be named exactly as js files of dashboard modules
-        mmc.dashboardModules = [
+        mmc.modules = [
             'dashboard_overview',
             'tickets',
             'group_workouts',
