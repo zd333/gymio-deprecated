@@ -73,17 +73,16 @@
                 uploadUser.password = v.processedField;
             }
 
+            //upload photo if needed
+            //TODO: add photo support
+            //TODO: check file size (not more than 4-5 mb?)
+            if (mpc.selectedFile) {
+                uploadUser.user_photo_not_approved = mpc.selectedFile;
+            }
+
             Authentication.updateUser(uploadUser)
                 .then(function (response) {
                     Authentication.setAuthenticatedUser(response.data);
-                    //upload photo if needed
-                    //TODO: add photo support
-                    //TODO: check file size (not more than 4-5 mb?)
-                    if (mpc.selectedFile) {
-                        Authentication.updateUserPhoto(mpc.selectedFile, Authentication.getAuthenticatedUser().id);
-                            //TODO: refactor - handle success and error
-                    }
-
                     $location.path('/dashboard/dashboard_overview');
                     $mdToast.showSimple($translate.instant('Successfully saved'));
                 }, function (response) {

@@ -35,15 +35,39 @@
             })
         }
 
+        //function updateUser(user) {
+        //    return $http.post(global.restUrl('users', user.id), user);
+        //}
+
         function updateUser(user) {
-            return $http.post(global.restUrl('users', user.id), user);
+            return $http({
+                method: 'POST',
+                url: global.restUrl('users', user.id),
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                },
+                data: user,
+                transformRequest: function (data, headersGetter) {
+                    var formData = new FormData();
+                    angular.forEach(data, function (value, key) {
+                        formData.append(key, value);
+                    });
+                    console.log(formData);
+                    var headers = headersGetter();
+                    delete headers['Content-Type'];
+
+                    return formData;
+                }
+            });
+
         }
+
 
         function updateUserPhoto(photo, userId) {
             //TODO: fix this
             return $http({
                 method: 'POST',
-                url: global.restUrl('userphoto', userId),
+                url: global.restUrl('users', userId),
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 },

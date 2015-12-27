@@ -111,7 +111,7 @@ class ClubUserManager(BaseUserManager):
 
 # function to create path to store user photo
 def upload_not_approved_photo(instance, filename):
-    return 'sc1/naphotos/{}/{}/{}'.format(instance.user_club_id, instance.username, filename)
+    return 'sc1/naphotos/{}/{}/{}'.format(instance.user_club_id, instance.id, filename)
 
 
 class ClubUser(AbstractBaseUser, PermissionsMixin):
