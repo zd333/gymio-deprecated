@@ -18,8 +18,7 @@
             isAuthenticated: isAuthenticated,
             logout: logout,
             unAuthenticate: unAuthenticate,
-            updateUser: updateUser,
-            updateUserPhoto: updateUserPhoto
+            updateUser: updateUser
         };
 
         return Authentication;
@@ -35,54 +34,10 @@
             })
         }
 
-        //function updateUser(user) {
-        //    return $http.post(global.restUrl('users', user.id), user);
-        //}
-
-        function updateUser(user) {
-            return $http({
-                method: 'POST',
-                url: global.restUrl('users', user.id),
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                },
-                data: user,
-                transformRequest: function (data, headersGetter) {
-                    var formData = new FormData();
-                    angular.forEach(data, function (value, key) {
-                        formData.append(key, value);
-                    });
-                    console.log(formData);
-                    var headers = headersGetter();
-                    delete headers['Content-Type'];
-
-                    return formData;
-                }
-            });
-
-        }
-
-
-        function updateUserPhoto(photo, userId) {
-            //TODO: fix this
-            return $http({
-                method: 'POST',
-                url: global.restUrl('users', userId),
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                },
-                data: {photo: photo},
-                transformRequest: function (data, headersGetter) {
-                    var formData = new FormData();
-                    angular.forEach(data, function (value, key) {
-                        formData.append(key, value);
-                    });
-
-                    var headers = headersGetter();
-                    delete headers['Content-Type'];
-
-                    return formData;
-                }
+        function updateUser(userFormData, userId) {
+            return $http.post(global.restUrl('users', userId), userFormData, {                
+                headers: {'Content-Type': undefined},//set undefined, browser will replace it with multipart\form and set boundaries
+                transformRequest: angular.identity//to avoid JSON serialization
             });
         }
 

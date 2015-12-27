@@ -27,18 +27,17 @@
         if (!mpc.user.user_photo) mpc.user.user_photo = '_common/img/profile_placeholder.png';
 
         function save() {
-            //create one more user object to use in upload
+            //use form data to update user (it is easiest way to upload files)
             //copy required by backend fields
-            var uploadUser = {};
-            uploadUser.id = Authentication.getAuthenticatedUser().id;
-            uploadUser.username = Authentication.getAuthenticatedUser().username;
-            uploadUser.user_full_name = Authentication.getAuthenticatedUser().user_full_name;
-            uploadUser.user_phone = Authentication.getAuthenticatedUser().user_phone;
-            uploadUser.user_birthday = global.stringifyDate(Authentication.getAuthenticatedUser().user_birthday);
+            var uploadUserFormData = new FormData();;
+            uploadUserFormData.append('id', Authentication.getAuthenticatedUser().id);
+            uploadUserFormData.append('username', Authentication.getAuthenticatedUser().username);
+            uploadUserFormData.append('user_full_name', Authentication.getAuthenticatedUser().user_full_name);            
+            uploadUserFormData.append('user_birthday', global.stringifyDate(Authentication.getAuthenticatedUser().user_birthday));
 
             var v; //validation buffer
 
-            //add property to upload object only if they were changed
+            //add fields to upload object only if they were changed
 
             if (mpc.updateProfile.userPhone.$dirty) {
                 v = datavalidation.phoneValidation(mpc.user.user_phone);
@@ -46,8 +45,13 @@
                     $mdToast.showSimple(v.errorMsg);
                     return;
                 }
-                uploadUser.user_phone = v.processedField;
+                uploadUserFormData.append('user_phone', v.processedField);
             }
+            else {
+                //set old value to field, because it is required by backend
+                uploadUserFormData.append('user_phone', Authentication.getAuthenticatedUser().user_phone);
+            }
+            
 
             if (mpc.updateProfile.userEmail.$dirty) {
                 //angularjs has native email validation support, so do not use datavalidation module
@@ -55,13 +59,13 @@
                     $mdToast.showSimple($translate.instant('Wrong Email'));
                     return;
                 }
-                uploadUser.email = mpc.user.email;
+                uploadUserFormData.append('email', mpc.user.email);
             }
 
             if (mpc.updateProfile.userDescription.$dirty) {
                 //TODO: разобраться с sanitize - если его применить здесь - то он кириллицу превратит в escape коды
                 //uploadUser.user_description = $sanitize(mpc.user.user_description);
-                uploadUser.user_description = mpc.user.user_description;
+                uploadUserFormData.append('user_description', mpc.user.user_description);
             }
 
             if (mpc.newPassword.length > 0) {
@@ -70,17 +74,15 @@
                     $mdToast.showSimple(v.errorMsg);
                     return;
                 }
-                uploadUser.password = v.processedField;
+                uploadUserFormData.append('password', v.processedField);
             }
 
-            //upload photo if needed
-            //TODO: add photo support
             //TODO: check file size (not more than 4-5 mb?)
             if (mpc.selectedFile) {
-                uploadUser.user_photo_not_approved = mpc.selectedFile;
+                uploadUserFormData.append('user_photo_not_approved', mpc.selectedFile);
             }
 
-            Authentication.updateUser(uploadUser)
+            Authentication.updateUser(uploadUserFormData, Authentication.getAuthenticatedUser().id)
                 .then(function (response) {
                     Authentication.setAuthenticatedUser(response.data);
                     $location.path('/dashboard/dashboard_overview');

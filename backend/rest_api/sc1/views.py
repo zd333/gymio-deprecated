@@ -23,7 +23,7 @@ class ClubViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     permission_classes = (permissions.AllowAny,)
 
 
-class ClubUserViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin,
+class ClubUserViewSet(mixins.CreateModelMixin,
                       viewsets.GenericViewSet):
     queryset = ClubUser.objects.all()
     serializer_class = ClubUserSerializer
@@ -32,8 +32,8 @@ class ClubUserViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin,
                           my_permissions.ActiveStaffCanViewUserList,
                           my_permissions.AnyCanViewStaffUser,
                           my_permissions.OwnerOrActiveAuthorizedStaffCanEditUser)
-    #parser_classes = (JSONParser, FormParser, MultiPartParser)
-    parser_classes = (FormParser, MultiPartParser)
+    # with this parser classes we can upload both json and form data (with files)
+    parser_classes = (JSONParser, FormParser, MultiPartParser)
 
     def perform_create(self, serializer):
         # get club by id from URL named parameter
@@ -53,20 +53,23 @@ class ClubUserViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin,
 
         serializer.save(user_club=club)
 
-    def perform_update(self, serializer):
-        # TODO: delete old file if there is a new one
-        # TODO: add club check and wrap into try-catch
-        user_id = self.kwargs['pk']
-        user = ClubUser.objects.get(pk=user_id)
-        user.user_photo_not_approved.save('rrrrrrr.jpg', self.request.FILES.get('user_photo_not_approved'))
-        logger.error('0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA!!!!!!!!!!!!!!!!!!!!!!!!!!')
-        serializer.data['user_photo_not_approved'] = user.user_photo_not_approved
-        logger.error(user.user_photo_not_approved)
-        logger.error(serializer.data['user_photo_not_approved'])
+    # don't use mixin to perform checking club id and save new photo
+    def update(self, request, pk=None, club=None):
+        user = get_object_or_404(self.queryset, pk=pk, user_club=club)
+        photo = request.FILES.get('user_photo_not_approved')
+        if photo is not None:
+            # TODO: add checking of file size
+            # delete old photo from disk, no need to save model - it will be saved by in next statements
+            user.user_photo_not_approved.delete(save=False)
+            user.user_photo_not_approved.save(photo.name, photo)
 
+        serializer = self.get_serializer(user, request.data)
+        serializer.is_valid(raise_exception=True)
         serializer.save()
 
-    # don't use mixin to perform filtering by club
+        return Response(serializer.data)
+
+    # don't use mixin to perform checking club id
     def retrieve(self, request, pk=None, club=None):
         user = get_object_or_404(self.queryset, pk=pk, user_club=club)
         self.check_object_permissions(request, user)
@@ -106,7 +109,9 @@ class LoginView(views.APIView):
 
 # Use generic APIView because this view is not CRUD, just need to perform some actions
 class LogoutView(views.APIView):
-    permission_classes = (permissions.IsAuthenticated,)
+    # permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.AllowAny,)
+    # TODO: add checking if this is logged in user who wants to logout
 
     def post(self, request, club=None):
         # don't check club, because it is safe operation
