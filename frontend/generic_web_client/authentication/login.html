@@ -1,13 +1,13 @@
-<md-content layout="column" flex-offset="5" flex="90">
-    <form ng-submit="lc.login()">
+<md-content flex-offset="25" flex="50">
+    <form layout="column" layout-align="center stretch" ng-submit="lc.login()">
         <h2 class="md-headline" translate>Please sign in</h2>
 
-        <md-input-container class="md-block">
+        <md-input-container flex="50">
             <label translate>Login</label>
             <input type="text" required ng-model="lc.username">
         </md-input-container>
 
-        <md-input-container class="md-block">
+        <md-input-container>
             <label translate>Password</label>
             <input type="password" required ng-model="lc.password">
         </md-input-container>

@@ -26,10 +26,10 @@ class ClubViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
 class ClubUserViewSet(mixins.CreateModelMixin,
                       viewsets.GenericViewSet):
     queryset = ClubUser.objects.all()
+    pagination_class = None  # this will work till amount of users is not huge
     serializer_class = ClubUserSerializer
     permission_classes = (my_permissions.UnAuthenticatedOrActiveAuthorizedStaffCanPostUser,
                           my_permissions.OwnerOrActiveStaffCanViewUser,
-                          my_permissions.ActiveStaffCanViewUserList,
                           my_permissions.AnyCanViewStaffUser,
                           my_permissions.OwnerOrActiveAuthorizedStaffCanEditUser)
     # with this parser classes we can upload both json and form data (with files)
@@ -74,6 +74,22 @@ class ClubUserViewSet(mixins.CreateModelMixin,
         user = get_object_or_404(self.queryset, pk=pk, user_club=club)
         self.check_object_permissions(request, user)
         serializer = self.serializer_class(user, context={'request': request})
+        return Response(serializer.data)
+
+    # don't use mixin to narrow user list by club id
+    def list(self, request, club=None):
+        # permission logic is implemented here to get different narrow for different user groups:
+        # CO get list all club users
+        # RA get list of customer users (not staff)
+        # all other (incl. unauthenticated) get list of staff
+        # TODO: implement logic above and beyond
+        # if request.user.is_authenticated():
+            # request.user - is instance of logged in user
+            # check if it has RA, CO roles (direct or by position referrence)
+            # club_queryset = self.queryset.filter(user_club=club, is_staff = true/false)
+
+        club_queryset = self.queryset.filter(user_club=club)
+        serializer = self.serializer_class(club_queryset, many=True)
         return Response(serializer.data)
 
 

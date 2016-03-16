@@ -31,7 +31,8 @@ urlpatterns = patterns(prefix,
                        url(r'^sc1/login/(?P<club>[0-9]+)/$', views.LoginView.as_view()),
                        url(r'^sc1/logout/(?P<club>[0-9]+)/$', views.LogoutView.as_view(),),
 
-                       url(r'^sc1/users/(?P<club>[0-9]+)/$', views.ClubUserViewSet.as_view({'post': 'create'})),
+                       url(r'^sc1/users/(?P<club>[0-9]+)/$',
+                           views.ClubUserViewSet.as_view({'get': 'list', 'post': 'create'})),
                        url(r'^sc1/users/(?P<club>[0-9]+)/(?P<pk>[0-9]+)/$',
                            views.ClubUserViewSet.as_view({'get': 'retrieve', 'post': 'update'})),
 

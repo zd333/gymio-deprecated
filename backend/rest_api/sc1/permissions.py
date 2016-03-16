@@ -21,15 +21,6 @@ class OwnerOrActiveStaffCanViewUser(permissions.BasePermission):
                 (request.user and request.user.is_authenticated()))
 
 
-class ActiveStaffCanViewUserList(permissions.BasePermission):
-    def has_permission(self, request, view):
-        # TODO: now this is loop back, need to fix it
-        # check view.action == 'list' or
-        # request.method == 'GET' and not 'pk' in view.kwarg
-        # to determine if this is list (not retrieve) action
-        return True
-
-
 class AnyCanViewStaffUser(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         # TODO: now it's only loop back, need to fix this
@@ -40,4 +31,6 @@ class AnyCanViewStaffUser(permissions.BasePermission):
 class OwnerOrActiveAuthorizedStaffCanEditUser(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         # TODO: now it's only loop back, need to fix this
+        # HR can edit all users
+        # RA can edit customer users only
         return True

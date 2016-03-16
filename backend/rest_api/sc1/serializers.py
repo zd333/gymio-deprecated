@@ -61,16 +61,17 @@ class ClubUserSerializer(serializers.ModelSerializer):
             'id',
             'username',
             'email',
-            'is_staff',  # TODO: create checking of field level permission, only authorized can change this
-            'is_active',  # TODO: create checking of field level permission, only authorized can change this
+            'is_staff',
+            'is_active',
             'date_joined',
-            'user_full_name',  # TODO: create checking of field level permission, only authorized can change this
+            'card_id',
+            'user_full_name',
             'user_phone',
-            'user_gender',  # TODO: create checking of field level permission, only authorized can change this
-            'user_birthday',  # TODO: create checking of field level permission, only authorized can change this
+            'user_gender',
+            'user_birthday',
             'user_description',
             'user_notes',
-            'user_position',  # TODO: create checking of field level permission, only authorized can change this
+            'user_position',
             'user_photo',
             'user_photo_not_approved',
             'password',
@@ -81,20 +82,15 @@ class ClubUserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = ClubUser.objects.create(**validated_data)
         password = validated_data.get('password', None)
-        # password check (at least not empty) is in view
         user.set_password(password)
         user.save()
         return user
 
     def update(self, instance, validated_data):
-        #  TODO: this is crutch. Can't define username as read only, because need to write it
-        #  when creating. Backend will accept updated user name,
-        #  but will not update it. Probably, this not so bad :).
-        #  Investigate and fix it when everything else will be just perfect.
-        #  instance.email = validated_data.get('email', instance.username)
         instance.email = validated_data.get('email', instance.email)
         instance.is_staff = validated_data.get('is_staff', instance.is_staff)
         instance.is_active = validated_data.get('is_active', instance.is_active)
+        instance.card_id = validated_data.get('card_id', instance.card_id)
         instance.user_full_name = validated_data.get('user_full_name', instance.user_full_name)
         instance.user_phone = validated_data.get('user_phone', instance.user_phone)
         instance.user_gender = validated_data.get('user_gender', instance.user_gender)

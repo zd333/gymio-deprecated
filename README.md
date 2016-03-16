@@ -12,6 +12,7 @@
  * Install vagrant plugins "vagrant plugin install vagrant-vbguest"
 ### How to run:
  * From project root directory execute "vagrant up" and "vagrant provision" commands
+ * Start this job to make backend service work: http://localhost:8085/job/RunBackendDevPythonWebServer/
 
 ##Dev environment resources
 ### SSH box's credentials:

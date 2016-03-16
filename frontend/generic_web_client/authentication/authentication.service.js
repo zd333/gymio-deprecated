@@ -18,10 +18,17 @@
             isAuthenticated: isAuthenticated,
             logout: logout,
             unAuthenticate: unAuthenticate,
-            updateUser: updateUser
+            updateUser: updateUser,
+            getUsers: getUsers
         };
 
         return Authentication;
+        
+        //это станное место для такого метода, но все остальные методы модели user в этом сервисе
+        //поэтому нет смысла создавать отдельный сервис для 1-2 методов
+        function getUsers() {
+            return $http.get(global.restUrl('users'));
+        }
 
         function register(username, password, userFullName, userPhone, userGender, userBirthday) {
             return $http.post(global.restUrl('users'), {

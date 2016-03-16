@@ -116,10 +116,15 @@ def upload_photo(instance, filename):
 
 class ClubUser(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=45, unique=True)
-    email = models.EmailField(unique=True, null=True, blank=True)
+    email = models.EmailField(null=True, blank=True)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     date_joined = models.DateField(auto_now_add=True)  # check what format is returned
+
+    # в это поле сохранять номер\идентификатор абонемента\карточки, которые использовались в клубе до
+    # внедрения Gymio (ну и в случае, если клуб хочет продолжать использовать эту модель идентификации пользователей)
+    # после внедрения Gymio
+    card_id = models.CharField(null=True, blank=True, max_length=45)
 
     user_club = models.ForeignKey(Club, null=True, blank=True)  # Allow null for Gymio owners
     user_full_name = models.CharField(max_length=100)
@@ -129,7 +134,7 @@ class ClubUser(AbstractBaseUser, PermissionsMixin):
     user_description = models.CharField(max_length=800, blank=True)  # external info, available for all users
     user_notes = models.CharField(max_length=800, blank=True)  # internal, for club staff
     user_position = models.ForeignKey(PositionType, null=True, blank=True)
-    user_photo = models.ImageField(null=True, blank=True)
+    user_photo = models.ImageField(null=True, blank=True, upload_to=upload_photo)
     user_photo_not_approved = models.ImageField(null=True, blank=True, upload_to=upload_photo)
 
     objects = ClubUserManager()

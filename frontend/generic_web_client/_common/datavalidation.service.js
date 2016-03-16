@@ -1,6 +1,7 @@
 (function () {
     'use strict';
 
+    //TODO: разобраться с $sanitize
     angular
         .module('gymio.services')
         .factory('datavalidation', ['$translate', '$sanitize', function ($translate, $sanitize) {
@@ -8,7 +9,8 @@
                 var resultObj = {
                     passed: true,//if filed passed validation
                     errorMsg: '',
-                    processedField: $sanitize(field)
+                    //processedField: $sanitize(field)
+                    processedField: field
                 };
 
                 if (field.length < 3) {
@@ -29,7 +31,8 @@
                 var resultObj = {
                     passed: true,//if filed passed validation
                     errorMsg: '',
-                    processedField: $sanitize(field)
+                    //processedField: $sanitize(field)
+                    processedField: field
                 };
                 var l = field.split(' ').length;
                 if ((l < 2) || (l > 3) || (field.match(/\d/))) {
@@ -46,7 +49,8 @@
                 var resultObj = {
                     passed: true,//if filed passed validation
                     errorMsg: '',
-                    processedField: $sanitize(field)
+                    //processedField: $sanitize(field)
+                    processedField: field
                 };
                 if (field.length < 3) {
                     resultObj.errorMsg = $translate.instant('Password too short');
@@ -61,7 +65,7 @@
                 var resultObj = {
                     passed: true,//if filed passed validation
                     errorMsg: '',
-                    processedField: $sanitize(field)
+                    processedField: field
                 };
 
                 var p = resultObj.processedField;

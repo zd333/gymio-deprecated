@@ -58,6 +58,7 @@
 <script type="text/javascript" src="staffboard/pre_registration/pre_registration.module.js"></script>
 <script type="text/javascript" src="staffboard/register_user/register_user.module.js"></script>
 <script type="text/javascript" src="staffboard/manage_users/manage_users.module.js"></script>
+<script type="text/javascript" src="staffboard/manage_users/manage_users.controller.js"></script>
 <script type="text/javascript" src="staffboard/ticket_sale/ticket_sale.module.js"></script>
 <script type="text/javascript" src="staffboard/ticket_freez/ticket_freez.module.js"></script>
 <script type="text/javascript" src="staffboard/tickets/tickets.module.js"></script>
@@ -93,7 +94,7 @@
     <md-content layout="column" flex>
         <div ng-include="'/header/header.html'"></div>
 
-        <div flex ng-view></div>
+        <div layout="row" flex ng-view></div>
 
         <div ng-include="'/footer/footer.html'"></div>
     </md-content>

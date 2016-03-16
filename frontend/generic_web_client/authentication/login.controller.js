@@ -20,7 +20,8 @@
         }
 
         function login() {
-            Authentication.login($sanitize(lc.username), $sanitize(lc.password))
+            //Authentication.login($sanitize(lc.username), $sanitize(lc.password))
+            Authentication.login($sanitize(lc.username), lc.password)
                 .then(function (response) {
                     Authentication.setAuthenticatedUser(response.data, lc.rememberMe);
                     if ((!Authentication.getAuthenticatedUser().is_staff) || (!Authentication.getAuthenticatedUser().is_active)) {
