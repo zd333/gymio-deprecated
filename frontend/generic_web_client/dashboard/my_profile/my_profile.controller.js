@@ -15,9 +15,8 @@
     mpc.newPassword = '';
 
     //do not assign user object directly to avoid changing by ref
-    mpc.user = {};
     var usr = Authentication.getAuthenticatedUser();
-    for (var k in usr) mpc.user[k] = usr[k];
+    mpc.user = angular.copy(usr);
 
     if (!mpc.user.is_active) {
       $mdToast.showSimple($translate.instant('User inactive message'));

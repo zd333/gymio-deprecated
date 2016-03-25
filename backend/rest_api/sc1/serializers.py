@@ -77,7 +77,6 @@ class ClubUserSerializer(serializers.ModelSerializer):
             'password',
         )
         read_only_fields = ('id', 'date_joined', 'user_photo', 'user_photo_not_approved',)
-        # read_only_fields = ('id', 'date_joined',)
 
     def create(self, validated_data):
         user = ClubUser.objects.create(**validated_data)

@@ -27,6 +27,31 @@
       <span ng-show="!muc.editUserModel.is_active" translate>User is inactive (mark to activate)</span>
     </md-checkbox>
 
+    <div layout="column">
+      <my-centered-circle-image my-src="{{muc.editUserModel.user_photo}}" my-size="80"></my-centered-circle-image>
+      <md-input-container>
+        <label translate>Browse new photo</label>
+        <input type="file" gymio-input-file="muc.selectedFile" accept="image/*" placeholder="">
+      </md-input-container>
+    </div>
+
+    <div layout="column" ng-show="muc.editUserModel.user_photo_not_approved" >
+      <p class="md-body-2" translate>
+        User wants new photo
+      </p>
+      <div layout="row">
+        <my-centered-circle-image my-src="{{muc.editUserModel.user_photo_not_approved}}" my-size="80" class="myprofile-not-approved-img"></my-centered-circle-image>
+        <div layout="column">
+          <md-button class="md-raised md-primary" ng-click="muc.approveUserPhoto()">
+            {{'Press to approve new photo' | translate}}
+          </md-button>
+          <md-button class="md-raised md-primary" ng-click="muc.rejectUserPhoto()">
+            {{'Press to reject new photo' | translate}}
+          </md-button>
+        </div>
+      </div>
+    </div>
+
     <div layout="row">
       <md-input-container flex>
         <label translate>Full name</label>
@@ -60,10 +85,9 @@
       </md-radio-button>
     </md-radio-group>
 
-    <!--TODO: find another datepicker-->
     <div layout="row">
       <p class="md-body-1">{{'Birthday date' | translate}}</p>
-      <md-datepicker ng-model="muc.editUserModel.userBirthdayDate" ng-required="true"></md-datepicker>
+      <md-datepicker ng-model="muc.editUserModel.user_birthday" ng-required="true"></md-datepicker>
     </div>
 
     <!-- TODO: доработать логику фото, -->

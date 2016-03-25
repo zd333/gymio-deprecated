@@ -99,7 +99,7 @@ class LoginView(views.APIView):
     permission_classes = (permissions.AllowAny,)
 
     def post(self, request, club=None):
-        data = json.loads(request.body.decode('utf-8'))  # added decode because of type error on python 3, check this?
+        data = json.loads(request.body.decode('utf-8'))  # TODO: added decode because of type error on python 3, check this?
 
         username = data.get('username', None)
         password = data.get('password', None)
@@ -133,3 +133,35 @@ class LogoutView(views.APIView):
         # don't check club, because it is safe operation
         logout(request)
         return Response({}, status=status.HTTP_204_NO_CONTENT)
+
+
+# Use essential APIView because this view is not CRUD, just need to perform some actions
+# and can use serializer of user model
+class ApproveUserPhotoView(views.APIView):
+    permission_classes = (my_permissions.AuthorizedStaffCanApproveUserPhoto,)
+
+    def post(self, request, pk=None, club=None):
+        user = ClubUser.objects.get(pk=pk, user_club=club)
+        user.user_photo.delete(save=False)
+        user.user_photo.name = user.user_photo_not_approved.name
+        user.user_photo_not_approved.name = None
+
+        user.save()
+
+        serialized = ClubUserSerializer(user)
+        return Response(serialized.data)
+
+
+# Use essential APIView because this view is not CRUD, just need to perform some actions
+# and can use serializer of user model
+class RejectUserPhotoView(views.APIView):
+    permission_classes = (my_permissions.AuthorizedStaffCanApproveUserPhoto,)
+
+    def post(self, request, pk=None, club=None):
+        user = ClubUser.objects.get(pk=pk, user_club=club)
+        user.user_photo_not_approved.delete(save=False)
+
+        user.save()
+
+        serialized = ClubUserSerializer(user)
+        return Response(serialized.data)

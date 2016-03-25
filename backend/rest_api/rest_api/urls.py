@@ -38,6 +38,9 @@ urlpatterns = patterns(prefix,
 
                        url(r'^sc1/admin/', include(admin.site.urls)),
 
+                       url(r'^sc1/approveuserphoto/(?P<club>[0-9]+)/(?P<pk>[0-9]+)/$', views.ApproveUserPhotoView.as_view()),
+                       url(r'^sc1/rejectuserphoto/(?P<club>[0-9]+)/(?P<pk>[0-9]+)/$', views.RejectUserPhotoView.as_view()),
+
                        )
 
 if settings.DEBUG:

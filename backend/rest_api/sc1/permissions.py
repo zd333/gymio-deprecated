@@ -34,3 +34,11 @@ class OwnerOrActiveAuthorizedStaffCanEditUser(permissions.BasePermission):
         # HR can edit all users
         # RA can edit customer users only
         return True
+
+
+class AuthorizedStaffCanApproveUserPhoto(permissions.BasePermission):
+    def has_object_permission(self, request, view, obj):
+        # TODO: now it's only loop back, need to fix this
+        # HR can approve photo of all users
+        # RA can approve photo of customer users only
+        return True

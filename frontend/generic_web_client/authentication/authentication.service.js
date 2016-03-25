@@ -19,11 +19,13 @@
             logout: logout,
             unAuthenticate: unAuthenticate,
             updateUser: updateUser,
+            approveUserPhoto: approveUserPhoto,
+            rejectUserPhoto: rejectUserPhoto,
             getUsers: getUsers
         };
 
         return Authentication;
-        
+
         //это станное место для такого метода, но все остальные методы модели user в этом сервисе
         //поэтому нет смысла создавать отдельный сервис для 1-2 методов
         function getUsers() {
@@ -42,10 +44,18 @@
         }
 
         function updateUser(userFormData, userId) {
-            return $http.post(global.restUrl('users', userId), userFormData, {                
+            return $http.post(global.restUrl('users', userId), userFormData, {
                 headers: {'Content-Type': undefined},//set undefined, browser will replace it with multipart\form and set boundaries
                 transformRequest: angular.identity//to avoid JSON serialization
             });
+        }
+
+        function approveUserPhoto(userId) {
+            return $http.post(global.restUrl('approveuserphoto', userId));
+        }
+
+        function rejectUserPhoto(userId) {
+            return $http.post(global.restUrl('rejectuserphoto', userId));
         }
 
         function login(username, password) {

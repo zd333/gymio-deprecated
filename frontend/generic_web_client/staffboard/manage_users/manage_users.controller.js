@@ -25,6 +25,8 @@
       muc.narrowUserList = narrowUserList;
       muc.setEditUserModel = setEditUserModel;
       muc.save = save;
+      muc.approveUserPhoto = approveUserPhoto;
+      muc.rejectUserPhoto = rejectUserPhoto;
 
       //get all users
       Authentication.getUsers()
@@ -41,7 +43,6 @@
         //username/user_full_name/id/card_id
         //такой подход не должен принести проблем производительности, т.к. это всего лишь указатели
         //по крайней мере с вменяемым количеством пользователей в списке
-        //TODO: add search logic
         var res = [];
         var t = text.toLowerCase();
 
@@ -63,18 +64,18 @@
 
         //копируем выбранного пользователя в отдельный экземпляр, чтобы привязанные к контролам свойства не затерлись в оригинальном массиве
         if (muc.selectedUser) {
-          muc.editUserModel = {};
-          for (var k in muc.selectedUser) muc.editUserModel[k] = muc.selectedUser[k];
+          muc.editUserModel = angular.copy(muc.selectedUser);
 
-          //add Date property for datepicker control
-          muc.editUserModel.userBirthdayDate = new Date(muc.editUserModel.user_birthday);
+          //изменяем со строки на объект для контрола datepicker
+          muc.editUserModel.user_birthday = new Date(muc.editUserModel.user_birthday);
+
+          muc.editUserModel.newPassword = '';
         } else {
           muc.editUserModel = null;
         }
       }
 
       function save() {
-        //alert(JSON.stringify(muc.editUserModel));
         //use form data to update user (it is easiest way to upload files)
         //copy required by backend fields
         var uploadUserFormData = new FormData();;
@@ -115,17 +116,15 @@
           uploadUserFormData.append('email', muc.editUserModel.email);
         }
 
-        v = datavalidation.birthDateValidation(muc.editUserModel.userBirthdayDate);
+        v = datavalidation.birthDateValidation(muc.editUserModel.user_birthday);
         if (!v.passed) {
           $mdToast.showSimple(v.errorMsg);
           return;
         }
-        muc.editUserModel.userBirthdayDate = v.processedField;
-        uploadUserFormData.append('user_birthday', global.stringifyDate(muc.editUserModel.userBirthdayDate));
+        muc.editUserModel.user_birthday = v.processedField;
+        uploadUserFormData.append('user_birthday', global.stringifyDate(muc.editUserModel.user_birthday));
 
         if (muc.updateUserForm.userDescription.$dirty) {
-          //TODO: разобраться с sanitize - если его применить здесь - то он кириллицу превратит в escape коды
-          //uploadUser.user_description = $sanitize(mpc.user.user_description);
           uploadUserFormData.append('user_description', muc.editUserModel.user_description);
         }
 
@@ -142,24 +141,75 @@
           uploadUserFormData.append('password', v.processedField);
         }
 
-        //TODO: добавить логику фото
+        //TODO: доделать логику фото
+        //TODO: check file size (not more than 4-5 mb?)
+        if (muc.selectedFile) {
+          //будем загружать основную фотку пользователя не напрямую, а через подтверждение, несколькими обращениями к бэкэнду
+          uploadUserFormData.append('user_photo_not_approved', muc.selectedFile);
+          var photoWasSent = true;
+        }
 
+        //TODO: отрефакторить эту громоздкую конструкцию
         Authentication.updateUser(uploadUserFormData, muc.editUserModel.id)
           .then(function(response) {
-            //обновляем измененного пользователя в свойсьве контроллера
-            //FIXME: https://bitbucket.org/zd333/gymio/issues/1/autocomplete
-            for (var i = 0; i < muc.userList.length; i++) {
-              if (muc.userList[i].id == muc.editUserModel.id) {
-                muc.userList[i] = muc.editUserModel;
-                break;
+            //если была загружена фотка - то нужно второе обращение к бэкэнду
+            if (photoWasSent) {
+              Authentication.approveUserPhoto(muc.editUserModel.id)
+                .then(function(response) {
+                  //обновляем измененного пользователя в свойстве контроллера
+                  for (var i = 0; i < muc.userList.length; i++) {
+                    if (muc.userList[i].id == muc.editUserModel.id) {
+                      //TODO: переделать - в userList[i] и editUserModel записать данные из response
+                      muc.userList[i] = angular.copy(muc.editUserModel);
+
+                      //возвращаем дату в строковый вид (для редактируемого пользователя дата нужна была в виде объекта для контрола datepicker)
+                      muc.userList[i].user_birthday = global.stringifyDate(muc.userList[i].user_birthday);
+                      break;
+                    }
+                  }
+                  $mdToast.showSimple($translate.instant('Successfully saved'));
+                }, function(response) {
+                  $mdToast.showSimple($translate.instant('Not saved'));
+                });
+            } else {
+              //обновляем измененного пользователя в свойстве контроллера
+              for (var i = 0; i < muc.userList.length; i++) {
+                if (muc.userList[i].id == muc.editUserModel.id) {
+                  //TODO: переделать - в userList[i] и editUserModel записать данные из response
+                  muc.userList[i] = angular.copy(muc.editUserModel);
+
+                  //возвращаем дату в строковый вид (для редактируемого пользователя дата нужна была в виде объекта для контрола datepicker)
+                  muc.userList[i].user_birthday = global.stringifyDate(muc.userList[i].user_birthday);
+                  break;
+                }
               }
+              $mdToast.showSimple($translate.instant('Successfully saved'));
             }
-            $mdToast.showSimple($translate.instant('Successfully saved'));
           }, function(response) {
             $mdToast.showSimple($translate.instant('Not saved'));
           });
       }
+
+      function approveUserPhoto() {
+        Authentication.approveUserPhoto(muc.editUserModel.id)
+          .then(function(response) {
+            //TODO: должен вернуться юзер полностью - перезаписываем его в соответствующие переменные
+            $mdToast.showSimple($translate.instant('Photo was approved'));
+          }, function(response) {
+            $mdToast.showSimple($translate.instant('Not saved'));
+          });
+      }
+
+      function rejectUserPhoto() {
+        Authentication.rejectUserPhoto(muc.editUserModel.id)
+          .then(function(response) {
+            //TODO: должен вернуться юзер полностью - перезаписываем его в соответствующие переменные
+            $mdToast.showSimple($translate.instant('Photo was rejected'));
+          }, function(response) {
+            $mdToast.showSimple($translate.instant('Not saved'));
+          });
+      }
+
     }
   })();
-
 }

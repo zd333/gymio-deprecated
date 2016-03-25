@@ -134,7 +134,7 @@ class ClubUser(AbstractBaseUser, PermissionsMixin):
     user_description = models.CharField(max_length=800, blank=True)  # external info, available for all users
     user_notes = models.CharField(max_length=800, blank=True)  # internal, for club staff
     user_position = models.ForeignKey(PositionType, null=True, blank=True)
-    user_photo = models.ImageField(null=True, blank=True, upload_to=upload_photo)
+    user_photo = models.ImageField(null=True, blank=True) # Эта фотка не будет загружаться напрямую, только через отдельный action REST-сервиса из user_photo_not_approved
     user_photo_not_approved = models.ImageField(null=True, blank=True, upload_to=upload_photo)
 
     objects = ClubUserManager()

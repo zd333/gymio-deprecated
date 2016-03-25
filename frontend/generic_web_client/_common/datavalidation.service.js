@@ -89,7 +89,6 @@
                 };
 
                 if (!resultObj.processedField) return resultObj;
-                console.log(resultObj.processedField);
                 var y = resultObj.processedField.getFullYear();
 
                 var now = (new Date()).getFullYear();
