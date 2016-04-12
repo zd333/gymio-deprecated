@@ -1,105 +1,107 @@
 <!DOCTYPE html>
 <html ng-app="gymio" ng-cloak lang="en">
-<link>
+  <link>
 
-<meta charset="utf-8">
+  <meta charset="utf-8">
 
-<!--for angular material-->
-<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no"/>
-<link rel="stylesheet" href="_bower/bower_components/angular-material/angular-material.css">
+  <!--for angular material-->
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no"/>
+  <link rel="stylesheet" href="_bower/bower_components/angular-material/angular-material.css">
 
-<!--DEPLOY: replace libraries with minified ones-->
-<script type="text/javascript" src="_bower/bower_components/angular/angular.js"></script>
-<script type="text/javascript" src="_bower/bower_components/angular-route/angular-route.js"></script>
-<script type="text/javascript" src="_bower/bower_components/angular-cookies/angular-cookies.js"></script>
-<script type="text/javascript" src="_bower/bower_components/angular-sanitize/angular-sanitize.js"></script>
-<script type="text/javascript" src="_bower/bower_components/angular-translate/angular-translate.js"></script>
-<script type="text/javascript"
-        src="_bower/bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js"></script>
-<script type="text/javascript"
-        src="_bower/bower_components/angular-translate-storage-cookie/angular-translate-storage-cookie.js"></script>
-<script type="text/javascript" src="_bower/bower_components/angular-aria/angular-aria.js"></script>
-<script type="text/javascript" src="_bower/bower_components/angular-animate/angular-animate.js"></script>
-<script type="text/javascript" src="_bower/bower_components/angular-material/angular-material.js"></script>
-<script type="text/javascript" src="_bower/bower_components/angular-material-icons/angular-material-icons.js"></script>
+  <!--DEPLOY: replace libraries with minified ones-->
+  <script type="text/javascript" src="_bower/bower_components/angular/angular.js"></script>
+  <script type="text/javascript" src="_bower/bower_components/angular-route/angular-route.js"></script>
+  <script type="text/javascript" src="_bower/bower_components/angular-cookies/angular-cookies.js"></script>
+  <script type="text/javascript" src="_bower/bower_components/angular-sanitize/angular-sanitize.js"></script>
+  <script type="text/javascript" src="_bower/bower_components/angular-translate/angular-translate.js"></script>
+  <script type="text/javascript" src="_bower/bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js"></script>
+  <script type="text/javascript" src="_bower/bower_components/angular-translate-storage-cookie/angular-translate-storage-cookie.js"></script>
+  <script type="text/javascript" src="_bower/bower_components/angular-aria/angular-aria.js"></script>
+  <script type="text/javascript" src="_bower/bower_components/angular-animate/angular-animate.js"></script>
+  <script type="text/javascript" src="_bower/bower_components/angular-material/angular-material.js"></script>
+  <script type="text/javascript" src="_bower/bower_components/angular-material-icons/angular-material-icons.js"></script>
 
-<script type="text/javascript" src="_common/gymio.js"></script>
-<script type="text/javascript" src="_common/gymio.config.js"></script>
-<script type="text/javascript" src="_common/gymio.directives.js"></script>
-<script type="text/javascript" src="_common/gymio.routes.js"></script>
-<script type="text/javascript" src="_common/global.service.js"></script>
-<script type="text/javascript" src="_common/datavalidation.service.js"></script>
-<script type="text/javascript" src="_common/initialization.controller.js"></script>
-<script type="text/javascript" src="_common/root.controller.js"></script>
+  <script type="text/javascript" src="_common/gymio.js"></script>
+  <script type="text/javascript" src="_common/gymio.config.js"></script>
+  <script type="text/javascript" src="_common/gymio.directives.js"></script>
+  <script type="text/javascript" src="_common/gymio.routes.js"></script>
+  <script type="text/javascript" src="_common/global.service.js"></script>
+  <script type="text/javascript" src="_common/datavalidation.service.js"></script>
+  <script type="text/javascript" src="_common/initialization.controller.js"></script>
+  <script type="text/javascript" src="_common/root.controller.js"></script>
 
-<script type="text/javascript" src="authentication/authentication.module.js"></script>
-<script type="text/javascript" src="authentication/authentication.service.js"></script>
-<script type="text/javascript" src="authentication/register.controller.js"></script>
-<script type="text/javascript" src="authentication/login.controller.js"></script>
+  <script type="text/javascript" src="authentication/authentication.module.js"></script>
+  <script type="text/javascript" src="authentication/authentication.service.js"></script>
+  <script type="text/javascript" src="authentication/register.controller.js"></script>
+  <script type="text/javascript" src="authentication/login.controller.js"></script>
 
-<script type="text/javascript" src="main_menu/main_menu.module.js"></script>
-<script type="text/javascript" src="main_menu/main_menu.controller.js"></script>
-<script type="text/javascript" src="dashboard/dashboard.module.js"></script>
-<script type="text/javascript" src="dashboard/dashboard_overview/dashboard_overview.module.js"></script>
-<script type="text/javascript" src="dashboard/tickets/tickets.module.js"></script>
-<script type="text/javascript" src="dashboard/group_workouts/group_workouts.module.js"></script>
-<script type="text/javascript" src="dashboard/gym/gym.module.js"></script>
-<script type="text/javascript" src="dashboard/sport_journal/sport_journal.module.js"></script>
-<script type="text/javascript" src="dashboard/nutrition/nutrition.module.js"></script>
-<script type="text/javascript" src="dashboard/woomens_calendar/woomens_calendar.module.js"></script>
-<script type="text/javascript" src="dashboard/my_results/my_results.module.js"></script>
-<script type="text/javascript" src="dashboard/my_profile/my_profile.module.js"></script>
-<script type="text/javascript" src="dashboard/my_profile/my_profile.controller.js"></script>
+  <script type="text/javascript" src="main_menu/main_menu.module.js"></script>
+  <script type="text/javascript" src="main_menu/main_menu.controller.js"></script>
+  <script type="text/javascript" src="dashboard/dashboard.module.js"></script>
+  <script type="text/javascript" src="dashboard/dashboard_overview/dashboard_overview.module.js"></script>
+  <script type="text/javascript" src="dashboard/tickets/tickets.module.js"></script>
+  <script type="text/javascript" src="dashboard/group_workouts/group_workouts.module.js"></script>
+  <script type="text/javascript" src="dashboard/gym/gym.module.js"></script>
+  <script type="text/javascript" src="dashboard/sport_journal/sport_journal.module.js"></script>
+  <script type="text/javascript" src="dashboard/nutrition/nutrition.module.js"></script>
+  <script type="text/javascript" src="dashboard/woomens_calendar/woomens_calendar.module.js"></script>
+  <script type="text/javascript" src="dashboard/my_results/my_results.module.js"></script>
+  <script type="text/javascript" src="dashboard/my_profile/my_profile.module.js"></script>
+  <script type="text/javascript" src="dashboard/my_profile/my_profile.controller.js"></script>
 
-<script type="text/javascript" src="staffboard/staffboard.module.js"></script>
-<script type="text/javascript" src="staffboard/staffboard_menu.controller.js"></script>
-<script type="text/javascript" src="staffboard/staffboard_overview/staffboard_overview.module.js"></script>
-<script type="text/javascript" src="staffboard/customer_tick/customer_tick.module.js"></script>
-<script type="text/javascript" src="staffboard/pre_registration/pre_registration.module.js"></script>
-<script type="text/javascript" src="staffboard/register_user/register_user.module.js"></script>
-<script type="text/javascript" src="staffboard/manage_users/manage_users.module.js"></script>
-<script type="text/javascript" src="staffboard/manage_users/manage_users.controller.js"></script>
-<script type="text/javascript" src="staffboard/ticket_sale/ticket_sale.module.js"></script>
-<script type="text/javascript" src="staffboard/ticket_freez/ticket_freez.module.js"></script>
-<script type="text/javascript" src="staffboard/tickets/tickets.module.js"></script>
-<script type="text/javascript" src="staffboard/group_workouts/group_workouts.module.js"></script>
-<script type="text/javascript" src="staffboard/gym/gym.module.js"></script>
-<script type="text/javascript" src="staffboard/nutrition_courses/nutrition_courses.module.js"></script>
-<script type="text/javascript" src="staffboard/customer_notification/customer_notification.module.js"></script>
-<script type="text/javascript" src="staffboard/salary/salary.module.js"></script>
-<script type="text/javascript" src="staffboard/expenses/expenses.module.js"></script>
-<script type="text/javascript" src="staffboard/employee_tick/employee_tick.module.js"></script>
-<script type="text/javascript" src="staffboard/employees/employees.module.js"></script>
-<script type="text/javascript" src="staffboard/positions/positions.module.js"></script>
-<script type="text/javascript" src="staffboard/system_rights/system_rights.module.js"></script>
-<script type="text/javascript" src="staffboard/reports/reports.module.js"></script>
+  <script type="text/javascript" src="staffboard/staffboard.module.js"></script>
+  <script type="text/javascript" src="staffboard/staffboard_menu.controller.js"></script>
+  <script type="text/javascript" src="staffboard/staffboard_overview/staffboard_overview.module.js"></script>
+  <script type="text/javascript" src="staffboard/customer_tick/customer_tick.module.js"></script>
+  <script type="text/javascript" src="staffboard/pre_registration/pre_registration.module.js"></script>
+  <script type="text/javascript" src="staffboard/register_user/register_user.module.js"></script>
+  <script type="text/javascript" src="staffboard/manage_users/manage_users.module.js"></script>
+  <script type="text/javascript" src="staffboard/manage_users/manage_users.controller.js"></script>
+  <script type="text/javascript" src="staffboard/ticket_sale/ticket_sale.module.js"></script>
+  <script type="text/javascript" src="staffboard/ticket_freez/ticket_freez.module.js"></script>
+  <script type="text/javascript" src="staffboard/tickets/tickets.module.js"></script>
+  <script type="text/javascript" src="staffboard/group_workouts/group_workouts.module.js"></script>
+  <script type="text/javascript" src="staffboard/gym/gym.module.js"></script>
+  <script type="text/javascript" src="staffboard/nutrition_courses/nutrition_courses.module.js"></script>
+  <script type="text/javascript" src="staffboard/customer_notification/customer_notification.module.js"></script>
+  <script type="text/javascript" src="staffboard/salary/salary.module.js"></script>
+  <script type="text/javascript" src="staffboard/expenses/expenses.module.js"></script>
+  <script type="text/javascript" src="staffboard/employee_tick/employee_tick.module.js"></script>
+  <script type="text/javascript" src="staffboard/employees/employees.module.js"></script>
+  <script type="text/javascript" src="staffboard/positions/positions.module.js"></script>
+  <script type="text/javascript" src="staffboard/system_rights/system_rights.module.js"></script>
+  <script type="text/javascript" src="staffboard/reports/reports.module.js"></script>
 
-<!--Common-->
-<base href="/">
-<link rel="icon" href="_common/img/favicon.png">
-<!--CSS customization (overwrite)-->
-<link href="_common/css/customization.css" rel="stylesheet">
+  <!--Common-->
+  <base href="/">
+  <link rel="icon" href="_common/img/favicon.png">
+  <!--CSS customization (overwrite)-->
+  <link href="_common/css/customization.css" rel="stylesheet">
 
-<title>Gymio</title>
+  <title>Gymio</title>
 </head>
 <body role="document" ng-controller="InitializationController as ic">
 
-<div ng-if="!ic.initialized" layout-fill layout="column" layout-align="center center">
+  <div ng-if="!ic.initialized" layout-fill layout="column" layout-align="center center">
     <div ng-include="'/spinner/spinner.html'"></div>
-</div>
+  </div>
 
-<div ng-if="ic.initialized" ng-controller="RootController as rc" layout="row" layout-fill>
-    <div layout="column" ng-include="'/main_menu/main_menu.html'"></div>
+  <div id="main-app-content-container" ng-if="ic.initialized" ng-controller="RootController as rc" layout="row" layout-fill>
+    <div id="main-menu-container" layout="column" ng-include="'/main_menu/main_menu.html'">
+    </div>
 
-    <md-content layout="column" flex>
-        <div ng-include="'/header/header.html'"></div>
+    <div id="dashboard-container" layout="column" flex>
+      <div id="header-container" ng-include="'/header/header.html'">
+      </div>
 
-        <div layout="row" flex ng-view></div>
+      <md-content id="content-container" ng-view layout="row" flex>
+        <!-- <div layout="row" flex ng-view></div> -->
+      </md-content>
 
-        <div ng-include="'/footer/footer.html'"></div>
-    </md-content>
-
+      <div id="footer-container" ng-include="'/footer/footer.html'">
+      </div>
+    </div>
     <div ng-if="rc.isStaff" ng-include="'/staffboard/staffboard_menu.html'"></div>
-</div>
+  </div>
 </body>
 </html>
