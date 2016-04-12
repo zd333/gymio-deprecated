@@ -1,6 +1,7 @@
 <md-content layout="column" flex-offset="5" flex="90" ng-controller="ManageUsersController as muc">
+
   <h2 class="md-headline" translate>manage_users</h2>
-  <!-- FIXME: https://bitbucket.org/zd333/gymio/issues/1/autocomplete -->
+
   <md-autocomplete md-no-cache="true" md-selected-item="muc.selectedUser" md-search-text="muc.searchText" md-items="user in muc.narrowUserList(muc.searchText)" md-item-text="user.user_full_name" md-min-length="1" placeholder="{{'Type user name / login / id / card id' | translate}}" md-menu-class="autocomplete-users-custom-template" md-selected-item-change="muc.setEditUserModel()">
     <md-item-template>
       <div layout="row" layout-align="start center">
@@ -90,17 +91,6 @@
       <md-datepicker ng-model="muc.editUserModel.user_birthday" ng-required="true"></md-datepicker>
     </div>
 
-    <!-- TODO: доработать логику фото, -->
-    <div layout="column">
-      <div layout="row" layout-align="start center">
-        <my-centered-circle-image my-src="{{muc.editUserModel.user_photo}}" my-size="80"></my-centered-circle-image>
-        <my-centered-circle-image my-src="{{muc.editUserModel.user_photo_not_approved}}" my-size="80" ng-show="muc.editUserModel.user_photo_not_approved" class="myprofile-not-approved-img"></my-centered-circle-image>
-      </div>
-      <md-checkbox ng-model="muc.editUserModel.performPhotoApprove" ng-show="muc.editUserModel.user_photo_not_approved">
-        <span translate>Photo is not approved, mark to approve</span>
-      </md-checkbox>
-    </div>
-
     <p class="md-body-2" translate>
       ATTENTION_ALL_USERS_SEE_THIS_INFO_FOR_STAFF
     </p>
@@ -125,7 +115,7 @@
     </div>
 
     <div layout="row" layout-align="start center">
-      <md-button flex="50" type="submit" ng-disabled="muc.updateUserForm.$pristine" class="md-raised md-primary">
+      <md-button flex="50" type="submit" ng-disabled="muc.updateUserForm.$pristine && !muc.selectedFile" class="md-raised md-primary">
         {{'Save profile changes' | translate}}
       </md-button>
     </div>

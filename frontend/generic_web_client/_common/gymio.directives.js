@@ -13,11 +13,17 @@
         scope: {
           gymioInputFile: '='
         },
-        link: function(scope, el) {
+        link: function(scope, el, attrs) {
           el.bind('change', function(event) {
             var file = event.target.files[0];
             scope.gymioInputFile = file ? file : undefined;
             scope.$apply();
+          });
+
+          scope.$watch('gymioInputFile', function(value) {
+            if (!value) {//очистка input field, полный двунаправленный биндинг сделать нельзя из-за ограничений безопасности input file
+              el.val('');
+            }
           });
         }
       };
@@ -37,8 +43,8 @@
           var size = 50;
           if (attrs.mySize) size = attrs.mySize;
           element.html('<div style="background: url(' + attrs.mySrc + ');width:' + size + 'px;height:' + size + 'px;background-size:cover;background-position: 50%;background-repeat: no-repeat;border-radius: 50%;"></div>');
-          attrs.$observe('mySrc', function () {
-            element.html('<div style="background: url(' + attrs.mySrc + ');width:' + size + 'px;height:' + size + 'px;background-size:cover;background-position: 50%;background-repeat: no-repeat;border-radius: 50%;"></div>');                        
+          attrs.$observe('mySrc', function() {
+            element.html('<div style="background: url(' + attrs.mySrc + ');width:' + size + 'px;height:' + size + 'px;background-size:cover;background-position: 50%;background-repeat: no-repeat;border-radius: 50%;"></div>');
           });
         }
       }
