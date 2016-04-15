@@ -1,4 +1,4 @@
-(function () {
+;(function () {
     'use strict';
 
     angular
@@ -12,8 +12,8 @@
 
 
             //global app properties
-            var clubSettings = {};
-            var gymioPlatformSettings = {};
+            var clubSettings = null;
+            var gymioPlatformSettings = null;
 
             //returns promise of JSON with current club settings, will be used only in initialization controller
             var deferredRequestClubSettings = function () {

@@ -1,123 +1,124 @@
 <div layout="column" flex-offset="5" flex="90" ng-controller="ManageUsersController as muc">
+  <div flex="noshrink">
+    <h2 class="md-headline" translate>manage_users</h2>
 
-  <h2 class="md-headline" translate>manage_users</h2>
+    <md-autocomplete md-no-cache="true" md-selected-item="muc.selectedUser" md-search-text="muc.searchText" md-items="user in muc.narrowUserList(muc.searchText)" md-item-text="user.user_full_name" md-min-length="1" placeholder="{{'Type user name / login / id / card id' | translate}}" md-menu-class="autocomplete-users-custom-template" md-selected-item-change="muc.setEditUserModel()">
+      <md-item-template>
+        <div layout="row">
+          <my-centered-circle-image my-src="{{user.user_photo}}" my-size="50"></my-centered-circle-image>
+          <div flex-offset="5" layout="column" class="autocomplete-user-list-item-text">
+            <strong>{{user.user_full_name+' ('+user.username+')'}}</strong>
+            <div layout="row">
+              <span>{{'ID: '+user.id}}</span>
+              <span ng-show="user.card_id">{{', ' + ('card' | translate) + ': ' + user.card_id}}</span>
+            </div>
+          </div>
+        </div>
+      </md-item-template>
+    </md-autocomplete>
 
-  <md-autocomplete md-no-cache="true" md-selected-item="muc.selectedUser" md-search-text="muc.searchText" md-items="user in muc.narrowUserList(muc.searchText)" md-item-text="user.user_full_name" md-min-length="1" placeholder="{{'Type user name / login / id / card id' | translate}}" md-menu-class="autocomplete-users-custom-template" md-selected-item-change="muc.setEditUserModel()">
-    <md-item-template>
-      <div layout="row" layout-align="start center">
-        <my-centered-circle-image my-src="{{user.user_photo}}" my-size="50"></my-centered-circle-image>
-        <div flex-offset="5" layout="column" class="autocomplete-user-list-item-text">
-          <strong>{{user.user_full_name+' ('+user.username+')'}}</strong>
-          <div layout="row">
-            <span>{{'ID: '+user.id}}</span>
-            <span ng-show="user.card_id">{{', ' + ('card' | translate) + ': ' + user.card_id}}</span>
+    <form layout="column" name="muc.updateUserForm" ng-show="muc.editUserModel" ng-submit="muc.save()">
+      <p class="md-body-2">
+        {{('Login' | translate) + ' ' + muc.editUserModel.username +
+      ' | ' + ('Register date' | translate) + ' ' + (muc.editUserModel.date_joined | date:'shortDate')}}
+      </p>
+
+      <md-checkbox ng-model="muc.editUserModel.is_active">
+        <span ng-show="muc.editUserModel.is_active" translate>User is active (umark to inactivate)</span>
+        <span ng-show="!muc.editUserModel.is_active" translate>User is inactive (mark to activate)</span>
+      </md-checkbox>
+
+      <div layout="column">
+        <my-centered-circle-image my-src="{{muc.editUserModel.user_photo}}" my-size="80"></my-centered-circle-image>
+        <md-input-container>
+          <label translate>Browse new photo</label>
+          <input type="file" gymio-input-file="muc.selectedFile" accept="image/*" placeholder="">
+        </md-input-container>
+      </div>
+
+      <div layout="column" ng-show="muc.editUserModel.user_photo_not_approved">
+        <p class="md-body-2" translate>
+          User wants new photo
+        </p>
+        <div layout="row">
+          <my-centered-circle-image my-src="{{muc.editUserModel.user_photo_not_approved}}" my-size="80" class="myprofile-not-approved-img"></my-centered-circle-image>
+          <div layout="column">
+            <md-button class="md-raised md-primary" ng-click="muc.approveUserPhoto()">
+              {{'Press to approve new photo' | translate}}
+            </md-button>
+            <md-button class="md-raised md-primary" ng-click="muc.rejectUserPhoto()">
+              {{'Press to reject new photo' | translate}}
+            </md-button>
           </div>
         </div>
       </div>
-    </md-item-template>
-  </md-autocomplete>
 
-  <form layout="column" layout-align="start stretch" name="muc.updateUserForm" ng-show="muc.editUserModel" ng-submit="muc.save()">
-    <p class="md-body-2">
-      {{('Login' | translate) + ' ' + muc.editUserModel.username +
-      ' | ' + ('Register date' | translate) + ' ' + (muc.editUserModel.date_joined | date:'shortDate')}}
-    </p>
-
-    <md-checkbox ng-model="muc.editUserModel.is_active">
-      <span ng-show="muc.editUserModel.is_active" translate>User is active (umark to inactivate)</span>
-      <span ng-show="!muc.editUserModel.is_active" translate>User is inactive (mark to activate)</span>
-    </md-checkbox>
-
-    <div layout="column">
-      <my-centered-circle-image my-src="{{muc.editUserModel.user_photo}}" my-size="80"></my-centered-circle-image>
-      <md-input-container>
-        <label translate>Browse new photo</label>
-        <input type="file" gymio-input-file="muc.selectedFile" accept="image/*" placeholder="">
-      </md-input-container>
-    </div>
-
-    <div layout="column" ng-show="muc.editUserModel.user_photo_not_approved" >
-      <p class="md-body-2" translate>
-        User wants new photo
-      </p>
       <div layout="row">
-        <my-centered-circle-image my-src="{{muc.editUserModel.user_photo_not_approved}}" my-size="80" class="myprofile-not-approved-img"></my-centered-circle-image>
-        <div layout="column">
-          <md-button class="md-raised md-primary" ng-click="muc.approveUserPhoto()">
-            {{'Press to approve new photo' | translate}}
-          </md-button>
-          <md-button class="md-raised md-primary" ng-click="muc.rejectUserPhoto()">
-            {{'Press to reject new photo' | translate}}
-          </md-button>
-        </div>
+        <md-input-container flex>
+          <label translate>Full name</label>
+          <input name="fullName" type="text" ng-model="muc.editUserModel.user_full_name">
+        </md-input-container>
+
+        <md-input-container class="md-block" flex>
+          <label translate>Card id</label>
+          <input name="usercardId" type="text" ng-model="muc.editUserModel.card_id">
+        </md-input-container>
       </div>
-    </div>
 
-    <div layout="row">
-      <md-input-container flex>
-        <label translate>Full name</label>
-        <input name="fullName" type="text" ng-model="muc.editUserModel.user_full_name">
+      <div layout="row">
+        <md-input-container flex>
+          <label translate>Mobile phone</label>
+          <input name="userPhone" type="tel" ng-model="muc.editUserModel.user_phone">
+        </md-input-container>
+
+        <md-input-container class="md-block" flex>
+          <label translate>Email</label>
+          <input name="userEmail" type="email" ng-model="muc.editUserModel.email">
+        </md-input-container>
+      </div>
+
+      <md-radio-group ng-model="muc.editUserModel.user_gender" layout="row">
+        <md-radio-button ng-value="false">
+          {{'Female' | translate}}
+        </md-radio-button>
+        <md-radio-button ng-value="true">
+          {{'Male' | translate}}
+        </md-radio-button>
+      </md-radio-group>
+
+      <div layout="row">
+        <p class="md-body-1">{{'Birthday date' | translate}}</p>
+        <md-datepicker ng-model="muc.editUserModel.user_birthday" ng-required="true"></md-datepicker>
+      </div>
+
+      <p class="md-body-2" translate>
+        ATTENTION_ALL_USERS_SEE_THIS_INFO_FOR_STAFF
+      </p>
+      <md-input-container>
+        <label translate>About me</label>
+        <textarea name="userDescription" ng-model="muc.editUserModel.user_description"></textarea>
       </md-input-container>
 
-      <md-input-container class="md-block" flex>
-        <label translate>Card id</label>
-        <input name="usercardId" type="text" ng-model="muc.editUserModel.card_id">
-      </md-input-container>
-    </div>
-
-    <div layout="row">
-      <md-input-container flex>
-        <label translate>Mobile phone</label>
-        <input name="userPhone" type="tel" ng-model="muc.editUserModel.user_phone">
+      <p class="md-body-2" translate>
+        INTERNAL_USER_NOTES_FOR_STAFF
+      </p>
+      <md-input-container>
+        <label translate>Internal user notes</label>
+        <textarea name="userInternalNotes" ng-model="muc.editUserModel.user_notes"></textarea>
       </md-input-container>
 
-      <md-input-container class="md-block" flex>
-        <label translate>Email</label>
-        <input name="userEmail" type="email" ng-model="muc.editUserModel.email">
-      </md-input-container>
-    </div>
+      <div layout="row" layout-align="start center">
+        <md-input-container flex="50">
+          <label translate>Password</label>
+          <input type="password" ng-model="muc.editUserModel.newPassword" placeholder="{{'New password' | translate}}">
+        </md-input-container>
+      </div>
 
-    <md-radio-group ng-model="muc.editUserModel.user_gender" layout="row">
-      <md-radio-button ng-value="false">
-        {{'Female' | translate}}
-      </md-radio-button>
-      <md-radio-button ng-value="true">
-        {{'Male' | translate}}
-      </md-radio-button>
-    </md-radio-group>
-
-    <div layout="row">
-      <p class="md-body-1">{{'Birthday date' | translate}}</p>
-      <md-datepicker ng-model="muc.editUserModel.user_birthday" ng-required="true"></md-datepicker>
-    </div>
-
-    <p class="md-body-2" translate>
-      ATTENTION_ALL_USERS_SEE_THIS_INFO_FOR_STAFF
-    </p>
-    <md-input-container>
-      <label translate>About me</label>
-      <textarea name="userDescription" ng-model="muc.editUserModel.user_description"></textarea>
-    </md-input-container>
-
-    <p class="md-body-2" translate>
-      INTERNAL_USER_NOTES_FOR_STAFF
-    </p>
-    <md-input-container>
-      <label translate>Internal user notes</label>
-      <textarea name="userInternalNotes" ng-model="muc.editUserModel.user_notes"></textarea>
-    </md-input-container>
-
-    <div layout="row" layout-align="start center">
-      <md-input-container flex="50">
-        <label translate>Password</label>
-        <input type="password" ng-model="muc.editUserModel.newPassword" placeholder="{{'New password' | translate}}">
-      </md-input-container>
-    </div>
-
-    <div layout="row" layout-align="start center">
-      <md-button flex="50" type="submit" ng-disabled="muc.updateUserForm.$pristine && !muc.selectedFile" class="md-raised md-primary">
-        {{'Save profile changes' | translate}}
-      </md-button>
-    </div>
-  </form>
+      <div layout="row" layout-align="start center">
+        <md-button flex="50" type="submit" ng-disabled="muc.updateUserForm.$pristine && !muc.selectedFile" class="md-raised md-primary">
+          {{'Save profile changes' | translate}}
+        </md-button>
+      </div>
+    </form>
+  </div>
 </div>

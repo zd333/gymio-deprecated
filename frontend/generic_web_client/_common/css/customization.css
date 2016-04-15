@@ -1,19 +1,18 @@
 /*custom template for md-autocomplete on manage users screen*/
 .autocomplete-users-custom-template li {
-    border-bottom: 1px solid #ccc;
-    height: auto;
-    white-space: normal;
+  border-bottom: 1px solid #ccc;
+  height: auto;
+  white-space: normal;
 }
 .autocomplete-users-custom-template li:last-child {
-    border-bottom-width: 0;
+  border-bottom-width: 0;
 }
 .autocomplete-users-custom-template .autocomplete-user-list-item-text {
-    line-height: 2;
+  line-height: 2;
 }
-
 
 
 /*не утвержденное фото слегка прозрачное*/
 .myprofile-not-approved-img {
-    opacity: 0.3;
+  opacity: 0.3;
 }
