@@ -36,6 +36,9 @@ urlpatterns = patterns(prefix,
                        url(r'^sc1/users/(?P<club>[0-9]+)/(?P<pk>[0-9]+)/$',
                            views.ClubUserViewSet.as_view({'get': 'retrieve', 'post': 'update'})),
 
+                       url(r'^sc1/userright/(?P<club>[0-9]+)/(?P<userid>[0-9]+)/(?P<righttext>[a-zA-Z0-9_-]+)/$',
+                           views.UserRightView.as_view()),
+
                        url(r'^sc1/admin/', include(admin.site.urls)),
 
                        url(r'^sc1/approveuserphoto/(?P<club>[0-9]+)/(?P<pk>[0-9]+)/$', views.ApproveUserPhotoView.as_view()),

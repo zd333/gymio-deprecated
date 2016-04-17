@@ -6,7 +6,7 @@ from rest_framework.exceptions import NotFound, ValidationError, PermissionDenie
 from rest_framework.response import Response
 from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
 #from rest_framework.decorators import detail_route, parser_classes
-from .models import Club, ClubUser
+from .models import Club, ClubUser, UserRight, RIGHT_CHOICES
 from .serializers import ClubSerializer, ClubUserSerializer
 from . import permissions as my_permissions
 from gettext import gettext as _
@@ -165,3 +165,65 @@ class RejectUserPhotoView(views.APIView):
 
         serialized = ClubUserSerializer(user)
         return Response(serialized.data)
+
+
+class UserRightView(views.APIView):
+    # use generic view instead of viewsets/mixins to perform checking club id, if it's staff user, if there is no such right already present
+    permission_classes = (my_permissions.AuthorizedStaffCanAddOrDeleteUserRight,)
+
+    def post(self, request, userid=None, righttext=None, club=None):
+        # check if user exists
+        try:
+            user = ClubUser.objects.get(pk=userid, user_club=club)
+        except ClubUser.DoesNotExist:
+            raise NotFound(_('User not found'))
+
+        # check if right item exists
+        found = False
+        for right in RIGHT_CHOICES:
+            if right[0] == righttext:
+                found = True
+                break
+        if not found:
+            raise NotFound(_('This type of right was not found'))
+
+        # verify if this right is not yet added to this user
+        try:
+            UserRight.objects.get(user_right_user=user, user_right_text=righttext)
+        except UserRight.DoesNotExist:
+            # all ok, this user does not have this right
+            UserRight.objects.create(user_right_user=user, user_right_text=righttext)
+
+            # get user again (with added right) and return it
+            user = ClubUser.objects.get(pk=userid, user_club=club)
+            serialized = ClubUserSerializer(user)
+            return Response(serialized.data)
+
+        # not ok, this user already has this right
+        return Response({"detail": _('This user already has this right')}, status=status.HTTP_409_CONFLICT)
+
+    def delete(self, request, userid=None, righttext=None, club=None):
+        # check if user exists
+        try:
+            user = ClubUser.objects.get(pk=userid, user_club=club)
+        except ClubUser.DoesNotExist:
+            raise NotFound(_('User not found'))
+
+        # check if right item exists
+        found = False
+        for right in RIGHT_CHOICES:
+            if right[0] == righttext:
+                found = True
+                break
+        if not found:
+            raise NotFound(_('This type of right was not found'))
+
+        # try to delete user right item
+        try:
+            UserRight.objects.get(user_right_user=user, user_right_text=righttext).delete()
+            # get user again (with removed right) and return it
+            user = ClubUser.objects.get(pk=userid, user_club=club)
+            serialized = ClubUserSerializer(user)
+            return Response(serialized.data)
+        except UserRight.DoesNotExist:
+            raise NotFound(_('This user does not have this right'))

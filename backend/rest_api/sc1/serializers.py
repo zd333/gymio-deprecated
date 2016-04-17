@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import update_session_auth_hash
-from .models import Club, ClubUser
+from .models import Club, ClubUser, UserRight
 
 # TODO: all serializers are set to ModelSerializer
 # better solution would be to use HyperlinkedModelSerializer
@@ -54,6 +54,7 @@ class ClubSerializer(serializers.ModelSerializer):
 
 class ClubUserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=False)
+    userRights = serializers.StringRelatedField(many=True)
 
     class Meta:
         model = ClubUser
@@ -75,6 +76,7 @@ class ClubUserSerializer(serializers.ModelSerializer):
             'user_photo',
             'user_photo_not_approved',
             'password',
+            'userRights',
         )
         read_only_fields = ('id', 'date_joined', 'user_photo', 'user_photo_not_approved',)
 

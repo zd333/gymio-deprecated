@@ -70,12 +70,11 @@ class PositionType(models.Model):
 
 
 class PositionRight(models.Model):
-    #position_right_club = models.ForeignKey(Club)  # duplicate?
-    position_right_position = models.ForeignKey(PositionType)
+    position_right_position = models.ForeignKey(PositionType, related_name='positionRights')
     position_right_text = models.CharField(max_length=2, choices=RIGHT_CHOICES)
 
     def __str__(self):
-        return str(self.position_right_position) + '-' + str(self.position_right_text)
+        return str(self.position_right_text)
 
 
 class ClubUserManager(BaseUserManager):
@@ -150,11 +149,11 @@ class ClubUser(AbstractBaseUser, PermissionsMixin):
 
 
 class UserRight(models.Model):
-    user_right_user = models.ForeignKey(ClubUser)
+    user_right_user = models.ForeignKey(ClubUser, related_name='userRights')
     user_right_text = models.CharField(max_length=2, choices=RIGHT_CHOICES)
 
     def __str__(self):
-        return str(self.user_right_user) + '-' + str(self.user_right_text)
+        return str(self.user_right_text)
 
 
 class StaffComing(models.Model):
