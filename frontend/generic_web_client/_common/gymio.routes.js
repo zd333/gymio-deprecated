@@ -1,25 +1,37 @@
 ;(function() {
   'use strict';
 
-  var checkRouting = function($q, $rootScope, $location, global) {
+  var checkRouting = function($q, $rootScope, $location, global, $timeout) {
     if (global.gymioPlatformSettings && global.clubSettings) {
       return true;
     } else {
       var deferred = $q.defer();
 
-      //asynchronous settings request chain
-      //main app parts will start only after all settings are received
-      //TODO: add cycle with timeout
-      global.deferredRequestGymioPlatformSettings().then(function (response) {
+      var getSettingsErrorHandler = function(response) {
+        getSettingsErrorHandler.retryCounter++;
+        if (getSettingsErrorHandler.retryCounter > getSettingsErrorHandler.maxRetries) {
+          console.log('Stopped trying to get settings');
+          deferred.reject('Tried to get settings ' + getSettingsErrorHandler.maxRetries + ' times');
+        }
+        else {
+          console.error('Can not get platform settings, retrying ' + getSettingsErrorHandler.retryCounter);
+          $timeout(getSettings, 5000);
+        }
+      };
+      getSettingsErrorHandler.retryCounter = 0;
+      getSettingsErrorHandler.maxRetries = 100;
+
+      function getSettings() {
+        global.deferredRequestGymioPlatformSettings().then(function(response) {
           global.gymioPlatformSettings = response.data;
-          global.deferredRequestClubSettings().then(function (response) {
-              global.clubSettings = response.data;
-              //now start main app parts
-              //TODO: добавить установку appIsInitialized в false где-то в самом начале загрузки приложения, там где есть доступ к rootScope
-              $rootScope.appIsInitialized = true;
-              deferred.resolve(true);
-          });
-      });
+          global.deferredRequestClubSettings().then(function(response) {
+            global.clubSettings = response.data;
+            $rootScope.appIsInitialized = true;
+            deferred.resolve(true);
+          }, getSettingsErrorHandler);
+        }, getSettingsErrorHandler);
+      }
+      getSettings();
 
       return deferred.promise;
     }
