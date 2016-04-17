@@ -8,15 +8,19 @@ class UnAuthenticatedOrActiveAuthorizedStaffCanPostUser(permissions.BasePermissi
     """
     def has_permission(self, request, view):
         # TODO: now only unassigned can add user, need to add authorized staff functionality
-        if request.method != 'POST': return True
-        if view.action != 'create': return True
+        if request.method != 'POST':
+            return True
+        if view.action != 'create':
+            return True
         #return not request.user or not request.user.is_authenticated()
         return True
 
 
-class OwnerOrActiveStaffCanViewUser(permissions.BasePermission):
+class ActiveStaffCanViewUser(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         # TODO: now all authenticated can view all, fix this
+        # any can view staffuser
+        # active staff can view customers
         return (not (request.method in permissions.SAFE_METHODS) or
                 (request.user and request.user.is_authenticated()))
 
@@ -28,10 +32,18 @@ class AnyCanViewStaffUser(permissions.BasePermission):
         return True
 
 
-class OwnerOrActiveAuthorizedStaffCanEditUser(permissions.BasePermission):
+class ActiveAuthorizedStaffCanEditCustomer(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         # TODO: now it's only loop back, need to fix this
-        # HR can edit all users
+        # CO and HR can edit all users
+        # RA can edit customer users only
+        return True
+
+
+class ActiveAuthorizedStaffCanEditStaffUser(permissions.BasePermission):
+    def has_object_permission(self, request, view, obj):
+        # TODO: now it's only loop back, need to fix this
+        # CO and HR can edit all users
         # RA can edit customer users only
         return True
 

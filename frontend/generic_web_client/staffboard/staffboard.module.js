@@ -1,4 +1,4 @@
-(function () {
+;(function () {
     'use strict';
 
     angular
@@ -23,7 +23,6 @@
             'gymio.staffboard.employee_tick',
             'gymio.staffboard.employees',
             'gymio.staffboard.positions',
-            'gymio.staffboard.system_rights',
             'gymio.staffboard.reports'
         ]);
 

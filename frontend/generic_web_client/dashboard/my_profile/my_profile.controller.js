@@ -1,13 +1,13 @@
-(function() {
+;(function() {
   'use strict';
 
   angular
     .module('gymio.dashboard.my_profile.controllers')
     .controller('MyProfileController', MyProfileController);
 
-  MyProfileController.$inject = ['Authentication', 'datavalidation', '$translate', '$sanitize', 'global', '$mdToast', '$location'];
+  MyProfileController.$inject = ['Authentication', 'datavalidation', '$translate', '$sanitize', 'global', '$mdToast', '$location', 'Users'];
 
-  function MyProfileController(Authentication, datavalidation, $translate, $sanitize, global, $mdToast, $location) {
+  function MyProfileController(Authentication, datavalidation, $translate, $sanitize, global, $mdToast, $location, Users) {
     var mpc = this;
 
     mpc.save = save;
@@ -80,9 +80,10 @@
         uploadUserFormData.append('user_photo_not_approved', mpc.selectedFile);
       }
 
-      Authentication.updateUser(uploadUserFormData, Authentication.getAuthenticatedUser().id)
+      Users.updateUser(uploadUserFormData, Authentication.getAuthenticatedUser().id)
         .then(function(response) {
           Authentication.setAuthenticatedUser(response.data);
+          //TODO: добавить такую логику: если фото в своем профиле редактировал активный сотрудник - то сразу утвердить его отдельным вызовом REST
           $location.path('/dashboard/dashboard_overview');
           $mdToast.showSimple($translate.instant('Successfully saved'));
         }, function(response) {

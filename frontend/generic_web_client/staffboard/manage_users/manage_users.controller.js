@@ -8,14 +8,14 @@
 
     ManageUsersController.$inject = [
       '$translate',
-      'Authentication',
       '$mdToast',
       '$scope',
       'global',
-      'datavalidation'
+      'datavalidation',
+      'Users'
     ];
 
-    function ManageUsersController($translate, Authentication, $mdToast, $scope, global, datavalidation) {
+    function ManageUsersController($translate, $mdToast, $scope, global, datavalidation, Users) {
       var muc = this;
 
       muc.userList = [{}]; //for now - list of all available users from backend WITHOUT PAGINATION
@@ -28,8 +28,8 @@
       muc.approveUserPhoto = approveUserPhoto;
       muc.rejectUserPhoto = rejectUserPhoto;
 
-      //get all users
-      Authentication.getUsers()
+      //получить всех пользователей-клиентов
+      Users.getUsers({is_staff: false})
         .then(function(response) {
           //success
           muc.userList = response.data;
@@ -155,11 +155,11 @@
           var photoWasSent = true;
         }
 
-        Authentication.updateUser(uploadUserFormData, muc.editUserModel.id)
+        Users.updateUser(uploadUserFormData, muc.editUserModel.id)
           .then(function(response) {
             //если была загружена фотка - то нужно второе обращение к бэкэнду
             if (photoWasSent) {
-              Authentication.approveUserPhoto(muc.editUserModel.id)
+              Users.approveUserPhoto(muc.editUserModel.id)
                 .then(function(response) {
                   //обновляем измененного пользователя в свойстве контроллера
                   muc.selectedUser = response.data;
@@ -180,7 +180,7 @@
       }
 
       function approveUserPhoto() {
-        Authentication.approveUserPhoto(muc.editUserModel.id)
+        Users.approveUserPhoto(muc.editUserModel.id)
           .then(function(response) {
             muc.selectedUser = response.data;
             setEditUserModel();
@@ -191,7 +191,7 @@
       }
 
       function rejectUserPhoto() {
-        Authentication.rejectUserPhoto(muc.editUserModel.id)
+        Users.rejectUserPhoto(muc.editUserModel.id)
           .then(function(response) {
             muc.selectedUser = response.data;
             setEditUserModel();

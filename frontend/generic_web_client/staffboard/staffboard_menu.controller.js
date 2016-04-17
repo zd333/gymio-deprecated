@@ -33,7 +33,6 @@
             'employee_tick',
             'employees',
             'positions',
-            'system_rights',
             'reports'
         ];
         //TODO: add here service call which will delete from modules array all modules,

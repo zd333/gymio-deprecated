@@ -29,9 +29,10 @@ class ClubUserViewSet(mixins.CreateModelMixin,
     pagination_class = None  # this will work till amount of users is not huge
     serializer_class = ClubUserSerializer
     permission_classes = (my_permissions.UnAuthenticatedOrActiveAuthorizedStaffCanPostUser,
-                          my_permissions.OwnerOrActiveStaffCanViewUser,
+                          my_permissions.ActiveStaffCanViewUser,
                           my_permissions.AnyCanViewStaffUser,
-                          my_permissions.OwnerOrActiveAuthorizedStaffCanEditUser)
+                          my_permissions.ActiveAuthorizedStaffCanEditCustomer,
+                          my_permissions.ActiveAuthorizedStaffCanEditStaffUser)
     # with this parser classes we can upload both json and form data (with files)
     parser_classes = (JSONParser, FormParser, MultiPartParser)
 
@@ -78,17 +79,41 @@ class ClubUserViewSet(mixins.CreateModelMixin,
 
     # don't use mixin to narrow user list by club id
     def list(self, request, club=None):
-        # permission logic is implemented here to get different narrow for different user groups:
-        # CO get list all club users
-        # RA get list of customer users (not staff)
-        # all other (incl. unauthenticated) get list of staff
-        # TODO: implement logic above and beyond
-        # if request.user.is_authenticated():
-            # request.user - is instance of logged in user
-            # check if it has RA, CO roles (direct or by position referrence)
-            # club_queryset = self.queryset.filter(user_club=club, is_staff = true/false)
+        """
+        ---
+        parameters:
+            - name: is_active
+              required: false
+              paramType: query
+              type: boolean
+            - name: is_staff
+              required: false
+              paramType: query
+              type: boolean
+        """
+        # active staff get list all club users
+        # customers, not active and unauthenticated get list of active staff
+        if request.user.is_authenticated() and request.user.is_active and request.user.is_staff:
+            is_active_filter = request.query_params.get('is_active', None)
+            if is_active_filter is not None:
+                is_active_filter = is_active_filter not in ['false', 'False', 'False']
+            is_staff_filter = request.query_params.get('is_staff', None)
+            if is_staff_filter is not None:
+                is_staff_filter = is_staff_filter not in ['false', 'False', 'False']
 
-        club_queryset = self.queryset.filter(user_club=club)
+            if is_active_filter is not None:
+                if is_staff_filter is not None:
+                    club_queryset = self.queryset.filter(user_club=club, is_active=is_active_filter, is_staff=is_staff_filter)
+                else:
+                    club_queryset = self.queryset.filter(user_club=club, is_active=is_active_filter)
+            else:
+                if is_staff_filter is not None:
+                    club_queryset = self.queryset.filter(user_club=club, is_staff=is_staff_filter)
+                else:
+                    club_queryset = self.queryset.filter(user_club=club)
+        else:
+            club_queryset = self.queryset.filter(user_club=club, is_active=True, is_staff=True)
+
         serializer = self.serializer_class(club_queryset, many=True)
         return Response(serializer.data)
 
