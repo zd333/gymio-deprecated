@@ -22,6 +22,7 @@
             'gymio.staffboard.salary',
             'gymio.staffboard.employee_tick',
             'gymio.staffboard.employees',
+            'gymio.staffboard.employee_roles',
             'gymio.staffboard.positions',
             'gymio.staffboard.reports'
         ]);

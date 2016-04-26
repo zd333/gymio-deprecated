@@ -1,7 +1,9 @@
-;(function() {
+;
+(function() {
   'use strict';
 
   var checkRouting = function($q, $rootScope, $location, global, $timeout) {
+console.log('check routing');
     if (global.gymioPlatformSettings && global.clubSettings) {
       return true;
     } else {
@@ -12,10 +14,9 @@
         if (getSettingsErrorHandler.retryCounter > getSettingsErrorHandler.maxRetries) {
           console.log('Stopped trying to get settings');
           deferred.reject('Tried to get settings ' + getSettingsErrorHandler.maxRetries + ' times');
-        }
-        else {
+        } else {
           console.error('Can not get platform settings, retrying ' + getSettingsErrorHandler.retryCounter);
-          $timeout(getSettings, 5000);
+          $timeout(getSettings, 1000 * getSettingsErrorHandler.retryCounter);
         }
       };
       getSettingsErrorHandler.retryCounter = 0;
@@ -184,8 +185,8 @@
         }
       })
       .when('/staffboard/manage_users', {
-        //controller: '',
-        //controllerAs: '',
+        controller: 'ManageUsersController',
+        controllerAs: 'muc',
         templateUrl: 'staffboard/manage_users/manage_users.html',
         reloadOnSearch: false,
         resolve: {
@@ -283,9 +284,18 @@
         }
       })
       .when('/staffboard/employees', {
-        //controller: '',
-        //controllerAs: '',
+        controller: 'EmployeesController',
+        controllerAs: 'ec',
         templateUrl: 'staffboard/employees/employees.html',
+        reloadOnSearch: false,
+        resolve: {
+          factory: checkRouting
+        }
+      })
+      .when('/staffboard/employee_roles', {
+        controller: 'EmployeeRolesController',
+        controllerAs: 'erc',
+        templateUrl: 'staffboard/employee_roles/employee_roles.html',
         reloadOnSearch: false,
         resolve: {
           factory: checkRouting

@@ -32,6 +32,7 @@
             'salary',
             'employee_tick',
             'employees',
+            'employee_roles',
             'positions',
             'reports'
         ];

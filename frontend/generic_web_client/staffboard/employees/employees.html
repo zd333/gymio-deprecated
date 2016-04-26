@@ -1,2 +1,107 @@
-<!--TODO: fix this stub-->
-<h1 class="page-header">Employees stub</h1>
+<div layout="column" flex-offset="5" flex="90" ng-controller="EmployeesController as ec">
+  <div flex="noshrink">
+    <h2 class="md-headline" translate>employees</h2>
+
+    <md-autocomplete md-no-cache="true" md-selected-item="ec.selectedUser" md-search-text="ec.searchText" md-items="user in ec.narrowUserList(ec.searchText)" md-item-text="user.user_full_name" md-min-length="1" placeholder="{{'Type user name / login / id / card id' | translate}}" md-menu-class="autocomplete-users-custom-template" md-selected-item-change="ec.setEditUserModel()">
+      <md-item-template>
+        <div layout="row">
+          <my-centered-circle-image my-src="{{user.user_photo}}" my-size="50"></my-centered-circle-image>
+          <div flex-offset="5" layout="column" class="autocomplete-user-list-item-text">
+            <strong>{{user.user_full_name+' ('+user.username+')'}}</strong>
+            <div layout="row">
+              <span>{{'ID: '+user.id}}</span>
+              <span ng-show="user.card_id">{{', ' + ('card' | translate) + ': ' + user.card_id}}</span>
+            </div>
+          </div>
+        </div>
+      </md-item-template>
+    </md-autocomplete>
+
+    <form layout="column" name="ec.updateUserForm" ng-show="ec.editUserModel" ng-submit="ec.save()">
+      <p class="md-body-2">
+        {{('Login' | translate) + ' ' + ec.editUserModel.username +
+      ' | ' + ('Register date' | translate) + ' ' + (ec.editUserModel.date_joined | date:'shortDate')}}
+      </p>
+
+      <md-checkbox ng-model="ec.editUserModel.is_active">
+        <span ng-show="ec.editUserModel.is_active" translate>User is active (umark to inactivate)</span>
+        <span ng-show="!ec.editUserModel.is_active" translate>User is inactive (mark to activate)</span>
+      </md-checkbox>
+
+      <div layout="column">
+        <my-centered-circle-image my-src="{{ec.editUserModel.user_photo}}" my-size="80"></my-centered-circle-image>
+        <md-input-container>
+          <label translate>Browse new photo</label>
+          <input type="file" gymio-input-file="ec.selectedFile" accept="image/*" placeholder="">
+        </md-input-container>
+      </div>
+
+      <div layout="row">
+        <md-input-container flex>
+          <label translate>Full name</label>
+          <input name="fullName" type="text" ng-model="ec.editUserModel.user_full_name">
+        </md-input-container>
+
+        <md-input-container class="md-block" flex>
+          <label translate>Card id</label>
+          <input name="usercardId" type="text" ng-model="ec.editUserModel.card_id">
+        </md-input-container>
+      </div>
+
+      <div layout="row">
+        <md-input-container flex>
+          <label translate>Mobile phone</label>
+          <input name="userPhone" type="tel" ng-model="ec.editUserModel.user_phone">
+        </md-input-container>
+
+        <md-input-container class="md-block" flex>
+          <label translate>Email</label>
+          <input name="userEmail" type="email" ng-model="ec.editUserModel.email">
+        </md-input-container>
+      </div>
+
+      <md-radio-group ng-model="ec.editUserModel.user_gender" layout="row">
+        <md-radio-button ng-value="false">
+          {{'Female' | translate}}
+        </md-radio-button>
+        <md-radio-button ng-value="true">
+          {{'Male' | translate}}
+        </md-radio-button>
+      </md-radio-group>
+
+      <div layout="row">
+        <p class="md-body-1">{{'Birthday date' | translate}}</p>
+        <md-datepicker ng-model="ec.editUserModel.user_birthday" ng-required="true"></md-datepicker>
+      </div>
+
+      <p class="md-body-2" translate>
+        ATTENTION_ALL_USERS_SEE_THIS_INFO_FOR_STAFF
+      </p>
+      <md-input-container>
+        <label translate>About me</label>
+        <textarea name="userDescription" ng-model="ec.editUserModel.user_description"></textarea>
+      </md-input-container>
+
+      <p class="md-body-2" translate>
+        INTERNAL_USER_NOTES_FOR_STAFF
+      </p>
+      <md-input-container>
+        <label translate>Internal user notes</label>
+        <textarea name="userInternalNotes" ng-model="ec.editUserModel.user_notes"></textarea>
+      </md-input-container>
+
+      <div layout="row" layout-align="start center">
+        <md-input-container flex="50">
+          <label translate>Password</label>
+          <input type="password" ng-model="ec.editUserModel.newPassword" placeholder="{{'New password' | translate}}">
+        </md-input-container>
+      </div>
+
+      <div layout="row" layout-align="start center">
+        <md-button flex="50" type="submit" ng-disabled="ec.updateUserForm.$pristine && !ec.selectedFile" class="md-raised md-primary">
+          {{'Save profile changes' | translate}}
+        </md-button>
+      </div>
+    </form>
+  </div>
+</div>
