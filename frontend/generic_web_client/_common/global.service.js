@@ -26,9 +26,10 @@
             };
 
             //builds URL to RESTful service
-            var restUrl = function (entityName, entityKey) {
+            var restUrl = function (entityName, entityKey, payload) {
                 var URL = '/' + deploySettings.restPrefix + '/' + entityName + '/' + deploySettings.clubNumber + '/';
                 if (entityKey !== undefined) URL += entityKey + '/';
+                if (payload !== undefined) URL += payload + '/';
                 return URL;
             };
 

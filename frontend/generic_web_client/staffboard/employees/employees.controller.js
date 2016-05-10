@@ -51,15 +51,15 @@
         function setEditUserModel() {
           $scope.ec.selectedFile = null; //с помощью этого сбрасывается file input в директиве
 
-          //копируем выбранного пользователя в отдельный экземпляр, чтобы привязанные к контролам свойства не затерлись в оригинальном массиве
+          //update user in list (in case if it was changed)
           if (ec.selectedUser) {
-            //обновляем пользователя в массиве пользователей (на случай если он был изменен)
             for (var i = 0; i < ec.userList.length; i++) {
               if (ec.userList[i].id === ec.selectedUser.id) {
                 ec.userList[i] = ec.selectedUser;
               }
             }
 
+            //копируем выбранного пользователя в отдельный экземпляр, чтобы привязанные к контролам свойства не затерлись в оригинальном массиве
             var bufObj = angular.copy(ec.selectedUser);
             //изменяем со строки на объект для контрола datepicker
             bufObj.user_birthday = new Date(bufObj.user_birthday);

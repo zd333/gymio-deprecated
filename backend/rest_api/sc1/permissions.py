@@ -1,4 +1,5 @@
 from rest_framework import permissions
+from .models import UserRight, RIGHT_CHOICES
 
 
 class UnAuthenticatedOrActiveAuthorizedStaffCanPostUser(permissions.BasePermission):
@@ -59,7 +60,25 @@ class AuthorizedStaffCanApproveUserPhoto(permissions.BasePermission):
 
 class AuthorizedStaffCanAddOrDeleteUserRight(permissions.BasePermission):
     def has_permission(self, request, view):
-        # TODO: now it's only loop back, need to fix this
-        # HR and CO can add and delete user rights
-        # RA can approve photo of customer users only
+        if not request.user.is_staff:
+            return False
+        if not request.user.is_active:
+            return False
         return True
+
+    def has_object_permission(self, request, view, obj):
+        user_rights = UserRight.objects.filter(user_right_user=request.user)
+
+        # RIGHT_CHOICES[0] - is CO tuple, RIGHT_CHOICES[0][0] - is 'CO' string
+        for r in user_rights:
+            if r.user_right_text == RIGHT_CHOICES[0][0]:
+                # it is CO - allow all rights
+                return True
+
+        # RIGHT_CHOICES[3] - is HR tuple, RIGHT_CHOICES[3][0] - is 'HR' string
+        for r in user_rights:
+            if r.user_right_text == RIGHT_CHOICES[3][0]:
+                # it is HR - so only HR(3), SK(4), RA(5), HT(6) are allowed, check it
+                return obj.user_right_text in (RIGHT_CHOICES[3][0], RIGHT_CHOICES[4][0], RIGHT_CHOICES[5][0], RIGHT_CHOICES[6][0])
+
+        return False

@@ -1,1 +1,57 @@
-ERC stub
+<div layout="column" flex-offset="5" flex="90" ng-controller="EmployeeRolesController as erc">
+  <div flex="noshrink">
+    <h2 class="md-headline" translate>employee_roles</h2>
+    <p class="md-body-1">
+      {{('You are allowed to set next rights (roles)' | translate) + ': ' + erc.rightsListString}}
+    </p>
+
+    <!-- TODO: wrap autocomplete control in directive -->
+    <md-autocomplete md-no-cache="true" md-selected-item="erc.selectedUser" md-search-text="erc.searchText" md-items="user in erc.narrowUserList(erc.searchText)" md-item-text="user.user_full_name" md-min-length="1" placeholder="{{'Type user name / login / id / card id' | translate}}" md-menu-class="autocomplete-users-custom-template" md-selected-item-change="erc.setEditRightsModel()">
+      <md-item-template>
+        <div layout="row">
+          <my-centered-circle-image my-src="{{user.user_photo}}" my-size="50"></my-centered-circle-image>
+          <div flex-offset="5" layout="column" class="autocomplete-user-list-item-text">
+            <strong>{{user.user_full_name+' ('+user.username+')'}}</strong>
+            <div layout="row">
+              <span>{{'ID: '+user.id}}</span>
+              <span ng-show="user.card_id">{{', ' + ('card' | translate) + ': ' + user.card_id}}</span>
+            </div>
+          </div>
+        </div>
+      </md-item-template>
+    </md-autocomplete>
+
+    <form layout="column" name="erc.updateUserRightsForm" ng-show="erc.selectedUser" ng-submit="erc.save()">
+      <br>
+      <div layout="row">
+        <my-centered-circle-image my-src="{{erc.selectedUser.user_photo}}" my-size="80"></my-centered-circle-image>
+        <div layout="column">
+          <p class="md-body-1">{{'Full name' | translate}}:
+            {{erc.selectedUser.user_full_name}}
+          </p>
+          <span ng-show="erc.selectedUser.is_active" translate>User is active</span>
+          <span ng-show="!erc.selectedUser.is_active" translate>User is inactive</span>
+        </div>
+      </div>
+
+      <md-input-container>
+        <label translate>Rights (roles) list of selected user</label>
+
+        <md-chips ng-model="erc.userRightsEditModel" md-require-match="true">
+          <md-autocomplete md-no-cache="true" md-selected-item="erc.selectedRightItem" md-search-text="erc.searchRightText" md-items="item in erc.narrowRightsList(erc.searchRightText)" md-item-text="item.text">
+            <span md-highlight-text="erc.searchRightText">{{item.text + ' (' + item.code + ')'}}</span>
+          </md-autocomplete>
+          <md-chip-template>
+            <strong>{{$chip.text + ' (' + $chip.code + ') '}}</strong>
+          </md-chip-template>
+        </md-chips>
+      </md-input-container>
+
+      <div layout="row" layout-align="start center">
+        <md-button flex="50" type="submit" ng-disabled="erc.updateUserRightsForm.$pristine" class="md-raised md-primary">
+          {{'Save user rights changes' | translate}}
+        </md-button>
+      </div>
+    </form>
+  </div>
+</div>

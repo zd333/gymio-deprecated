@@ -6,7 +6,16 @@
   angular
     .module('gymio.services')
     .factory('datavalidation', ['$translate', '$sanitize', function($translate, $sanitize) {
-      var loginValidation = function(field) {
+
+      return {
+        loginValidation: loginValidation,
+        fullNameValidation: fullNameValidation,
+        passwordValidation: passwordValidation,
+        phoneValidation: phoneValidation,
+        birthDateValidation: birthDateValidation
+      };
+
+      function loginValidation(field) {
         var resultObj = {
           passed: true, //if filed passed validation
           errorMsg: '',
@@ -26,9 +35,9 @@
         }
 
         return resultObj;
-      };
+      }
 
-      var fullNameValidation = function(field) {
+      function fullNameValidation(field) {
         var resultObj = {
           passed: true, //if filed passed validation
           errorMsg: '',
@@ -43,10 +52,9 @@
         }
 
         return resultObj;
-      };
+      }
 
-
-      var passwordValidation = function(field) {
+      function passwordValidation(field) {
         var resultObj = {
           passed: true, //if filed passed validation
           errorMsg: '',
@@ -60,9 +68,9 @@
         }
 
         return resultObj;
-      };
+      }
 
-      var phoneValidation = function(field) {
+      function phoneValidation(field) {
         var resultObj = {
           passed: true, //if filed passed validation
           errorMsg: '',
@@ -80,9 +88,9 @@
         resultObj.processedField = p.slice(p.length - 10);
 
         return resultObj;
-      };
+      }
 
-      var birthDateValidation = function(field) {
+      function birthDateValidation(field) {
         var resultObj = {
           passed: false, //if filed did not pass validation
           errorMsg: $translate.instant('Wrong age'),
@@ -100,15 +108,7 @@
         }
 
         return resultObj;
-      };
+      }
 
-
-      return {
-        loginValidation: loginValidation,
-        fullNameValidation: fullNameValidation,
-        passwordValidation: passwordValidation,
-        phoneValidation: phoneValidation,
-        birthDateValidation: birthDateValidation
-      };
     }]);
 })();

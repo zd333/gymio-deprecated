@@ -1,4 +1,5 @@
-;(function() {
+;
+(function() {
   'use strict';
 
   angular
@@ -8,7 +9,8 @@
         updateUser: updateUser,
         approveUserPhoto: approveUserPhoto,
         rejectUserPhoto: rejectUserPhoto,
-        getUsers: getUsers
+        getUsers: getUsers,
+        getUser: getUser
       };
 
       return Users;
@@ -38,6 +40,10 @@
         } else {
           return $http.get(global.restUrl('users'));
         }
+      }
+
+      function getUser(userId) {
+        return $http.get(global.restUrl('users', userId));
       }
     }])
 })();

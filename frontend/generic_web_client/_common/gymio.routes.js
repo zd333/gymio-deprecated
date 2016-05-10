@@ -3,7 +3,7 @@
   'use strict';
 
   var checkRouting = function($q, $rootScope, $location, global, $timeout) {
-console.log('check routing');
+
     if (global.gymioPlatformSettings && global.clubSettings) {
       return true;
     } else {

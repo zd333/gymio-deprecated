@@ -152,7 +152,6 @@ class LoginView(views.APIView):
 class LogoutView(views.APIView):
     # permission_classes = (permissions.IsAuthenticated,)
     permission_classes = (permissions.AllowAny,)
-    # TODO: add checking if this is logged in user who wants to logout
 
     def post(self, request, club=None):
         # don't check club, because it is safe operation
@@ -210,14 +209,18 @@ class UserRightView(views.APIView):
                 found = True
                 break
         if not found:
-            raise NotFound(_('This type of right was not found'))
+            raise NotFound(righttext + ': ' + _('this type of right was not found'))
 
         # verify if this right is not yet added to this user
         try:
             UserRight.objects.get(user_right_user=user, user_right_text=righttext)
         except UserRight.DoesNotExist:
             # all ok, this user does not have this right
-            UserRight.objects.create(user_right_user=user, user_right_text=righttext)
+            nr = UserRight(user_right_user=user, user_right_text=righttext)
+
+            # call object permissions verification manually since we are using api view (not generic ones) and defining our own get object method
+            self.check_object_permissions(request, nr)
+            nr.save()
 
             # get user again (with added right) and return it
             user = ClubUser.objects.get(pk=userid, user_club=club)
@@ -225,14 +228,14 @@ class UserRightView(views.APIView):
             return Response(serialized.data)
 
         # not ok, this user already has this right
-        return Response({"detail": _('This user already has this right')}, status=status.HTTP_409_CONFLICT)
+        return Response({"detail": user.username + ', ' + righttext + ': ' + _('this user already has this right')}, status=status.HTTP_409_CONFLICT)
 
     def delete(self, request, userid=None, righttext=None, club=None):
         # check if user exists
         try:
             user = ClubUser.objects.get(pk=userid, user_club=club)
         except ClubUser.DoesNotExist:
-            raise NotFound(_('User not found'))
+            raise NotFound(userid + ': ' + _('user not found'))
 
         # check if right item exists
         found = False
@@ -241,14 +244,18 @@ class UserRightView(views.APIView):
                 found = True
                 break
         if not found:
-            raise NotFound(_('This type of right was not found'))
+            raise NotFound(righttext + ': ' + _('this type of right was not found'))
 
         # try to delete user right item
         try:
-            UserRight.objects.get(user_right_user=user, user_right_text=righttext).delete()
+            r = UserRight.objects.get(user_right_user=user, user_right_text=righttext)
+            # call object permissions verification manually since we are using api view (not generic ones) and defining our own get object method
+            self.check_object_permissions(request, r)
+            r.delete()
+
             # get user again (with removed right) and return it
             user = ClubUser.objects.get(pk=userid, user_club=club)
             serialized = ClubUserSerializer(user)
             return Response(serialized.data)
         except UserRight.DoesNotExist:
-            raise NotFound(_('This user does not have this right'))
+            raise NotFound(user.username + ', ' + righttext + ': ' + _('this user does not have this right'))
