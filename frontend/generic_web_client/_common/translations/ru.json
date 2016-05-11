@@ -82,7 +82,7 @@
   "Tickets keeper": "Абонементы",
   "Reception admin": "Администратор",
   "Head trainer": "Старший тренер",
-  "Save user rights changes": "Сохранить изменения прав (ролей)",
-  "Rights (roles) list of selected user": "Список прав выбранного пользователя:",
-  "You are allowed to set next rights (roles)": "Вы можете устанавливать следующие права (роли)"
+  "Save user roles changes": "Сохранить изменения ролей",
+  "Roles list of selected user": "Список ролей выбранного пользователя:",
+  "You are allowed to set next roles": "Вы можете устанавливать следующие роли"
 }

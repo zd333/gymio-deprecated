@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import update_session_auth_hash
-from .models import Club, ClubUser, UserRight
+from .models import Club, ClubUser, UserRole
 
 # TODO: all serializers are set to ModelSerializer
 # better solution would be to use HyperlinkedModelSerializer
@@ -54,7 +54,7 @@ class ClubSerializer(serializers.ModelSerializer):
 
 class ClubUserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=False)
-    userRights = serializers.StringRelatedField(many=True)
+    userRoles = serializers.StringRelatedField(many=True, required=False)
 
     class Meta:
         model = ClubUser
@@ -72,13 +72,12 @@ class ClubUserSerializer(serializers.ModelSerializer):
             'user_birthday',
             'user_description',
             'user_notes',
-            'user_position',
             'user_photo',
             'user_photo_not_approved',
             'password',
-            'userRights',
+            'userRoles',
         )
-        read_only_fields = ('id', 'date_joined', 'user_photo', 'user_photo_not_approved',)
+        read_only_fields = ('id', 'date_joined', 'user_photo', 'user_photo_not_approved', 'userRoles',)
 
     def create(self, validated_data):
         user = ClubUser.objects.create(**validated_data)
@@ -98,7 +97,6 @@ class ClubUserSerializer(serializers.ModelSerializer):
         instance.user_birthday = validated_data.get('user_birthday', instance.user_birthday)
         instance.user_description = validated_data.get('user_description', instance.user_description)
         instance.user_notes = validated_data.get('user_notes', instance.user_notes)
-        instance.user_position = validated_data.get('user_position', instance.user_position)
 
         password = validated_data.get('password', None)
         if password:

@@ -8,7 +8,7 @@ from django.utils import timezone
 from gettext import gettext as _
 
 
-RIGHT_CHOICES = (
+ROLE_CHOICES = (
         ('CO', _('Club owner')),
         ('FK', _('Finance keeper')),
         ('EI', _('Expenses compositor')),
@@ -133,12 +133,12 @@ class ClubUser(AbstractBaseUser, PermissionsMixin):
         return self.username
 
 
-class UserRight(models.Model):
-    user_right_user = models.ForeignKey(ClubUser, related_name='userRights')
-    user_right_text = models.CharField(max_length=2, choices=RIGHT_CHOICES)
+class UserRole(models.Model):
+    role_user = models.ForeignKey(ClubUser, related_name='userRoles')
+    role_text = models.CharField(max_length=2, choices=ROLE_CHOICES)
 
     def __str__(self):
-        return str(self.user_right_text)
+        return str(self.role_text)
 
 
 class StaffComing(models.Model):

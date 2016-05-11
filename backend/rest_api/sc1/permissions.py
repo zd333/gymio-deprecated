@@ -1,5 +1,5 @@
 from rest_framework import permissions
-from .models import UserRight, RIGHT_CHOICES
+from .models import UserRole, ROLE_CHOICES
 
 
 class UnAuthenticatedOrAuthorizedStaffCanPostUser(permissions.BasePermission):
@@ -49,17 +49,7 @@ class AuthorizedStaffCanEditStaffUser(permissions.BasePermission):
         return True
 
 
-class AuthorizedStaffCanApproveUserPhoto(permissions.BasePermission):
-    def has_object_permission(self, request, view, obj):
-        # TODO: now it's only loop back, need to fix this
-        # check if active
-        # HR can approve staff user's photo
-        # staff can approve own photo
-        # RA can approve photo of customer users only
-        return True
-
-
-class AuthorizedStaffCanAddOrDeleteUserRight(permissions.BasePermission):
+class AuthorizedStaffCanAddOrDeleteUserRole(permissions.BasePermission):
     def has_permission(self, request, view):
         if not request.user.is_staff:
             return False
@@ -68,18 +58,18 @@ class AuthorizedStaffCanAddOrDeleteUserRight(permissions.BasePermission):
         return True
 
     def has_object_permission(self, request, view, obj):
-        user_rights = UserRight.objects.filter(user_right_user=request.user)
+        user_roles = UserRole.objects.filter(role_user=request.user)
 
-        # RIGHT_CHOICES[0] - is CO tuple, RIGHT_CHOICES[0][0] - is 'CO' string
-        for r in user_rights:
-            if r.user_right_text == RIGHT_CHOICES[0][0]:
-                # it is CO - allow all rights
+        # ROLE_CHOICES[0] - is CO tuple, ROLE_CHOICES[0][0] - is 'CO' string
+        for r in user_roles:
+            if r.role_text == ROLE_CHOICES[0][0]:
+                # it is CO - allow all roles
                 return True
 
-        # RIGHT_CHOICES[3] - is HR tuple, RIGHT_CHOICES[3][0] - is 'HR' string
-        for r in user_rights:
-            if r.user_right_text == RIGHT_CHOICES[3][0]:
-                # it is HR - so only HR(3), TK(4), RA(5), HT(6) are allowed, check it
-                return obj.user_right_text in (RIGHT_CHOICES[3][0], RIGHT_CHOICES[4][0], RIGHT_CHOICES[5][0], RIGHT_CHOICES[6][0])
+        # ROLE_CHOICES[3] - is HR tuple, ROLE_CHOICES[3][0] - is 'HR' string
+        for r in user_roles:
+            if r.role_text == ROLE_CHOICES[3][0]:
+                # it is HR - so EI(2), FK(1) are not allowed
+                return obj.role_text not in (ROLE_CHOICES[1][0], ROLE_CHOICES[2][0])
 
         return False

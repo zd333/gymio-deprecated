@@ -6,7 +6,7 @@ from rest_framework.exceptions import NotFound, ValidationError, PermissionDenie
 from rest_framework.response import Response
 from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
 #from rest_framework.decorators import detail_route, parser_classes
-from .models import Club, ClubUser, UserRight, RIGHT_CHOICES
+from .models import Club, ClubUser, UserRole, ROLE_CHOICES
 from .serializers import ClubSerializer, ClubUserSerializer
 from . import permissions as my_permissions
 from gettext import gettext as _
@@ -162,7 +162,7 @@ class LogoutView(views.APIView):
 # Use essential APIView because this view is not CRUD, just need to perform some actions
 # and can use serializer of user model
 class ApproveUserPhotoView(views.APIView):
-    permission_classes = (my_permissions.AuthorizedStaffCanApproveUserPhoto,)
+    permission_classes = (my_permissions.AuthorizedStaffCanEditStaffUser,)
 
     def post(self, request, pk=None, club=None):
         user = ClubUser.objects.get(pk=pk, user_club=club)
@@ -179,7 +179,7 @@ class ApproveUserPhotoView(views.APIView):
 # Use essential APIView because this view is not CRUD, just need to perform some actions
 # and can use serializer of user model
 class RejectUserPhotoView(views.APIView):
-    permission_classes = (my_permissions.AuthorizedStaffCanApproveUserPhoto,)
+    permission_classes = (my_permissions.AuthorizedStaffCanEditStaffUser,)
 
     def post(self, request, pk=None, club=None):
         user = ClubUser.objects.get(pk=pk, user_club=club)
@@ -191,71 +191,71 @@ class RejectUserPhotoView(views.APIView):
         return Response(serialized.data)
 
 
-class UserRightView(views.APIView):
-    # use generic view instead of viewsets/mixins to perform checking club id, if it's staff user, if there is no such right already present
-    permission_classes = (my_permissions.AuthorizedStaffCanAddOrDeleteUserRight,)
+class UserRoleView(views.APIView):
+    # use generic view instead of viewsets/mixins to perform checking club id, if it's staff user, if there is no such role already present
+    permission_classes = (my_permissions.AuthorizedStaffCanAddOrDeleteUserRole,)
 
-    def post(self, request, userid=None, righttext=None, club=None):
+    def post(self, request, userid=None, role_text=None, club=None):
         # check if user exists
         try:
             user = ClubUser.objects.get(pk=userid, user_club=club)
         except ClubUser.DoesNotExist:
             raise NotFound(_('User not found'))
 
-        # check if right item exists
+        # check if role item exists
         found = False
-        for right in RIGHT_CHOICES:
-            if right[0] == righttext:
+        for role in ROLE_CHOICES:
+            if role[0] == role_text:
                 found = True
                 break
         if not found:
-            raise NotFound(righttext + ': ' + _('this type of right was not found'))
+            raise NotFound(role_text + ': ' + _('this type of role was not found'))
 
-        # verify if this right is not yet added to this user
+        # verify if this role is not yet added to this user
         try:
-            UserRight.objects.get(user_right_user=user, user_right_text=righttext)
-        except UserRight.DoesNotExist:
-            # all ok, this user does not have this right
-            nr = UserRight(user_right_user=user, user_right_text=righttext)
+            UserRole.objects.get(role_user=user, role_text=role_text)
+        except UserRole.DoesNotExist:
+            # all ok, this user does not have this role
+            nr = UserRole(role_user=user, role_text=role_text)
 
             # call object permissions verification manually since we are using api view (not generic ones) and defining our own get object method
             self.check_object_permissions(request, nr)
             nr.save()
 
-            # get user again (with added right) and return it
+            # get user again (with added role) and return it
             user = ClubUser.objects.get(pk=userid, user_club=club)
             serialized = ClubUserSerializer(user)
             return Response(serialized.data)
 
-        # not ok, this user already has this right
-        return Response({"detail": user.username + ', ' + righttext + ': ' + _('this user already has this right')}, status=status.HTTP_409_CONFLICT)
+        # not ok, this user already has this role
+        return Response({"detail": user.username + ', ' + role_text + ': ' + _('this user already has this role')}, status=status.HTTP_409_CONFLICT)
 
-    def delete(self, request, userid=None, righttext=None, club=None):
+    def delete(self, request, userid=None, role_text=None, club=None):
         # check if user exists
         try:
             user = ClubUser.objects.get(pk=userid, user_club=club)
         except ClubUser.DoesNotExist:
             raise NotFound(userid + ': ' + _('user not found'))
 
-        # check if right item exists
+        # check if role item exists
         found = False
-        for right in RIGHT_CHOICES:
-            if right[0] == righttext:
+        for role in ROLE_CHOICES:
+            if role[0] == role_text:
                 found = True
                 break
         if not found:
-            raise NotFound(righttext + ': ' + _('this type of right was not found'))
+            raise NotFound(role_text + ': ' + _('this type of role was not found'))
 
-        # try to delete user right item
+        # try to delete user role item
         try:
-            r = UserRight.objects.get(user_right_user=user, user_right_text=righttext)
+            r = UserRole.objects.get(role_user=user, role_text=role_text)
             # call object permissions verification manually since we are using api view (not generic ones) and defining our own get object method
             self.check_object_permissions(request, r)
             r.delete()
 
-            # get user again (with removed right) and return it
+            # get user again (with removed role) and return it
             user = ClubUser.objects.get(pk=userid, user_club=club)
             serialized = ClubUserSerializer(user)
             return Response(serialized.data)
-        except UserRight.DoesNotExist:
-            raise NotFound(user.username + ', ' + righttext + ': ' + _('this user does not have this right'))
+        except UserRole.DoesNotExist:
+            raise NotFound(user.username + ', ' + role_text + ': ' + _('this user does not have this role'))

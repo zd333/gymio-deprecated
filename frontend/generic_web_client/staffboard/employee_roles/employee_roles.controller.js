@@ -4,25 +4,25 @@
 
   angular
     .module('gymio.staffboard.employee_roles.controllers')
-    .controller('EmployeeRolesController', ['$translate', 'Users', 'UserRights', '$mdToast', '$q', 'authorisation', function($translate, Users, UserRights, $mdToast, $q, authorisation) {
+    .controller('EmployeeRolesController', ['$translate', 'Users', 'userRoles', '$mdToast', '$q', 'authorisation', function($translate, Users, userRoles, $mdToast, $q, authorisation) {
       var erc = this;
 
       erc.userList = [{}]; //for now - list of all available staff users from backend WITHOUT PAGINATION
       erc.searchText = '';
       erc.selectedUser = null;
-      erc.userRightsEditModel = []; //this is a model of input in form (not to affect original model till not saved)
-      erc.allPossibleRights = authorisation.getPossibleRights();
-      erc.allowedRights = authorisation.getRightsAllowedToBeSetByLoggedInUser();
+      erc.userRolesEditModel = []; //this is a model of input in form (not to affect original model till not saved)
+      erc.allPossibleRoles = authorisation.getPossibleRoles();
+      erc.allowedRoles = authorisation.getRolesAllowedToBeSetByLoggedInUser();
 
-      erc.rightsListString = '';
-      for (var i = 0; i < erc.allowedRights.length; i++) {
-        erc.rightsListString += erc.allowedRights[i].code + ',';
+      erc.rolesListString = '';
+      for (var i = 0; i < erc.allowedRoles.length; i++) {
+        erc.rolesListString += erc.allowedRoles[i].code + ',';
       }
-      if (erc.rightsListString) erc.rightsListString = erc.rightsListString.slice(0, -1);
+      if (erc.rolesListString) erc.rolesListString = erc.rolesListString.slice(0, -1);
 
       erc.narrowUserList = narrowUserList;
-      erc.setEditRightsModel = setEditRightsModel;
-      erc.narrowRightsList = narrowRightsList;
+      erc.setEditRolesModel = setEditRolesModel;
+      erc.narrowRolesList = narrowRolesList;
       erc.save = save;
 
       reloadUsersFromBackend();
@@ -48,8 +48,8 @@
         return res;
       }
 
-      function setEditRightsModel() {
-        erc.updateUserRightsForm.$setPristine();
+      function setEditRolesModel() {
+        erc.updateUserRolesForm.$setPristine();
 
         //update user in list (in case if it was changed)
         if (erc.selectedUser) {
@@ -60,59 +60,59 @@
           }
         }
 
-        erc.userRightsEditModel = [];
-        if (erc.selectedUser && erc.selectedUser.userRights) {
-          for (var i = 0; i < erc.selectedUser.userRights.length; i++) {
-            for (var j = 0; j < erc.allPossibleRights.length; j++) {
-              if (erc.selectedUser.userRights[i] === erc.allPossibleRights[j].code) {
-                erc.userRightsEditModel.push(erc.allPossibleRights[j]);
+        erc.userRolesEditModel = [];
+        if (erc.selectedUser && erc.selectedUser.userRoles) {
+          for (var i = 0; i < erc.selectedUser.userRoles.length; i++) {
+            for (var j = 0; j < erc.allPossibleRoles.length; j++) {
+              if (erc.selectedUser.userRoles[i] === erc.allPossibleRoles[j].code) {
+                erc.userRolesEditModel.push(erc.allPossibleRoles[j]);
               }
             }
           }
         }
       }
 
-      function narrowRightsList(text) {
-        var narrowedRightKeys = [];
+      function narrowRolesList(text) {
+        var narrowedRoleKeys = [];
         var t = text.toUpperCase();
 
-        for (var i = 0; i < erc.allowedRights.length; i++) {
-          if ((erc.allowedRights[i].code.indexOf(t) > -1) || (erc.allowedRights[i].text.toUpperCase().indexOf(t) > -1)) {
-            //check if user doesn't have matching right yet
+        for (var i = 0; i < erc.allowedRoles.length; i++) {
+          if ((erc.allowedRoles[i].code.indexOf(t) > -1) || (erc.allowedRoles[i].text.toUpperCase().indexOf(t) > -1)) {
+            //check if user doesn't have matching role yet
             var found = false;
-            for (var j = 0; j < erc.userRightsEditModel.length; j++) {
-              if (erc.userRightsEditModel[j].code === erc.allowedRights[i].code) {
+            for (var j = 0; j < erc.userRolesEditModel.length; j++) {
+              if (erc.userRolesEditModel[j].code === erc.allowedRoles[i].code) {
                 found = true;
                 break;
               }
             }
             if (!found) {
-              narrowedRightKeys.push(erc.allowedRights[i]);
+              narrowedRoleKeys.push(erc.allowedRoles[i]);
             }
           }
         }
-        return narrowedRightKeys;
+        return narrowedRoleKeys;
       }
 
       function save() {
-        var curRights = erc.selectedUser.userRights;
-        var newRights = erc.userRightsEditModel;
+        var curRoles = erc.selectedUser.userRoles;
+        var newRoles = erc.userRolesEditModel;
 
         var resultMessage = '';
         var backendRequestPromises = [];
 
-        //find deleted rights and perform backend delete requests
-        for (var i = 0; i < curRights.length; i++) {
+        //find deleted roles and perform backend delete requests
+        for (var i = 0; i < curRoles.length; i++) {
           var found = false;
-          for (var j = 0; j < newRights.length; j++) {
-            if (curRights[i] === newRights[j].code) {
+          for (var j = 0; j < newRoles.length; j++) {
+            if (curRoles[i] === newRoles[j].code) {
               found = true;
               break;
             }
           }
           if (!found) {
-            //need to delete curRights[i]
-            backendRequestPromises.push(UserRights.deleteUserRight(erc.selectedUser.id, curRights[i])
+            //need to delete curRoles[i]
+            backendRequestPromises.push(userRoles.deleteUserRole(erc.selectedUser.id, curRoles[i])
               .catch(function(response) {
                 var m = response.statusText;
                 if ((response.data) && (response.data.detail)) m += '(' + response.data.detail + ')';
@@ -122,18 +122,18 @@
           }
         }
 
-        //find added rights and perform backend add requests
-        for (var i = 0; i < newRights.length; i++) {
+        //find added roless and perform backend add requests
+        for (var i = 0; i < newRoles.length; i++) {
           var found = false;
-          for (var j = 0; j < curRights.length; j++) {
-            if (newRights[i].code === curRights[j]) {
+          for (var j = 0; j < curRoles.length; j++) {
+            if (newRoles[i].code === curRoles[j]) {
               found = true;
               break;
             }
           }
           if (!found) {
-            //need to add newRights[i].code
-            backendRequestPromises.push(UserRights.addUserRight(erc.selectedUser.id, newRights[i].code)
+            //need to add newRoles[i].code
+            backendRequestPromises.push(userRoles.addUserRole(erc.selectedUser.id, newRoles[i].code)
               .catch(function(response) {
                 var m = response.statusText;
                 if ((response.data) && (response.data.detail)) m += '(' + response.data.detail + ')';
@@ -150,7 +150,7 @@
           //so $q.all is never rejected
           Users.getUser(erc.selectedUser.id).then(function(response) {
             erc.selectedUser = response.data;
-            setEditRightsModel();
+            setEditRolesModel();
           });//TODO: add code for the case when all was ok, but this last user request failed
 
           if (resultMessage) {

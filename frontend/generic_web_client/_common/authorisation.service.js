@@ -6,13 +6,13 @@
     .module('gymio.services')
     .factory('authorisation', ['$translate', 'Authentication', function($translate, Authentication) {
       return {
-        getPossibleRights: getPossibleRights,
-        getRightsAllowedToBeSetByLoggedInUser: getRightsAllowedToBeSetByLoggedInUser,
+        getPossibleRoles: getPossibleRoles,
+        getRolesAllowedToBeSetByLoggedInUser: getRolesAllowedToBeSetByLoggedInUser,
         getAllowedStaffboardModuleList: getAllowedStaffboardModuleList
       };
 
-      function getPossibleRights() {
-        //this list must exactly match correspondidng backend list (RIGHT_CHOICES)
+      function getPossibleRoles() {
+        //this list must exactly match correspondidng backend list (ROLE_CHOICES)
         return [{
           code: 'CO',
           text: $translate.instant('Club owner')
@@ -37,14 +37,14 @@
         }, ];
       }
 
-      function getRightsAllowedToBeSetByLoggedInUser() {
+      function getRolesAllowedToBeSetByLoggedInUser() {
         var usr = Authentication.getAuthenticatedUser();
         if ((!usr.is_staff) || (!usr.is_active)) return [];
-        if (usr.userRights.indexOf('CO') >= 0) {
-          return getPossibleRights();
+        if (usr.userRoles.indexOf('CO') >= 0) {
+          return getPossibleRoles();
         }
-        if (usr.userRights.indexOf('HR') >= 0) {
-          var t = getPossibleRights();
+        if (usr.userRoles.indexOf('HR') >= 0) {
+          var t = getPossibleRoles();
           t.shift(); //remove CO
           t.shift(); //remove FK
           t.shift(); //remove EI
@@ -90,22 +90,22 @@
           //'customer_notification',//uncomment after implementation
         ];
 
-        if ((usr.userRights.indexOf('RA') >= 0) || (usr.userRights.indexOf('CO') >= 0)) {
+        if ((usr.userRoles.indexOf('RA') >= 0) || (usr.userRoles.indexOf('CO') >= 0)) {
           modules = modules.concat(RAmodules);
         }
-        if ((usr.userRights.indexOf('HR') >= 0) || (usr.userRights.indexOf('CO') >= 0)) {
+        if ((usr.userRoles.indexOf('HR') >= 0) || (usr.userRoles.indexOf('CO') >= 0)) {
           modules = modules.concat(HRmodules);
         }
-        if ((usr.userRights.indexOf('HT') >= 0) || (usr.userRights.indexOf('CO') >= 0)) {
+        if ((usr.userRoles.indexOf('HT') >= 0) || (usr.userRoles.indexOf('CO') >= 0)) {
           modules = modules.concat(HTmodules);
         }
-        if ((usr.userRights.indexOf('TK') >= 0) || (usr.userRights.indexOf('CO') >= 0)) {
+        if ((usr.userRoles.indexOf('TK') >= 0) || (usr.userRoles.indexOf('CO') >= 0)) {
           modules = modules.concat(TKmodules);
         }
-        if ((usr.userRights.indexOf('EI') >= 0) || (usr.userRights.indexOf('CO') >= 0)) {
+        if ((usr.userRoles.indexOf('EI') >= 0) || (usr.userRoles.indexOf('CO') >= 0)) {
           modules = modules.concat(EImodules);
         }
-        if ((usr.userRights.indexOf('FK') >= 0) || (usr.userRights.indexOf('CO') >= 0)) {
+        if ((usr.userRoles.indexOf('FK') >= 0) || (usr.userRoles.indexOf('CO') >= 0)) {
           modules = modules.concat(FKmodules);
         }
 

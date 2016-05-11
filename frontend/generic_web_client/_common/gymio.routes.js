@@ -301,24 +301,6 @@
           factory: checkRouting
         }
       })
-      .when('/staffboard/positions', {
-        //controller: '',
-        //controllerAs: '',
-        templateUrl: 'staffboard/positions/positions.html',
-        reloadOnSearch: false,
-        resolve: {
-          factory: checkRouting
-        }
-      })
-      .when('/staffboard/system_rights', {
-        //controller: '',
-        //controllerAs: '',
-        templateUrl: 'staffboard/system_rights/system_rights.html',
-        reloadOnSearch: false,
-        resolve: {
-          factory: checkRouting
-        }
-      })
       .when('/staffboard/reports', {
         //controller: '',
         //controllerAs: '',
