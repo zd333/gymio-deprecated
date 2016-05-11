@@ -2,13 +2,10 @@ from rest_framework import permissions
 from .models import UserRight, RIGHT_CHOICES
 
 
-class UnAuthenticatedOrActiveAuthorizedStaffCanPostUser(permissions.BasePermission):
-    """
-    Only unauthenticated users can post (create new model instances)
-    Typically used for user registration
-    """
+class UnAuthenticatedOrAuthorizedStaffCanPostUser(permissions.BasePermission):
     def has_permission(self, request, view):
         # TODO: now only unassigned can add user, need to add authorized staff functionality
+        # check if active
         if request.method != 'POST':
             return True
         if view.action != 'create':
@@ -17,10 +14,10 @@ class UnAuthenticatedOrActiveAuthorizedStaffCanPostUser(permissions.BasePermissi
         return True
 
 
-class ActiveStaffCanViewUser(permissions.BasePermission):
+class StaffCanViewCustomer(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         # TODO: now all authenticated can view all, fix this
-        # any can view staffuser
+        # check if active
         # active staff can view customers
         return (not (request.method in permissions.SAFE_METHODS) or
                 (request.user and request.user.is_authenticated()))
@@ -33,25 +30,29 @@ class AnyCanViewStaffUser(permissions.BasePermission):
         return True
 
 
-class ActiveAuthorizedStaffCanEditCustomer(permissions.BasePermission):
+class AuthorizedStaffCanEditCustomer(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         # TODO: now it's only loop back, need to fix this
-        # CO and HR can edit all users
-        # RA can edit customer users only
+        # check if active
+        # CO and RA can edit customer users
+        # check if they don't try to change is_staff
         return True
 
 
-class ActiveAuthorizedStaffCanEditStaffUser(permissions.BasePermission):
+class AuthorizedStaffCanEditStaffUser(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         # TODO: now it's only loop back, need to fix this
-        # CO and HR can edit all users
-        # RA can edit customer users only
+        # check if active
+        # CO and HR can edit staff users
+        # HR can't edit CO
+        # allow CO and HR set is_staff for customer users
         return True
 
 
 class AuthorizedStaffCanApproveUserPhoto(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         # TODO: now it's only loop back, need to fix this
+        # check if active
         # HR can approve staff user's photo
         # staff can approve own photo
         # RA can approve photo of customer users only
@@ -78,7 +79,7 @@ class AuthorizedStaffCanAddOrDeleteUserRight(permissions.BasePermission):
         # RIGHT_CHOICES[3] - is HR tuple, RIGHT_CHOICES[3][0] - is 'HR' string
         for r in user_rights:
             if r.user_right_text == RIGHT_CHOICES[3][0]:
-                # it is HR - so only HR(3), SK(4), RA(5), HT(6) are allowed, check it
+                # it is HR - so only HR(3), TK(4), RA(5), HT(6) are allowed, check it
                 return obj.user_right_text in (RIGHT_CHOICES[3][0], RIGHT_CHOICES[4][0], RIGHT_CHOICES[5][0], RIGHT_CHOICES[6][0])
 
         return False

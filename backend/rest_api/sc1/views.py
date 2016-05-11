@@ -28,11 +28,11 @@ class ClubUserViewSet(mixins.CreateModelMixin,
     queryset = ClubUser.objects.all()
     pagination_class = None  # this will work till amount of users is not huge
     serializer_class = ClubUserSerializer
-    permission_classes = (my_permissions.UnAuthenticatedOrActiveAuthorizedStaffCanPostUser,
-                          my_permissions.ActiveStaffCanViewUser,
+    permission_classes = (my_permissions.UnAuthenticatedOrAuthorizedStaffCanPostUser,
+                          my_permissions.StaffCanViewCustomer,
                           my_permissions.AnyCanViewStaffUser,
-                          my_permissions.ActiveAuthorizedStaffCanEditCustomer,
-                          my_permissions.ActiveAuthorizedStaffCanEditStaffUser)
+                          my_permissions.AuthorizedStaffCanEditCustomer,
+                          my_permissions.AuthorizedStaffCanEditStaffUser)
     # with this parser classes we can upload both json and form data (with files)
     parser_classes = (JSONParser, FormParser, MultiPartParser)
 

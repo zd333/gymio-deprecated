@@ -13,7 +13,7 @@ RIGHT_CHOICES = (
         ('FK', _('Finance keeper')),
         ('EI', _('Expenses compositor')),
         ('HR', _('Human resources')),
-        ('SK', _('Sales keeper')),
+        ('TK', _('Tickets keeper')),
         ('RA', _('Reception admin')),
         ('HT', _('Head trainer')),
     )
@@ -61,20 +61,6 @@ class WorkoutType(models.Model):
     workout_max_fee = models.DecimalField(max_digits=6, decimal_places=2)
     workout_per_visitor_fee = models.DecimalField(max_digits=6, decimal_places=2)
     workout_is_active = models.BooleanField()
-
-
-class PositionType(models.Model):
-    position_club = models.ForeignKey(Club)
-    position_name = models.CharField(max_length=45)
-    workout_types = models.ManyToManyField(WorkoutType)
-
-
-class PositionRight(models.Model):
-    position_right_position = models.ForeignKey(PositionType, related_name='positionRights')
-    position_right_text = models.CharField(max_length=2, choices=RIGHT_CHOICES)
-
-    def __str__(self):
-        return str(self.position_right_text)
 
 
 class ClubUserManager(BaseUserManager):
@@ -132,7 +118,6 @@ class ClubUser(AbstractBaseUser, PermissionsMixin):
     user_birthday = models.DateField()
     user_description = models.CharField(max_length=800, blank=True)  # external info, available for all users
     user_notes = models.CharField(max_length=800, blank=True)  # internal, for club staff
-    user_position = models.ForeignKey(PositionType, null=True, blank=True)
     user_photo = models.ImageField(null=True, blank=True) # Эта фотка не будет загружаться напрямую, только через отдельный action REST-сервиса из user_photo_not_approved
     user_photo_not_approved = models.ImageField(null=True, blank=True, upload_to=upload_photo)
 

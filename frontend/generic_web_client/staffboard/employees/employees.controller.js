@@ -16,6 +16,7 @@
       ec.save = save;
 
       //get all staff users
+      //TODO: add possibility to set is_staff for customer users
       Users.getUsers({
           is_staff: true
         })
