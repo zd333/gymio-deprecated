@@ -29,10 +29,10 @@ class ClubUserViewSet(mixins.CreateModelMixin,
     pagination_class = None  # this will work till amount of users is not huge
     serializer_class = ClubUserSerializer
     permission_classes = (my_permissions.UnAuthenticatedOrAuthorizedStaffCanPostUser,
-                          my_permissions.StaffCanViewCustomer,
-                          my_permissions.AnyCanViewStaffUser,
+                          my_permissions.StaffCanViewCustomerAnyCanViewStaff,
                           my_permissions.AuthorizedStaffCanEditCustomer,
-                          my_permissions.AuthorizedStaffCanEditStaffUser)
+                          my_permissions.AuthorizedStaffCanEditStaffUser,
+                          my_permissions.OwnerCanEditUser,)
     # with this parser classes we can upload both json and form data (with files)
     parser_classes = (JSONParser, FormParser, MultiPartParser)
 
@@ -57,6 +57,7 @@ class ClubUserViewSet(mixins.CreateModelMixin,
     # don't use mixin to perform checking club id and save new photo
     def update(self, request, pk=None, club=None):
         user = get_object_or_404(self.queryset, pk=pk, user_club=club)
+        self.check_object_permissions(request, user)
         photo = request.FILES.get('user_photo_not_approved')
         if photo is not None:
             # TODO: add checking of file size
@@ -96,10 +97,10 @@ class ClubUserViewSet(mixins.CreateModelMixin,
         if request.user.is_authenticated() and request.user.is_active and request.user.is_staff:
             is_active_filter = request.query_params.get('is_active', None)
             if is_active_filter is not None:
-                is_active_filter = is_active_filter not in ['false', 'False', 'False']
+                is_active_filter = is_active_filter not in ['false', 'False', 'FALSE']
             is_staff_filter = request.query_params.get('is_staff', None)
             if is_staff_filter is not None:
-                is_staff_filter = is_staff_filter not in ['false', 'False', 'False']
+                is_staff_filter = is_staff_filter not in ['false', 'False', 'FALSE']
 
             if is_active_filter is not None:
                 if is_staff_filter is not None:

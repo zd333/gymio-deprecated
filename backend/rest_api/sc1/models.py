@@ -135,7 +135,7 @@ class ClubUser(AbstractBaseUser, PermissionsMixin):
 
 class UserRole(models.Model):
     role_user = models.ForeignKey(ClubUser, related_name='userRoles')
-    role_text = models.CharField(max_length=2, choices=ROLE_CHOICES)
+    role_text = models.CharField(max_length=3, choices=ROLE_CHOICES)
 
     def __str__(self):
         return str(self.role_text)
