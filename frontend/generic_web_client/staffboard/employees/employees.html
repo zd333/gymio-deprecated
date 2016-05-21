@@ -23,6 +23,12 @@
       ' | ' + ('Register date' | translate) + ' ' + (ec.editUserModel.date_joined | date:'shortDate')}}
       </p>
 
+      <div layout="row" layout-align="start center">
+        <md-button flex="50" class="md-raised md-primary" ng-click="ec.fire()">
+          {{'Fire' | translate}}
+        </md-button>
+      </div>
+
       <md-checkbox ng-model="ec.editUserModel.is_active">
         <span ng-show="ec.editUserModel.is_active" translate>User is active (umark to inactivate)</span>
         <span ng-show="!ec.editUserModel.is_active" translate>User is inactive (mark to activate)</span>

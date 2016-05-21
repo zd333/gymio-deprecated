@@ -14,6 +14,7 @@
       ec.narrowUserList = narrowUserList;
       ec.setEditUserModel = setEditUserModel;
       ec.save = save;
+      ec.fire = fire;
 
       //get all staff users
       //TODO: add possibility to set is_staff for customer users
@@ -164,6 +165,38 @@
                 setEditUserModel();
                 $mdToast.showSimple($translate.instant('Successfully saved'));
               }
+            }, function(response) {
+              $mdToast.showSimple($translate.instant('Not saved'));
+            });
+        }
+
+        function fire() {
+          //use form data to update user (it is easiest way to upload files)
+          //copy required by backend fields
+          var uploadUserFormData = new FormData();
+          uploadUserFormData.append('id', ec.selectedUser.id);
+          uploadUserFormData.append('username', ec.selectedUser.username);
+          uploadUserFormData.append('is_active', ec.selectedUser.is_active);
+          uploadUserFormData.append('user_gender', ec.selectedUser.user_gender);
+          uploadUserFormData.append('user_full_name', ec.selectedUser.user_full_name);
+          uploadUserFormData.append('user_phone', ec.selectedUser.user_phone);
+          uploadUserFormData.append('user_birthday', ec.selectedUser.user_birthday);
+
+          uploadUserFormData.append('is_staff', false);
+
+          Users.updateUser(uploadUserFormData, ec.editUserModel.id)
+            .then(function(response) {
+              //staff became customer, delete him from staff list and reset view
+              for (var i = 0; i < ec.userList.length; i++) {
+                if (ec.userList[i].id === ec.selectedUser.id) {
+                  ec.userList.splice(i, 1);
+                  break;
+                }
+              }
+              ec.selectedUser = null;
+              ec.editUserModel = null;
+
+              $mdToast.showSimple($translate.instant('Successfully saved'));
             }, function(response) {
               $mdToast.showSimple($translate.instant('Not saved'));
             });

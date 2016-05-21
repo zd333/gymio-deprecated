@@ -84,5 +84,7 @@
   "Head trainer": "Старший тренер",
   "Save user roles changes": "Сохранить изменения ролей",
   "Roles list of selected user": "Список ролей выбранного пользователя:",
-  "You are allowed to set next roles": "Вы можете устанавливать следующие роли"
+  "You are allowed to set next roles": "Вы можете устанавливать следующие роли",
+  "Hire": "Сделать сотрудником",
+  "Fire": "Уволить из сотрудников"
 }

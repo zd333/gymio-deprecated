@@ -12,10 +12,11 @@
     '$scope',
     'global',
     'datavalidation',
-    'Users'
+    'Users',
+    'authorisation'
   ];
 
-  function ManageUsersController($translate, $mdToast, $scope, global, datavalidation, Users) {
+  function ManageUsersController($translate, $mdToast, $scope, global, datavalidation, Users, authorisation) {
     var muc = this;
 
     muc.userList = [{}]; //for now - list of all available customer users from backend WITHOUT PAGINATION
@@ -27,6 +28,8 @@
     muc.save = save;
     muc.approveUserPhoto = approveUserPhoto;
     muc.rejectUserPhoto = rejectUserPhoto;
+    muc.hire = hire;
+    muc.canHire = authorisation.loggedInUserAllowedToHireFireStaff();
 
     //получить всех пользователей-клиентов
     Users.getUsers({
@@ -198,6 +201,38 @@
           muc.selectedUser = response.data;
           setEditUserModel();
           $mdToast.showSimple($translate.instant('Photo was rejected'));
+        }, function(response) {
+          $mdToast.showSimple($translate.instant('Not saved'));
+        });
+    }
+
+    function hire() {
+      //use form data to update user (it is easiest way to upload files)
+      //copy required by backend fields
+      var uploadUserFormData = new FormData();
+      uploadUserFormData.append('id', muc.selectedUser.id);
+      uploadUserFormData.append('username', muc.selectedUser.username);
+      uploadUserFormData.append('is_active', muc.selectedUser.is_active);
+      uploadUserFormData.append('user_gender', muc.selectedUser.user_gender);
+      uploadUserFormData.append('user_full_name', muc.selectedUser.user_full_name);
+      uploadUserFormData.append('user_phone', muc.selectedUser.user_phone);
+      uploadUserFormData.append('user_birthday', muc.selectedUser.user_birthday);
+
+      uploadUserFormData.append('is_staff', true);
+
+      Users.updateUser(uploadUserFormData, muc.editUserModel.id)
+        .then(function(response) {
+          //customer became staff, delete him from customerr list and reset view
+          for (var i = 0; i < muc.userList.length; i++) {
+            if (muc.userList[i].id === muc.selectedUser.id) {
+              muc.userList.splice(i, 1);
+              break;
+            }
+          }
+          muc.selectedUser = null;
+          muc.editUserModel = null;
+
+          $mdToast.showSimple($translate.instant('Successfully saved'));
         }, function(response) {
           $mdToast.showSimple($translate.instant('Not saved'));
         });

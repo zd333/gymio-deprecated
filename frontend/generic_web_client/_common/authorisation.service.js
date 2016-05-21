@@ -8,7 +8,8 @@
       return {
         getPossibleRoles: getPossibleRoles,
         getRolesAllowedToBeSetByLoggedInUser: getRolesAllowedToBeSetByLoggedInUser,
-        getAllowedStaffboardModuleList: getAllowedStaffboardModuleList
+        getAllowedStaffboardModuleList: getAllowedStaffboardModuleList,
+        loggedInUserAllowedToHireFireStaff: loggedInUserAllowedToHireFireStaff
       };
 
       function getPossibleRoles() {
@@ -53,6 +54,19 @@
         return []; //all regular staff is allowed to assign nobody
       }
 
+      function loggedInUserAllowedToHireFireStaff() {
+        var usr = Authentication.getAuthenticatedUser();
+        if ((!usr.is_staff) || (!usr.is_active)) {
+          return false;
+        }
+
+        if ((usr.userRoles.indexOf('HR') >= 0) || (usr.userRoles.indexOf('CO') >= 0)) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+
       function getAllowedStaffboardModuleList() {
         var usr = Authentication.getAuthenticatedUser();
         if ((!usr.is_staff) || (!usr.is_active)) {
@@ -71,7 +85,8 @@
         var HRmodules = [
           //'employee_tick',//uncomment after implementation
           'employees',
-          'employee_roles'
+          'employee_roles',
+          'manage_users'
         ];
         var EImodules = [
           //'expenses',//uncomment after implementation
@@ -109,7 +124,10 @@
           modules = modules.concat(FKmodules);
         }
 
-        return modules;
+        //remove duplicates, this allows to give access to the same modules to different roles
+        return modules.filter(function (item, pos, self) {
+          return self.indexOf(item) == pos;
+        });
       }
 
     }]);
