@@ -27,8 +27,6 @@ class Club(models.Model):
     club_email = models.EmailField(max_length=45)
     club_homepage = models.URLField(null=True, blank=True)
     club_key = models.CharField(max_length=200, null=True, blank=True)
-    # TODO: remove short name
-    club_short_name = models.CharField(max_length=8)
     club_list_languages = models.CharField(max_length=20, blank=True)
 
     # frontend settings
@@ -54,13 +52,13 @@ class Club(models.Model):
 class WorkoutType(models.Model):
     workout_club = models.ForeignKey(Club)
     workout_name = models.CharField(max_length=45)
-    workout_max_visitors = models.SmallIntegerField()
-    workout_duration = models.SmallIntegerField()
-    workout_description = models.CharField(max_length=200)
-    workout_min_fee = models.DecimalField(max_digits=6, decimal_places=2)
-    workout_max_fee = models.DecimalField(max_digits=6, decimal_places=2)
-    workout_per_visitor_fee = models.DecimalField(max_digits=6, decimal_places=2)
-    workout_is_active = models.BooleanField()
+    workout_max_visitors = models.SmallIntegerField(default=0)
+    workout_duration = models.SmallIntegerField(default=0)
+    workout_description = models.CharField(max_length=200, null=True, blank=True)
+    workout_min_fee = models.DecimalField(max_digits=6, decimal_places=2, default=0)
+    workout_max_fee = models.DecimalField(max_digits=6, decimal_places=2, default=0)
+    workout_per_visitor_fee = models.DecimalField(max_digits=6, decimal_places=2, default=0)
+    workout_is_active = models.BooleanField(default=True)
 
 
 class ClubUserManager(BaseUserManager):
@@ -103,7 +101,7 @@ class ClubUser(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=45, unique=True)
     email = models.EmailField(null=True, blank=True)
     is_staff = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=False)
     date_joined = models.DateField(auto_now_add=True)  # check what format is returned
 
     # в это поле сохранять номер\идентификатор абонемента\карточки, которые использовались в клубе до

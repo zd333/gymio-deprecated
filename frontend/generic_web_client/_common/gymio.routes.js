@@ -221,8 +221,8 @@
         }
       })
       .when('/staffboard/group_workouts', {
-        //controller: '',
-        //controllerAs: '',
+        controller: 'GroupWorkoutsController',
+        controllerAs: 'gwc',
         templateUrl: 'staffboard/group_workouts/group_workouts.html',
         reloadOnSearch: false,
         resolve: {

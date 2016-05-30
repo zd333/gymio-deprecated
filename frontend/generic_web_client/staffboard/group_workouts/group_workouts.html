@@ -1,2 +1,34 @@
-<!--TODO: fix this stub-->
-<h1 class="page-header">Group workouts stub</h1>
+<div layout="column" flex-offset="5" flex="90" ng-controller="GroupWorkoutsController as gwc">
+  <h2 class="md-headline" translate>group_workouts</h2>
+  <md-tabs>
+    <md-tab label="{{'Add' | translate}}">
+      <form layout="column">
+        <div layout="row" layout-align="start center">
+          <md-input-container flex style="background-color: green;"  layout="row">
+              <label>фвквввип</label>
+              <input type="text" ng-model="gwc.addWorkoutTypeModel.workout_name">
+          </md-input-container>
+        </div>
+        <div layout="row" layout-align="start center">
+          <div flex style="background-color: blue;">
+            qqq
+          </div>
+        </div>
+      </form>
+    </md-tab>
+    <md-tab label="{{'Add' | translate}}">
+      <form layout="column">
+        <div layout="row" layout-align="start center">
+          <div flex style="background-color: red;">
+            qqq
+          </div>
+        </div>
+        <div layout="row" layout-align="start center">
+          <div flex style="background-color: yellow;">
+            qqq
+          </div>
+        </div>
+      </form>
+    </md-tab>
+  </md-tabs>
+</div>

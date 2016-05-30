@@ -6,8 +6,8 @@ from rest_framework.exceptions import NotFound, ValidationError, PermissionDenie
 from rest_framework.response import Response
 from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
 #from rest_framework.decorators import detail_route, parser_classes
-from .models import Club, ClubUser, UserRole, ROLE_CHOICES
-from .serializers import ClubSerializer, ClubUserSerializer
+from .models import Club, ClubUser, UserRole, ROLE_CHOICES, WorkoutType
+from .serializers import ClubSerializer, ClubUserSerializer, WorkoutTypeSerializer
 from . import permissions as my_permissions
 from gettext import gettext as _
 
@@ -260,3 +260,63 @@ class UserRoleView(views.APIView):
             return Response(serialized.data)
         except UserRole.DoesNotExist:
             raise NotFound(user.username + ', ' + role_text + ': ' + _('this user does not have this role'))
+
+
+class WorkoutTypeViewSet(mixins.CreateModelMixin,
+                         viewsets.GenericViewSet):
+    # use perform_create and perform_update hooks just to verify club
+    queryset = WorkoutType.objects.all()
+    pagination_class = None  # this will work till amount of users is not huge
+    serializer_class = WorkoutTypeSerializer
+    permission_classes = (my_permissions.AuthorizedStaffCanCreateAndEditWorkoutTypes, )
+
+    def perform_create(self, serializer):
+        # get club by id from URL named parameter
+        # check if club exists
+        # set foreign key value to model field
+        club_id = self.kwargs['club']
+        try:
+            club = Club.objects.get(pk=club_id)
+        except Club.DoesNotExist:
+            raise NotFound(_('Club not found'))
+
+        serializer.save(workout_club=club)
+
+    # don't use mixin to perform club id verification
+    def update(self, request, pk=None, club=None):
+        workout_type = get_object_or_404(self.queryset, pk=pk, workout_club=club)
+        self.check_object_permissions(request, workout_type)
+
+        serializer = self.get_serializer(workout_type, request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(serializer.data)
+
+    # don't use mixin to perform club id verification
+    def retrieve(self, request, pk=None, club=None):
+        workout_type = get_object_or_404(self.queryset, pk=pk, workout_club=club)
+        self.check_object_permissions(request, workout_type)
+        serializer = self.serializer_class(workout_type, context={'request': request})
+        return Response(serializer.data)
+
+    # don't use mixin to narrow workout types list by club id
+    def list(self, request, club=None):
+        """
+        ---
+        parameters:
+            - name: is_active
+              required: false
+              paramType: query
+              type: boolean
+        """
+
+        is_active_filter = request.query_params.get('is_active', None)
+        if is_active_filter is not None:
+            is_active_filter = is_active_filter not in ['false', 'False', 'FALSE']
+            workout_type_queryset = self.queryset.filter(workout_club=club, workout_is_active=is_active_filter)
+        else:
+            workout_type_queryset = self.queryset.filter(workout_club=club)
+
+        serializer = self.serializer_class(workout_type_queryset, many=True)
+        return Response(serializer.data)

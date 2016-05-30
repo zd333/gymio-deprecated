@@ -75,7 +75,7 @@
 
         var modules = ['staffboard_overview']; //common modules available for all staff
         var HTmodules = [
-          //'group_workouts',//uncomment after implementation
+          'group_workouts'
           //'gym',//uncomment after implementation
           //'nutrition_courses',//uncomment after implementation
         ];

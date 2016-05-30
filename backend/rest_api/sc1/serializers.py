@@ -1,14 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import update_session_auth_hash
-from .models import Club, ClubUser, UserRole
-
-# TODO: all serializers are set to ModelSerializer
-# better solution would be to use HyperlinkedModelSerializer
-# because it returns direct URLs instead of IDs
-# but because of customized URL structure with club parameter almost for every model/action
-# HyperlinkedModelSerializer does not work (it uses one lookup field to specify reverse URL)
-# see this possible workaround: http://stackoverflow.com/a/26670818
-
+from .models import Club, ClubUser, WorkoutType
 
 
 class ClubSerializer(serializers.ModelSerializer):
@@ -21,7 +13,6 @@ class ClubSerializer(serializers.ModelSerializer):
             'club_phones',
             'club_email',
             'club_homepage',
-            'club_short_name',
             'club_list_languages',
             'club_show_finance_module',
             'club_show_hr_module',
@@ -39,7 +30,6 @@ class ClubSerializer(serializers.ModelSerializer):
             'club_phones',
             'club_email',
             'club_homepage',
-            'club_short_name',
             'club_list_languages',
             'club_show_finance_module',
             'club_show_hr_module',
@@ -77,7 +67,9 @@ class ClubUserSerializer(serializers.ModelSerializer):
             'password',
             'userRoles',
         )
-        read_only_fields = ('id', 'date_joined', 'user_photo', 'user_photo_not_approved',)
+
+        read_only_fields = ('id', 'date_joined', 'user_photo', 'user_photo_not_approved', 'userRoles',)
+        # read_only_fields = ('id', 'date_joined', 'user_photo', 'user_photo_not_approved',)
 
     def create(self, validated_data):
         user = ClubUser.objects.create(**validated_data)
@@ -105,3 +97,17 @@ class ClubUserSerializer(serializers.ModelSerializer):
         instance.save()
         update_session_auth_hash(self.context.get('request'), instance)
         return instance
+
+class WorkoutTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WorkoutType
+        fields = (
+            'workout_name',
+            'workout_max_visitors',
+            'workout_duration',
+            'workout_description',
+            'workout_min_fee',
+            'workout_max_fee',
+            'workout_per_visitor_fee',
+            'workout_is_active',
+        )

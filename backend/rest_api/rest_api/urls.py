@@ -44,6 +44,11 @@ urlpatterns = patterns(prefix,
                        url(r'^sc1/approveuserphoto/(?P<club>[0-9]+)/(?P<pk>[0-9]+)/$', views.ApproveUserPhotoView.as_view()),
                        url(r'^sc1/rejectuserphoto/(?P<club>[0-9]+)/(?P<pk>[0-9]+)/$', views.RejectUserPhotoView.as_view()),
 
+                       url(r'^sc1/workouttypes/(?P<club>[0-9]+)/$',
+                           views.WorkoutTypeViewSet.as_view({'get': 'list', 'post': 'create'})),
+                       url(r'^sc1/workouttypes/(?P<club>[0-9]+)/(?P<pk>[0-9]+)/$',
+                           views.WorkoutTypeViewSet.as_view({'get': 'retrieve', 'post': 'update'})),
+
                        )
 
 if settings.DEBUG:
